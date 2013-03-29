@@ -1,0 +1,14 @@
+{
+  "name": "jankbot",
+  "version": "1.0.0",
+  "description": "Jank Dota steam bot",
+  "main": "jankbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "BSD",
+  "dependencies": {
+    "steam": "~0.5.5",
+    "optimist": "~0.3.5"
+  }
+}
