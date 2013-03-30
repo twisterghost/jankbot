@@ -3,6 +3,8 @@ var fs = require('fs');
 var Steam = require('steam');
 var logger = require('winston');
 var friends = require('./friends.js');
+var quotes = require('./quotes.js');
+var logger = require('./logger.js');
 var argv = require('optimist')
 
     .default('name', 'Jankbot')
@@ -17,25 +19,13 @@ var ADMINS = [
 
 // Global variables.
 var myName = argv.name;
-var quotes = [];
-
-// if we've saved a server list, use it
-if (fs.existsSync('servers')) {
-  Steam.servers = JSON.parse(fs.readFileSync('servers'));
-}
-
-
-// if we've saved a quotes list, use it
-if (fs.existsSync('quotes')) {
-  quotes = JSON.parse(fs.readFileSync('quotes'));
-}
 
 
 // Log in and set name.
 var bot = new Steam.SteamClient();
 bot.logOn('thejankbot', 'get in the jank');
 bot.on('loggedOn', function() {
-  log('Logged in!');
+  logger.log('Logged in!');
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
 
@@ -55,7 +45,7 @@ bot.on('message', function(source, message, type, chatter) {
   }
   var original = message;
   message = message.toLowerCase();
-  log('Received message from ' + friends.nameOf(source) + ': ' + message);
+  logger.log('Received message from ' + friends.nameOf(source) + ': ' + message);
   input = message.split(" ");
 
   if (input[0] == "admin") {
@@ -119,7 +109,7 @@ bot.on('message', function(source, message, type, chatter) {
 
   // Hook for quotes.
   else if (input[0] == "quote") {
-    handleQuotes(original, source);
+    quotes.handleQuotes(original, source, bot);
   }
 
   // Default.
@@ -133,7 +123,7 @@ bot.on('message', function(source, message, type, chatter) {
 bot.on('relationship', function(other, type){
   if(type == Steam.EFriendRelationship.PendingInvitee) {
     bot.addFriend(other);
-    log("Added friend: " + other);
+    logger.log("Added friend: " + other);
     friends.addFriend(other);
     friends.updateFriendsNames(bot);
 
@@ -143,7 +133,7 @@ bot.on('relationship', function(other, type){
 
 function messageUser(user, message) {
   if (!friends.getMute(user)) {
-    log("Message sent to " + friends.nameOf(user) +  ": " + message);
+    logger.log("Message sent to " + friends.nameOf(user) +  ": " + message);
     bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
   } else {
     friends.pushMessageQueue(user, message);
@@ -170,7 +160,7 @@ function randomResponse() {
 
 // Broadcasts a message to everyone but source.
 function broadcast(message, source) {
-  log("Broadcasting: " + message);
+  logger.log("Broadcasting: " + message);
   for (var friend in friends.getAllFriends()) {
     if (friend != source)
       messageUser(friend, message);
@@ -178,10 +168,10 @@ function broadcast(message, source) {
 }
 
 
-// Saves the friends list and quits gracefully.
+// Saves data and exits gracefully.
 function shutdown() {
-  fs.writeFileSync("friends", JSON.stringify(friends));
-  fs.writeFileSync("quotes", JSON.stringify(quotes));
+  friends.save();
+  quotes.save();
   process.exit();
 }
 
@@ -197,13 +187,13 @@ function admin(input, callback) {
 
   // Dump friends info.
   if (input[1] == "dump" && input[2] == "friends") {
-    log(JSON.stringify(friends.getAllFriends()));
+    logger.log(JSON.stringify(friends.getAllFriends()));
     callback("Friends JSON dumped to console.");
   }
 
   // Dump users info.
   if (input[1] == "dump" && input[2] == "users") {
-    log(JSON.stringify(bot.users));
+    logger.log(JSON.stringify(bot.users));
     callback("bot.users JSON dumped to console.");
   }
 }
@@ -244,40 +234,3 @@ function isGreeting(message) {
 }
 
 
-function log(message) {
-  fs.appendFile('output.log', "LOG: " + message + "\n");
-  console.log(message);
-}
-
-
-function error(message) {
-  fs.appendFile('output.log', "ERR: " + message + "\n");
-  console.log(message);
-}
-
-
-function addQuote(quote) {
-  quotes.push(quote);
-}
-
-
-function getQuotes() {
-  return quotes.join("\n");
-}
-
-
-function handleQuotes(input, source) {
-  input = input.split(" ");
-  if (input[1].toLowerCase() == "add") {
-    input.splice(0, 2);
-    var quote = input.join(" ");
-    quotes.push(quote);
-    messageUser(source, "Saved quote.");
-  }
-  else if (input[1].toLowerCase() == "list") {
-    messageUser(source, "Here are quotes saved by Jank members:\n" + getQuotes());
-  }
-  else if (input[1].toLowerCase() == "random") {
-    messageUser(source, quotes[Math.floor(Math.random() * quotes.length)]);
-  }
-}

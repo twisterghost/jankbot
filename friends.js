@@ -1,4 +1,6 @@
-fs = require('fs');
+var fs = require('fs');
+var logger = require('./logger.js');
+var Steam = require('steam');
 
 var friends = {};
 
@@ -22,7 +24,7 @@ exports.nameOf = function(id) {
 // Attempts to add someone to internal friends list.
 exports.addFriend = function(source) {
   if (!friends.hasOwnProperty(source)) {
-    log("Adding friend: " + source);
+    logger.log("Adding friend: " + source);
     friends[source] = {};
     friends[source].messages = [];
     friends[source].mute = false;
@@ -37,6 +39,7 @@ exports.updateFriendsNames = function(bot) {
       friends[friend].name = bot.users[friend].playerName;
     }
   }
+  exports.save();
 }
 
 
@@ -78,4 +81,20 @@ exports.getMute = function(friend) {
 // Check that a friend exists.
 function friendExists(friend) {
   return friends.hasOwnProperty(friend);
+}
+
+
+// Saves the friends list.
+exports.save = function() {
+  fs.writeFileSync("friendslist", JSON.stringify(friends));
+}
+
+
+exports.messageUser = function(user, message, bot) {
+  if (!exports.getMute(user)) {
+    logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
+    bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
+  } else {
+    friends.pushMessageQueue(user, message);
+  }
 }
