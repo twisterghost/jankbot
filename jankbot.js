@@ -1,7 +1,10 @@
 // Imports
 var fs = require('fs');
 var Steam = require('steam');
+var logger = require('winston');
+var friends = require('./friends.js');
 var argv = require('optimist')
+
     .default('name', 'Jankbot')
     .argv;
 
@@ -9,20 +12,22 @@ var argv = require('optimist')
 var JANK_GROUP_ID = "103582791432915713";
 var ADMINS = [
   "76561197996182292"
-]
+];
+
 
 // Global variables.
 var myName = argv.name;
-var friends = {};
+var quotes = [];
 
 // if we've saved a server list, use it
 if (fs.existsSync('servers')) {
   Steam.servers = JSON.parse(fs.readFileSync('servers'));
 }
 
-// if we've saved a friends list, use it
-if (fs.existsSync('friends')) {
-  friends = JSON.parse(fs.readFileSync('friends'));
+
+// if we've saved a quotes list, use it
+if (fs.existsSync('quotes')) {
+  quotes = JSON.parse(fs.readFileSync('quotes'));
 }
 
 
@@ -30,7 +35,7 @@ if (fs.existsSync('friends')) {
 var bot = new Steam.SteamClient();
 bot.logOn('thejankbot', 'get in the jank');
 bot.on('loggedOn', function() {
-  console.log('Logged in!');
+  log('Logged in!');
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
 
@@ -43,17 +48,14 @@ bot.on('loggedOn', function() {
 
 // Respond to messages.
 bot.on('message', function(source, message, type, chatter) {
-  updateFriendsNames();
+  friends.addFriend(source);
+  friends.updateFriendsNames(bot);
   if (message == '') {
     return;
   }
+  var original = message;
   message = message.toLowerCase();
-
-  addFriend(source);
-
-  console.log('Received message from ' + nameOf(source) + ': ' + message);
-
-
+  log('Received message from ' + friends.nameOf(source) + ': ' + message);
   input = message.split(" ");
 
   if (input[0] == "admin") {
@@ -61,47 +63,68 @@ bot.on('message', function(source, message, type, chatter) {
     // Authenticate as admin.
     if (isAdmin(source)) {
       admin(input, function(resp) {
-        bot.sendMessage(source, resp, Steam.EChatEntryType.ChatMsg);
+        messageUser(source, resp);
       });
     } else {
-      bot.sendMessage(source, "You're not an admin!", Steam.EChatEntryType.ChatMsg);
+      messageUser(source, "You're not an admin!");
     }
   }
 
   // Looking for group / general play.
   else if (message == "looking for group" || message == "lfg") {
-    broadcast(nameOf(source) + " is looking to play.", source);
-    bot.sendMessage(source, "I alerted the jank that you wish to play.", Steam.EChatEntryType.ChatMsg);
+    broadcast(friends.nameOf(source) + " is looking to play.", source);
+    messageUser(source, "I alerted the jank that you wish to play.");
   }
 
   // Starting inhouses.
   else if (message == "inhouse") {
-    broadcast(nameOf(source) + " is hosting an inhouse.", source);
-    bot.sendMessage(source, "I alerted the jank that you want to have an inhouse.", Steam.EChatEntryType.ChatMsg);
+    broadcast(friends.nameOf(source) + " is hosting an inhouse.", source);
+    messageUser(source, "I alerted the jank that you want to have an inhouse.");
   }
 
+  // Slots open alert.
   else if ((input[1] == "slots" && input[2] == "open") || (input[1] == "open" && input[2] == "slots")) {
     var open = input[0];
-    broadcast(nameOf(source) + "'s party has " + open + " slots.", source);
-    bot.sendMessage(source, "I alerted the jank that your group has " + open + " slots open.", Steam.EChatEntryType.ChatMsg);
+    broadcast(friends.nameOf(source) + "'s party has " + open + " slots.", source);
+    messageUser(source, "I alerted the jank that your group has " + open + " slots open.");
   }
 
+  // Respond to pings.
   else if (message == 'ping') {
-    bot.sendMessage(source, 'pong: ' + source, Steam.EChatEntryType.ChatMsg);
+    messageUser(source, 'pong: ' + source);
   }
 
-  // Help message
+  // Help message.
   else if (message == 'help' || message == 'hlep' || message == 'halp') {
-    bot.sendMessage(source, help(), Steam.EChatEntryType.ChatMsg);
+    messageUser(source, help());
   }
 
+  // Mute.
+  else if (message == 'mute') {
+    messageUser(source, "Okay, I will store messages to you until you unmute me. Bye!");
+    friends[source].mute = true;
+  }
+
+  // Unmute player and give missed messaged.
+  else if (message == 'unmute') {
+    friends[source].mute = false;
+    messageUser(source, "Hello again, " + friends.nameOf(source) + "!");
+    messageUser(source, "Here are the messages you missed:\n" + getHeldMessages(source));
+  }
+
+  // Respond to greetings.
   else if (isGreeting(message)) {
-    bot.sendMessage(source, "Hello there, " + nameOf(source) + ".", Steam.EChatEntryType.ChatMsg);
+    messageUser(source, "Hello there, " + friends.nameOf(source) + ".");
+  }
+
+  // Hook for quotes.
+  else if (input[0] == "quote") {
+    handleQuotes(original, source);
   }
 
   // Default.
   else {
-    bot.sendMessage(source, randomResponse(), Steam.EChatEntryType.ChatMsg);
+    messageUser(source, randomResponse());
   }
 });
 
@@ -110,11 +133,25 @@ bot.on('message', function(source, message, type, chatter) {
 bot.on('relationship', function(other, type){
   if(type == Steam.EFriendRelationship.PendingInvitee) {
     bot.addFriend(other);
-    console.log("Added friend: " + other);
-    addFriend(other);
+    log("Added friend: " + other);
+    friends.addFriend(other);
+    friends.updateFriendsNames(bot);
+
   }
 });
 
+
+function messageUser(user, message) {
+  if (!friends.getMute(user)) {
+    log("Message sent to " + friends.nameOf(user) +  ": " + message);
+    bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
+  } else {
+    friends.pushMessageQueue(user, message);
+  }
+}
+
+
+// Responses for unknown commands.
 function randomResponse() {
   var responses = [
     "Come again?",
@@ -125,28 +162,31 @@ function randomResponse() {
     "Not a clue what you want.",
     "Shut up, Richard.",
     "WAT.",
-    "SPEAK. ENGLISH.",
     "Perhaps try 'help'?"
   ];
   return responses[Math.floor(Math.random() * responses.length)];
 }
 
-function nameOf(id) {
-  return friends[id].name;
-}
 
+// Broadcasts a message to everyone but source.
 function broadcast(message, source) {
-  for (var friend in friends) {
+  log("Broadcasting: " + message);
+  for (var friend in friends.getAllFriends()) {
     if (friend != source)
-      bot.sendMessage(friend, message, Steam.EChatEntryType.ChatMsg);
+      messageUser(friend, message);
   }
 }
 
+
+// Saves the friends list and quits gracefully.
 function shutdown() {
   fs.writeFileSync("friends", JSON.stringify(friends));
+  fs.writeFileSync("quotes", JSON.stringify(quotes));
   process.exit();
 }
 
+
+// Handler for admin functionality.
 function admin(input, callback) {
 
   // Quit function
@@ -157,42 +197,38 @@ function admin(input, callback) {
 
   // Dump friends info.
   if (input[1] == "dump" && input[2] == "friends") {
-    console.log(JSON.stringify(friends));
+    log(JSON.stringify(friends.getAllFriends()));
     callback("Friends JSON dumped to console.");
   }
 
   // Dump users info.
   if (input[1] == "dump" && input[2] == "users") {
-    console.log(JSON.stringify(bot.users));
+    log(JSON.stringify(bot.users));
     callback("bot.users JSON dumped to console.");
   }
 }
 
+
+// Returns true if the given ID is an admin.
 function isAdmin(source) {
   return ADMINS.indexOf(source) != -1;
 }
 
-function addFriend(source) {
-  if (!friends.hasOwnProperty(source)) {
-    console.log("Adding friend: " + source);
-    friends[source] = {};
-  }
-  updateFriendsNames();
-}
 
-function updateFriendsNames() {
-  for (var friend in friends) {
-    friends[friend].name = bot.users[friend].playerName;
-  }
-}
-
+// Help text.
 function help() {
   return "I am Jankbot, here to help with your everyday janking!\n" +
   "Some commands:\n" +
   "inhouse - Alert the jank that an inhouse is starting.\n" +
   "looking for group (or lfg) - Alert the jank that you want to play.\n" +
-  "X slots open - Alert that you have X slots open in your group.";
+  "X slots open - Alert that you have X slots open in your group.\n" +
+  "quote add _____ - Adds a quote to the quote list.\n" +
+  "quote list - Lists all quotes\n" +
+  "quote random - Gives a random quote\n" +
+  "mute - Silences me. I will save missed messages for you.\n" +
+  "unmute - Unsilences me. I will tell you what you missed.";
 }
+
 
 function isGreeting(message) {
   var greetings = [
@@ -201,7 +237,47 @@ function isGreeting(message) {
     "hello",
     "hola",
     "yo",
-    "howdy"
+    "howdy",
+    "hi"
   ];
   return greetings.indexOf(message) != -1;
+}
+
+
+function log(message) {
+  fs.appendFile('output.log', "LOG: " + message + "\n");
+  console.log(message);
+}
+
+
+function error(message) {
+  fs.appendFile('output.log', "ERR: " + message + "\n");
+  console.log(message);
+}
+
+
+function addQuote(quote) {
+  quotes.push(quote);
+}
+
+
+function getQuotes() {
+  return quotes.join("\n");
+}
+
+
+function handleQuotes(input, source) {
+  input = input.split(" ");
+  if (input[1].toLowerCase() == "add") {
+    input.splice(0, 2);
+    var quote = input.join(" ");
+    quotes.push(quote);
+    messageUser(source, "Saved quote.");
+  }
+  else if (input[1].toLowerCase() == "list") {
+    messageUser(source, "Here are quotes saved by Jank members:\n" + getQuotes());
+  }
+  else if (input[1].toLowerCase() == "random") {
+    messageUser(source, quotes[Math.floor(Math.random() * quotes.length)]);
+  }
 }
