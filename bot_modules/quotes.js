@@ -30,16 +30,16 @@ function getQuotes() {
 // Handler.
 exports.handle = function(input, source, bot) {
   input = input.split(" ");
-  if (input[1].toLowerCase() == "add") {
+  if (input.length > 2 && input[1].toLowerCase() == "add") {
     input.splice(0, 2);
     var quote = input.join(" ");
     quotes.push(quote);
     friends.messageUser(source, "Saved quote.", bot);
   }
-  else if (input[1].toLowerCase() == "list") {
+  else if (input.length > 1 && input[1].toLowerCase() == "list") {
     friends.messageUser(source, "Here are quotes saved by Jank members:\n" + getQuotes(), bot);
   }
-  else if (input[1].toLowerCase() == "random") {
+  else if (input.length > 1 && input[1].toLowerCase() == "random") {
     friends.messageUser(source, quotes[Math.floor(Math.random() * quotes.length)], bot);
   }
   exports.save();
@@ -50,4 +50,17 @@ exports.handle = function(input, source, bot) {
 exports.canHandle = function(original) {
   var input = original.toLowerCase().split(" ");
   return input[0] == "quote";
+}
+
+
+exports.onExit = function() {
+  exports.save();
+}
+
+
+exports.getHelp = function() {
+  return "QUOTES\n" +
+  "quote add _____ - Adds a quote to the quote list.\n" +
+  "quote list - Lists all quotes\n" +
+  "quote random - Gives a random quote\n";
 }

@@ -16,6 +16,9 @@ var ADMINS = [
   "76561197996182292"
 ];
 
+var modules = [
+  quotes
+];
 
 // Global variables.
 var myName = argv.name;
@@ -55,8 +58,10 @@ bot.on('message', function(source, message, type, chatter) {
       admin(input, function(resp) {
         friends.messageUser(source, resp, bot);
       });
+      return;
     } else {
       friends.messageUser(source, "You're not an admin!", bot);
+      return;
     }
   }
 
@@ -64,35 +69,47 @@ bot.on('message', function(source, message, type, chatter) {
   else if (message == "looking for group" || message == "lfg") {
     friends.broadcast(friends.nameOf(source) + " is looking to play.", source, bot);
     friends.messageUser(source, "I alerted the jank that you wish to play.", bot);
+    return;
   }
 
   // Starting inhouses.
   else if (message == "inhouse") {
     friends.broadcast(friends.nameOf(source) + " is hosting an inhouse.", source, bot);
     friends.messageUser(source, "I alerted the jank that you want to have an inhouse.", bot);
+    return;
   }
 
   // Slots open alert.
   else if ((input[1] == "slots" && input[2] == "open") || (input[1] == "open" && input[2] == "slots")) {
     var open = input[0];
-    friends.broadcast(friends.nameOf(source) + "'s party has " + open + " slots.", source, bot);
-    friends.messageUser(source, "I alerted the jank that your group has " + open + " slots open.", bot);
+
+    // Stop carl from being stupid.
+    if (open != "1" || open != "2" || open != "3" || open != "4") {
+      friends.messageUser(source, "You must give a number between 1 and 4, inclusive.", bot);
+    } else {
+      friends.broadcast(friends.nameOf(source) + "'s party has " + open + " slots.", source, bot);
+      friends.messageUser(source, "I alerted the jank that your group has " + open + " slots open.", bot);
+    }
+    return;
   }
 
   // Respond to pings.
   else if (message == 'ping') {
     friends.messageUser(source, 'pong: ' + source, bot);
+    return;
   }
 
   // Help message.
   else if (message == 'help' || message == 'hlep' || message == 'halp') {
     friends.messageUser(source, help(), bot);
+    return;
   }
 
   // Mute.
   else if (message == 'mute') {
     friends.messageUser(source, "Okay, I will store messages to you until you unmute me. Bye!", bot);
     friends.setMute(source, true);
+    return;
   }
 
   // Unmute player and give missed messaged.
@@ -100,22 +117,26 @@ bot.on('message', function(source, message, type, chatter) {
     friends.setMute(source, false);
     friends.messageUser(source, "Hello again, " + friends.nameOf(source) + "!", bot);
     friends.messageUser(source, "Here are the messages you missed:\n" + friends.getHeldMessages(source), bot);
+    return;
   }
 
   // Respond to greetings.
   else if (isGreeting(message)) {
     friends.messageUser(source, "Hello there, " + friends.nameOf(source) + ".", bot);
+    return;
   }
 
-  // Hook for quotes.
-  else if (quotes.canHandle(original)) {
-    quotes.handle(original, source, bot);
+  // Loop through other modules.
+  for (var i = 0; i < modules.length; i++) {
+    if (modules[i].canHandle(original)) {
+      modules[i].handle(original, source, bot);
+      return;
+    }
   }
 
-  // Default.
-  else {
-    friends.messageUser(source, randomResponse(), bot);
-  }
+  // Default
+  friends.messageUser(source, randomResponse(), bot);
+
 });
 
 
@@ -150,7 +171,9 @@ function randomResponse() {
 // Saves data and exits gracefully.
 function shutdown() {
   friends.save();
-  quotes.save();
+  for (var i = 0; i < modules.length; i++) {
+    modules[i].onExit();
+  }
   process.exit();
 }
 
@@ -186,16 +209,17 @@ function isAdmin(source) {
 
 // Help text.
 function help() {
-  return "I am Jankbot, here to help with your everyday janking!\n" +
-  "Some commands:\n" +
+  var resp =  "I am Jankbot, here to help with your everyday janking!\n" +
+  "DEFAULT COMMANDS:\n" +
   "inhouse - Alert the jank that an inhouse is starting.\n" +
   "looking for group (or lfg) - Alert the jank that you want to play.\n" +
   "X slots open - Alert that you have X slots open in your group.\n" +
-  "quote add _____ - Adds a quote to the quote list.\n" +
-  "quote list - Lists all quotes\n" +
-  "quote random - Gives a random quote\n" +
   "mute - Silences me. I will save missed messages for you.\n" +
-  "unmute - Unsilences me. I will tell you what you missed.";
+  "unmute - Unsilences me. I will tell you what you missed.\n";
+  for (var i = 0; i < modules.length; i++) {
+    resp += "\n" + modules[i].getHelp();
+  }
+  return resp;
 }
 
 
