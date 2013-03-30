@@ -1,6 +1,6 @@
 var fs = require('fs');
-var friends = require('./friends.js');
-var logger = require('./logger.js');
+var friends = require('./bot_modules/friends.js');
+var logger = require('./bot_modules/logger.js');
 
 var quotes = [];
 // if we've saved a quotes list, use it
@@ -39,4 +39,9 @@ exports.handleQuotes = function(input, source, bot) {
     friends.messageUser(source, quotes[Math.floor(Math.random() * quotes.length)], bot);
   }
   exports.save();
+}
+
+
+exports.canHandle = function(input) {
+  return input.toLowerCase.split(" ")[0] == "quote";
 }

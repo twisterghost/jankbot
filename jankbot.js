@@ -2,9 +2,9 @@
 var fs = require('fs');
 var Steam = require('steam');
 var logger = require('winston');
-var friends = require('./friends.js');
-var quotes = require('./quotes.js');
-var logger = require('./logger.js');
+var friends = require('./bot_modules/friends.js');
+var quotes = require('./bot_modules/quotes.js');
+var logger = require('./bot_modules/logger.js');
 var argv = require('optimist')
 
     .default('name', 'Jankbot')
@@ -108,7 +108,7 @@ bot.on('message', function(source, message, type, chatter) {
   }
 
   // Hook for quotes.
-  else if (input[0] == "quote") {
+  else if (quotes.canHandle(input)) {
     quotes.handleQuotes(original, source, bot);
   }
 

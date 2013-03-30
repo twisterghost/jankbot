@@ -1,5 +1,5 @@
 var fs = require('fs');
-var logger = require('./logger.js');
+var logger = require('./bot_modules/logger.js');
 var Steam = require('steam');
 
 var friends = {};
