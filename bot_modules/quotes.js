@@ -60,7 +60,7 @@ exports.onExit = function() {
 
 exports.getHelp = function() {
   return "QUOTES\n" +
-  "quote add _____ - Adds a quote to the quote list.\n" +
+  "quote add _____ - Adds a quote to the quote list\n" +
   "quote list - Lists all quotes\n" +
   "quote random - Gives a random quote\n";
 }
