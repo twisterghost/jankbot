@@ -7,7 +7,6 @@ var quotes = require('./bot_modules/quotes.js');
 var logger = require('./bot_modules/logger.js');
 var changelog = require('./bot_modules/changelog.js');
 var argv = require('optimist')
-
     .default('name', 'Jankbot')
     .argv;
 
@@ -26,9 +25,12 @@ var modules = [
 var myName = argv.name;
 
 
+// Load credentials.
+var creds = JSON.parse(fs.readFileSync("credentials.json"));
+
 // Log in and set name.
 var bot = new Steam.SteamClient();
-bot.logOn('thejankbot', 'get in the jank');
+bot.logOn(creds.username, creds.password);
 bot.on('loggedOn', function() {
   logger.log('Logged in!');
   bot.setPersonaState(Steam.EPersonaState.Online);
