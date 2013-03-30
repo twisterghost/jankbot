@@ -1,6 +1,6 @@
 var fs = require('fs');
-var friends = require('./bot_modules/friends.js');
-var logger = require('./bot_modules/logger.js');
+var friends = require('./friends.js');
+var logger = require('./logger.js');
 
 var quotes = [];
 // if we've saved a quotes list, use it
@@ -9,22 +9,26 @@ if (fs.existsSync('quoteslist')) {
 }
 
 
+// Saves quotes.
 exports.save = function() {
-  fs.writeFileSync("quotes", JSON.stringify(quotes));
+  fs.writeFileSync("quoteslist", JSON.stringify(quotes));
 }
 
 
+// Helper function to add a quote.
 function addQuote(quote) {
   quotes.push(quote);
 }
 
 
+// Helper function to get all quotes.
 function getQuotes() {
   return quotes.join("\n");
 }
 
 
-exports.handleQuotes = function(input, source, bot) {
+// Handler.
+exports.handle = function(input, source, bot) {
   input = input.split(" ");
   if (input[1].toLowerCase() == "add") {
     input.splice(0, 2);
@@ -42,6 +46,8 @@ exports.handleQuotes = function(input, source, bot) {
 }
 
 
-exports.canHandle = function(input) {
-  return input.toLowerCase.split(" ")[0] == "quote";
+// Can handle function.
+exports.canHandle = function(original) {
+  var input = original.toLowerCase().split(" ");
+  return input[0] == "quote";
 }

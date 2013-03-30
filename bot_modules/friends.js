@@ -1,5 +1,5 @@
 var fs = require('fs');
-var logger = require('./bot_modules/logger.js');
+var logger = require('./logger.js');
 var Steam = require('steam');
 
 var friends = {};
@@ -50,7 +50,7 @@ exports.getAllFriends = function() {
 
 
 // Add a message to a friend's message queue.
-exports.pushMessageQueue = function(friend, message) {
+function pushMessageQueue(friend, message) {
   friends[friend].messages.push(message);
 }
 
@@ -78,6 +78,13 @@ exports.getMute = function(friend) {
 }
 
 
+exports.setMute = function(friend, mute) {
+  if (friendExists(friend)) {
+    friends[friend].mute = mute;
+  }
+}
+
+
 // Check that a friend exists.
 function friendExists(friend) {
   return friends.hasOwnProperty(friend);
@@ -90,11 +97,22 @@ exports.save = function() {
 }
 
 
+// Sends a message to a user.
 exports.messageUser = function(user, message, bot) {
   if (!exports.getMute(user)) {
     logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
     bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
   } else {
-    friends.pushMessageQueue(user, message);
+    pushMessageQueue(user, message);
+  }
+}
+
+
+// Broadcasts a message to everyone but source.
+exports.broadcast = function(message, source, bot) {
+  logger.log("Broadcasting: " + message);
+  for (var friend in friends) {
+    if (friend != source)
+      exports.messageUser(friend, message, bot);
   }
 }

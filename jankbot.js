@@ -53,68 +53,68 @@ bot.on('message', function(source, message, type, chatter) {
     // Authenticate as admin.
     if (isAdmin(source)) {
       admin(input, function(resp) {
-        messageUser(source, resp);
+        friends.messageUser(source, resp, bot);
       });
     } else {
-      messageUser(source, "You're not an admin!");
+      friends.messageUser(source, "You're not an admin!", bot);
     }
   }
 
   // Looking for group / general play.
   else if (message == "looking for group" || message == "lfg") {
-    broadcast(friends.nameOf(source) + " is looking to play.", source);
-    messageUser(source, "I alerted the jank that you wish to play.");
+    friends.broadcast(friends.nameOf(source) + " is looking to play.", source, bot);
+    friends.messageUser(source, "I alerted the jank that you wish to play.", bot);
   }
 
   // Starting inhouses.
   else if (message == "inhouse") {
-    broadcast(friends.nameOf(source) + " is hosting an inhouse.", source);
-    messageUser(source, "I alerted the jank that you want to have an inhouse.");
+    friends.broadcast(friends.nameOf(source) + " is hosting an inhouse.", source, bot);
+    friends.messageUser(source, "I alerted the jank that you want to have an inhouse.", bot);
   }
 
   // Slots open alert.
   else if ((input[1] == "slots" && input[2] == "open") || (input[1] == "open" && input[2] == "slots")) {
     var open = input[0];
-    broadcast(friends.nameOf(source) + "'s party has " + open + " slots.", source);
-    messageUser(source, "I alerted the jank that your group has " + open + " slots open.");
+    friends.broadcast(friends.nameOf(source) + "'s party has " + open + " slots.", source, bot);
+    friends.messageUser(source, "I alerted the jank that your group has " + open + " slots open.", bot);
   }
 
   // Respond to pings.
   else if (message == 'ping') {
-    messageUser(source, 'pong: ' + source);
+    friends.messageUser(source, 'pong: ' + source, bot);
   }
 
   // Help message.
   else if (message == 'help' || message == 'hlep' || message == 'halp') {
-    messageUser(source, help());
+    friends.messageUser(source, help(), bot);
   }
 
   // Mute.
   else if (message == 'mute') {
-    messageUser(source, "Okay, I will store messages to you until you unmute me. Bye!");
-    friends[source].mute = true;
+    friends.messageUser(source, "Okay, I will store messages to you until you unmute me. Bye!", bot);
+    friends.setMute(source, true);
   }
 
   // Unmute player and give missed messaged.
   else if (message == 'unmute') {
-    friends[source].mute = false;
-    messageUser(source, "Hello again, " + friends.nameOf(source) + "!");
-    messageUser(source, "Here are the messages you missed:\n" + getHeldMessages(source));
+    friends.setMute(source, false);
+    friends.messageUser(source, "Hello again, " + friends.nameOf(source) + "!", bot);
+    friends.messageUser(source, "Here are the messages you missed:\n" + friends.getHeldMessages(source), bot);
   }
 
   // Respond to greetings.
   else if (isGreeting(message)) {
-    messageUser(source, "Hello there, " + friends.nameOf(source) + ".");
+    friends.messageUser(source, "Hello there, " + friends.nameOf(source) + ".", bot);
   }
 
   // Hook for quotes.
-  else if (quotes.canHandle(input)) {
-    quotes.handleQuotes(original, source, bot);
+  else if (quotes.canHandle(original)) {
+    quotes.handle(original, source, bot);
   }
 
   // Default.
   else {
-    messageUser(source, randomResponse());
+    friends.messageUser(source, randomResponse(), bot);
   }
 });
 
@@ -126,19 +126,8 @@ bot.on('relationship', function(other, type){
     logger.log("Added friend: " + other);
     friends.addFriend(other);
     friends.updateFriendsNames(bot);
-
   }
 });
-
-
-function messageUser(user, message) {
-  if (!friends.getMute(user)) {
-    logger.log("Message sent to " + friends.nameOf(user) +  ": " + message);
-    bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
-  } else {
-    friends.pushMessageQueue(user, message);
-  }
-}
 
 
 // Responses for unknown commands.
@@ -155,16 +144,6 @@ function randomResponse() {
     "Perhaps try 'help'?"
   ];
   return responses[Math.floor(Math.random() * responses.length)];
-}
-
-
-// Broadcasts a message to everyone but source.
-function broadcast(message, source) {
-  logger.log("Broadcasting: " + message);
-  for (var friend in friends.getAllFriends()) {
-    if (friend != source)
-      messageUser(friend, message);
-  }
 }
 
 
