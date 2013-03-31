@@ -6,6 +6,8 @@ var friends = require('./bot_modules/friends.js');
 var quotes = require('./bot_modules/quotes.js');
 var logger = require('./bot_modules/logger.js');
 var changelog = require('./bot_modules/changelog.js');
+var mumble = require('./bot_modules/mumble.js');
+
 var argv = require('optimist')
     .default('name', 'Jankbot')
     .argv;
@@ -18,7 +20,8 @@ var ADMINS = [
 
 var modules = [
   quotes,
-  changelog
+  changelog,
+  mumble
 ];
 
 // Global variables.

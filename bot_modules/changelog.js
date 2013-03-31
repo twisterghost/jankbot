@@ -13,5 +13,9 @@ exports.handle = function(input, source, bot) {
 };
 
 exports.getHelp = function() {
-  return "CHANGELOG\nchangelog - View Jankbot changelog";
+  return "CHANGELOG\nchangelog - View Jankbot changelog\n";
 };
+
+exports.onExit = function() {
+  // Nothing!
+}
