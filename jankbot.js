@@ -113,7 +113,7 @@ bot.on('message', function(source, message, type, chatter) {
   }
 
   // Mute.
-  else if (message == 'mute') {
+  else if (message == 'mute' || message == 'shutup' || message == 'shut-up') {
     friends.messageUser(source, "Okay, I will store messages to you until you unmute me. Bye!", bot);
     friends.setMute(source, true);
     return;
