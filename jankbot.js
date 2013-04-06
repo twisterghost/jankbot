@@ -1,39 +1,36 @@
-// Imports
+/**
+ * Jankbot - A Dota-centric steambot by JankDota
+ * Authored by Michael Barrett (twisterghost)
+ * https://github.com/twisterghost/jankbot
+ */
+
+// Imports.
 var fs = require('fs');
 var Steam = require('steam');
-var logger = require('winston');
 var friends = require('./bot_modules/friends.js');
-var quotes = require('./bot_modules/quotes.js');
 var logger = require('./bot_modules/logger.js');
-var changelog = require('./bot_modules/changelog.js');
-var mumble = require('./bot_modules/mumble.js');
 
-var argv = require('optimist')
-    .default('name', 'Jankbot')
-    .argv;
+// Define command line arguments.
+var argv = require('optimist');
 
-// Constants.
-var JANK_GROUP_ID = "103582791432915713";
-var ADMINS = [
-  "76561197996182292"
-];
+// Load config file.
+var CONFIG = JSON.parse(fs.readFileSync("config.json"));
 
-var modules = [
-  quotes,
-  changelog,
-  mumble
-];
+// Set admins.
+var ADMINS = CONFIG.admins;
+
+// Load modules.
+var modules = [];
+for (var i = 0; i < CONFIG.modules.length; i++) {
+  modules.push(require("./bot_modules/" + CONFIG.modules[i] + ".js"));
+}
 
 // Global variables.
-var myName = argv.name;
-
-
-// Load credentials.
-var creds = JSON.parse(fs.readFileSync("credentials.json"));
+var myName = CONFIG.displayName;
 
 // Log in and set name.
 var bot = new Steam.SteamClient();
-bot.logOn(creds.username, creds.password);
+bot.logOn(CONFIG.username, CONFIG.password);
 bot.on('loggedOn', function() {
   logger.log('Logged in!');
   bot.setPersonaState(Steam.EPersonaState.Online);
