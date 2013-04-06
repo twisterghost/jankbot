@@ -39,3 +39,60 @@ Create a file called `config.json` and use this template:
 Once you edit the config file with the proper username and password, you're set!
 Run your newly installed Jankbot with `node jankbot` and you should be ready to
 roll!
+
+## Adding Modules
+Jankbot is designed to use custom modules to extend his abilities. To add a
+module, begin by placing the module source file in the `bot_modules/` directory.
+Then, edit `config.json` and add the name of the module to the `modules`
+property.
+
+For example, if you were adding a module called "quotes" with a source file
+`quotes.js`, your config.json file would look like this:
+
+```javascript
+{
+  "username": "your_bot_account_username",
+  "password": "your_bot_account_password",
+  "admins" : [],
+  "modules" : [
+    "quotes"
+  ],
+  "displayName" : "Jankbot"
+}
+```
+
+To add more modules, simply repeat the same steps and add the names of the
+modules to your config file. **Be sure to use commas to separate the module
+names!**
+
+## Administrating Your Jankbot
+To use the admin commands, you will need to let Jankbot know who is an admin. To
+do this, you will need to add the Steam ID numbers to the config file. To find
+out your steam ID number, run Jankbot and message him saying "ping". Jankbot
+will respond saying "pong" and your Steam ID.
+
+Once you have your Steam ID, add it to the `admins` property in the config file.
+If your steam ID was 12345654321, your config file would look like this:
+
+```javascript
+{
+  "username": "your_bot_account_username",
+  "password": "your_bot_account_password",
+  "admins" : ["12345654321"],
+  "modules" : [
+  ],
+  "displayName" : "Jankbot"
+}
+```
+
+To add more administrators, simply add their Steam IDs to the list, separating
+by commas.
+
+## License
+Copyright (c) 2013 Michael Barrett, JankDota
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
