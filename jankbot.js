@@ -35,26 +35,28 @@ bot.on('loggedOn', function() {
   logger.log('Logged in!');
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
-
-  // Join group chat if told to
-  if (argv.groupchat) {
-    bot.joinChat(JANK_GROUP_ID);
-  }
 });
 
 
 // Respond to messages.
 bot.on('message', function(source, message, type, chatter) {
+
+  // Be sure this person is remembered and run friends list name update.
   friends.addFriend(source);
   friends.updateFriendsNames(bot);
+
+  // If the message is blank (blank messages are received from 'is typing').
   if (message == '') {
     return;
   }
+
+  // Save the original full message for later use.
   var original = message;
   message = message.toLowerCase();
   logger.log('Received message from ' + friends.nameOf(source) + ': ' + message);
   input = message.split(" ");
 
+  // First, check if this is an admin function request.
   if (input[0] == "admin") {
 
     // Authenticate as admin.
@@ -164,7 +166,6 @@ function randomResponse() {
     "Huh?",
     "Sure.....what?",
     "Not a clue what you want.",
-    "Shut up, Richard.",
     "WAT.",
     "Perhaps try 'help'?"
   ];
@@ -239,5 +240,3 @@ function isGreeting(message) {
   ];
   return greetings.indexOf(message) != -1;
 }
-
-
