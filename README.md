@@ -90,25 +90,30 @@ by commas.
 
 ## FAQ
 **Why won't Jankbot accept friend requests?**
+
 You need to be sure that the account Jankbot is using has full permissions. You
 must make at least 1 transaction on the account to make use of friends lists.
 
 **How do I keep Jankbot running after I close the terminal?**
+
 You may want to look into [forever](https://github.com/nodejitsu/forever). It
 will keep scripts running...well, forever.
 
 **What will happen if I delete the friends or logger modules?**
+
 Puppies around the world will die and Jankbot will not be able to function.
 Those modules are part of the core of Jankbot and are there to be used by other
 modules.
 
 **How do I update Jankbot?**
+
 Updating Jankbot is as simple as replacing the files. Just make sure you don't
 delete or overwrite any module data files like `friendslist`. Soon enough a
 patch system will be put in place and Jankbot will be able to update himself.
 Remember that you will need to restart Jankbot after updating.
 
 **Why is Jankbot a 'he'?**
+
 By all means, refer to Jankbot as Jankettebot. Just feels easier saying 'he'
 instead of 'it' or 'Jankbot' all the time.
 
