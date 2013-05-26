@@ -9,12 +9,16 @@ var fs = require('fs');
 var Steam = require('steam');
 var friends = require('./bot_modules/friends.js');
 var logger = require('./bot_modules/logger.js');
+var minimap = require('minimap');
 
 // Define command line arguments.
 var argv = require('optimist');
 
 // Load config file.
 var CONFIG = JSON.parse(fs.readFileSync("config.json"));
+
+// Load dictionary.
+var DICT = JSON.parse(fs.readFileSync(CONFIG.dictionary));
 
 // Set admins.
 var ADMINS = CONFIG.admins;
@@ -32,7 +36,7 @@ var myName = CONFIG.displayName;
 var bot = new Steam.SteamClient();
 bot.logOn(CONFIG.username, CONFIG.password);
 bot.on('loggedOn', function() {
-  logger.log('Logged in!');
+  logger.log(DICT.SYSTEM.system_loggedin);
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
 });
@@ -53,8 +57,13 @@ bot.on('message', function(source, message, type, chatter) {
   // Save the original full message for later use.
   var original = message;
   message = message.toLowerCase();
-  logger.log('Received message from ' + friends.nameOf(source) + ': ' + message);
-  input = message.split(" ");
+  var fromUser = friends.nameOf(source);
+
+  // Log the received message.
+  logger.log(minimap.map({"user" : fromUser, "message" : original},
+      DICT.SYSTEM.system_msg_received));
+
+  var input = message.split(" ");
 
   // First, check if this is an admin function request.
   if (input[0] == "admin") {
@@ -66,69 +75,62 @@ bot.on('message', function(source, message, type, chatter) {
       });
       return;
     } else {
-      friends.messageUser(source, "You're not an admin!", bot);
+      friends.messageUser(source, DICT.ERRORS.err_not_admin, bot);
       return;
     }
   }
 
   // Looking for group / general play.
-  else if (message == "looking for group" || message == "lfg") {
-    friends.broadcast(friends.nameOf(source) + " is looking to play.", source, bot);
-    friends.messageUser(source, "I alerted the jank that you wish to play.", bot);
+  else if (message == DICT.CMDS.lfg) {
+    var broadcastMsg = minimap.map({"user" : fromUser},
+        DICT.LFG_RESPONSES.lfg_broadcast);
+    friends.broadcast(broadcastMsg, source, bot);
+    friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender, bot);
     return;
   }
 
   // Starting inhouses.
-  else if (message == "inhouse") {
-    friends.broadcast(friends.nameOf(source) + " is hosting an inhouse.", source, bot);
-    friends.messageUser(source, "I alerted the jank that you want to have an inhouse.", bot);
-    return;
-  }
-
-  // Slots open alert.
-  else if ((input[1] == "slots" && input[2] == "open") || (input[1] == "open" && input[2] == "slots")) {
-    var open = input[0];
-
-    // Stop carl from being stupid.
-    if (open != "1" || open != "2" || open != "3" || open != "4") {
-      friends.messageUser(source, "You must give a number between 1 and 4, inclusive.", bot);
-    } else {
-      friends.broadcast(friends.nameOf(source) + "'s party has " + open + " slots.", source, bot);
-      friends.messageUser(source, "I alerted the jank that your group has " + open + " slots open.", bot);
-    }
+  else if (message == DICT.CMDS.inhouse) {
+    var broadcastMsg = minimap.map({"host" : fromUser},
+        DICT.INHOUSE_RESPONSES.inhouse_broadcast);
+    friends.broadcast(broadcastMsg, source, bot);
+    friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender, bot);
     return;
   }
 
   // Respond to pings.
-  else if (message == 'ping') {
-    friends.messageUser(source, 'pong: ' + source, bot);
+  else if (message == DICT.CMDS.ping) {
+    var responseStr = minimap.map({"userid" : source}, DICT.ping_response);
+    friends.messageUser(source, responseStr, bot);
     return;
   }
 
   // Help message.
-  else if (message == 'help' || message == 'hlep' || message == 'halp') {
+  else if (message == DICT.CMDS.help) {
     friends.messageUser(source, help(), bot);
     return;
   }
 
   // Mute.
-  else if (message == 'mute' || message == 'shutup' || message == 'shut-up') {
-    friends.messageUser(source, "Okay, I will store messages to you until you unmute me. Bye!", bot);
+  else if (message == DICT.CMDS.mute) {
+    friends.messageUser(source, DICT.mute_response, bot);
     friends.setMute(source, true);
     return;
   }
 
   // Unmute player and give missed messaged.
-  else if (message == 'unmute') {
+  else if (message == DICT.CMDS.unmute) {
     friends.setMute(source, false);
-    friends.messageUser(source, "Hello again, " + friends.nameOf(source) + "!", bot);
-    friends.messageUser(source, "Here are the messages you missed:\n" + friends.getHeldMessages(source), bot);
+    var responseStr = minimap.map({"messages" : friends.getHeldMessages(source)},
+        DICT.unmute_response);
+    friends.messageUser(source, responseStr, bot);
     return;
   }
 
   // Respond to greetings.
   else if (isGreeting(message)) {
-    friends.messageUser(source, "Hello there, " + friends.nameOf(source) + ".", bot);
+    var responseStr = minimap.map({"user" : fromUser}, DICT.greeting_response);
+    friends.messageUser(source, responseStr, bot);
     return;
   }
 
@@ -150,7 +152,7 @@ bot.on('message', function(source, message, type, chatter) {
 bot.on('relationship', function(other, type){
   if(type == Steam.EFriendRelationship.PendingInvitee) {
     bot.addFriend(other);
-    logger.log("Added friend: " + other);
+    logger.log(minimap.map({"userid" : other}, DICT.SYSTEM.system_added_friend));
     friends.addFriend(other);
     friends.updateFriendsNames(bot);
   }
@@ -159,16 +161,7 @@ bot.on('relationship', function(other, type){
 
 // Responses for unknown commands.
 function randomResponse() {
-  var responses = [
-    "Come again?",
-    "Wuzzat?",
-    "Wut",
-    "Huh?",
-    "Sure.....what?",
-    "Not a clue what you want.",
-    "WAT.",
-    "Perhaps try 'help'?"
-  ];
+  var responses = DICT.random_responses;
   return responses[Math.floor(Math.random() * responses.length)];
 }
 
@@ -217,8 +210,7 @@ function help() {
   var resp =  "I am Jankbot, here to help with your everyday janking!\n" +
   "DEFAULT COMMANDS:\n" +
   "inhouse - Alert the jank that an inhouse is starting.\n" +
-  "looking for group (or lfg) - Alert the jank that you want to play.\n" +
-  "X slots open - Alert that you have X slots open in your group.\n" +
+  "lfg - Alert the jank that you want to play.\n" +
   "mute - Silences me. I will save missed messages for you.\n" +
   "unmute - Unsilences me. I will tell you what you missed.\n";
   for (var i = 0; i < modules.length; i++) {
@@ -229,14 +221,5 @@ function help() {
 
 
 function isGreeting(message) {
-  var greetings = [
-    "hey",
-    "sup",
-    "hello",
-    "hola",
-    "yo",
-    "howdy",
-    "hi"
-  ];
-  return greetings.indexOf(message) != -1;
+  return DICT.greetings.indexOf(message) != -1;
 }

@@ -1,0 +1,58 @@
+{
+  "SYSTEM" : {
+    "system_loggedin" : "Successfully logged in.",
+    "system_msg_received" : "Received from {user}: {message}",
+    "system_added_friend" : "Added new friend: {userid}"
+  },
+
+  "ERRORS" : {
+    "err_not_admin" : "You are not an admin!"
+  },
+
+  "CMDS" : {
+    "lfg" : "lfg",
+    "inhouse" : "inhouse",
+    "help" : "help",
+    "mute" : "mute",
+    "unmute" : "unmute",
+    "ping" : "ping"
+  },
+
+  "LFG_RESPONSES" : {
+    "lfg_response_sender" : "I alerted my friends that you wish to play.",
+    "lfg_broadcast" : "{user} is looking to play."
+  },
+
+  "INHOUSE_RESPONSES" : {
+    "inhouse_response_sender" : "I alerted my friends that you are hosting an inhouse.",
+    "inhouse_broadcast" : "{host} is hosting an inhouse."
+  },
+
+  "mute_response" : "Okay, I will stop bugging you. Your missed messages will be delivered when you unmute me.",
+  "unmute_response" : "Hello! Here are the messages you missed: \n{messages}",
+
+  "ping_response" : "PONG. Your user id is {userid}",
+
+  "greeting_response" : "Hello there, {user}!",
+
+  "random_responses" : [
+    "Come again?",
+    "Wuzzat?",
+    "Wut",
+    "Huh?",
+    "Sure.....what?",
+    "Not a clue what you want.",
+    "WAT.",
+    "Perhaps try 'help'?"
+  ],
+
+  "greetings" : [
+    "hey",
+    "sup",
+    "hello",
+    "hola",
+    "yo",
+    "howdy",
+    "hi"
+  ]
+}
