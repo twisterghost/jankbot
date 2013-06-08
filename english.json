@@ -18,6 +18,17 @@
     "ping" : "ping"
   },
 
+  "help_message" : "I'm Jankbot, here to help with your every day DotA!",
+
+  "CMD_HELP" : {
+    "lfg" : "Alert my friends that you are looking to play.",
+    "inhouse" : "Alert my friends that you are hosting an inhouse.",
+    "help" : "Shows this help message.",
+    "mute" : "Shuts me up. All missed messages will be saved.",
+    "unmute" : "Resumes messages from me. Saved messages will be delivered.",
+    "ping" : "PONG! I'll tell you your Steam ID."
+    },
+
   "LFG_RESPONSES" : {
     "lfg_response_sender" : "I alerted my friends that you wish to play.",
     "lfg_broadcast" : "{user} is looking to play."
@@ -34,6 +45,14 @@
   "ping_response" : "PONG. Your user id is {userid}",
 
   "greeting_response" : "Hello there, {user}!",
+
+  "ADMIN" : {
+    "quit" : "Okay, quitting...",
+    "dump_friends" : "Dumping friends JSON to console...",
+    "dump_users" : "Dumping users JSON to console...",
+    "broadcast_log" : "Admin broadcast request: {message}",
+    "broadcast_sent" : "Your broadcast has been sent."
+  },
 
   "random_responses" : [
     "Come again?",

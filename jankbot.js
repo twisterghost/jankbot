@@ -70,7 +70,7 @@ bot.on('message', function(source, message, type, chatter) {
 
     // Authenticate as admin.
     if (isAdmin(source)) {
-      admin(input, function(resp) {
+      admin(input, source, original, function(resp) {
         friends.messageUser(source, resp, bot);
       });
       return;
@@ -177,24 +177,32 @@ function shutdown() {
 
 
 // Handler for admin functionality.
-function admin(input, callback) {
+function admin(input, source, original, callback) {
 
   // Quit function
   if (input[1] == "quit") {
-    callback("Okay. Quitting...");
+    callback(DICT.ADMIN.quit);
     shutdown();
   }
 
   // Dump friends info.
   if (input[1] == "dump" && input[2] == "friends") {
     logger.log(JSON.stringify(friends.getAllFriends()));
-    callback("Friends JSON dumped to console.");
+    callback(DICT.ADMIN.dump_friends);
   }
 
   // Dump users info.
   if (input[1] == "dump" && input[2] == "users") {
     logger.log(JSON.stringify(bot.users));
-    callback("bot.users JSON dumped to console.");
+    callback(DICT.ADMIN.dump_users);
+  }
+
+  if (input[1] == "broadcast") {
+    var adminMessage = original.replace("admin broadcast", "");
+    logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
+    friends.broadcast(adminMessage, source, bot);
+    callback(DICT.ADMIN.broadcast_sent);
+
   }
 }
 
@@ -207,12 +215,10 @@ function isAdmin(source) {
 
 // Help text.
 function help() {
-  var resp =  "I am Jankbot, here to help with your everyday janking!\n" +
-  "DEFAULT COMMANDS:\n" +
-  "inhouse - Alert the jank that an inhouse is starting.\n" +
-  "lfg - Alert the jank that you want to play.\n" +
-  "mute - Silences me. I will save missed messages for you.\n" +
-  "unmute - Unsilences me. I will tell you what you missed.\n";
+  var resp = DICT.help_message + "\n";
+  for (cmd in DICT.CMDS) {
+    resp += cmd + " - " + DICT.CMD_HELP[cmd] + "\n";
+  }
   for (var i = 0; i < modules.length; i++) {
     resp += "\n" + modules[i].getHelp();
   }
