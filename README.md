@@ -1,6 +1,14 @@
 # Jankbot
 A Steam bot for Dota 2 communities
 
+## Table of Contents
+[Introduction](#introduction)
+[Installation](#installation)
+[Running Jankbot](#running-jankbot)
+[Administrating Your Jankbot](#administrating-your-jankbot)
+[FAQ](#faq)
+[License](#license)
+
 ## Introduction
 Jankbot is an open source module-oriented Steam bot designed to help organize
 player communities. The system is open for use and devleoped with scale in mind
