@@ -15,15 +15,17 @@ Jankbot is an open source module-oriented Steam bot designed to help organize
 player communities. The system is open for use and devleoped with scale in mind
 so that any size group can make use of it. Jankbot is written in NodeJS.
 
+The Jankbot project is rapidly developing and is very welcome to pull requests.
+
 ## Installation
 Installing jankbot is pretty simple, really!
 
 You will need:
 * NodeJS v0.10.x or higher
-* NPM (comes with node)
+* NPM (comes with NodeJS)
 * A Steam account with full privilages
 
-Keep in mind that in order to have a full privilaged Steam account, **you must
+Keep in mind that in order to have a fully privilaged Steam account, **you must
 make at least one transaction on the account.** If you do not do this, you will
 not be able to add the bot to your friends list.
 
@@ -73,7 +75,7 @@ is the name Jankbot will show up as on your friends list.
 
 Finally we come to `"dictionary" : "english.json"`. Jankbot is built for DotA 2
 which is highly international. So, Jankbot can learn different languages!
-Unfortunately, JankDota.com members aren't fluent in much else besides English
+Unfortunately, JankDota's developers aren't fluent in much else besides English
 and idiocy, so we only have an English dictionary out of the box. **HINT HINT
 if any multilingual people out there want to translate and make some
 dictionaries we would love you forever!**
@@ -104,9 +106,12 @@ one purchase, you are READY TO RUN JANKBOT, WOOHOO!
 
 And that's it! Jankbot should now log in to steam and accept friend requests.
 Simply add him as you would another user and he will add you back, ready to help
-improve your community!m
+improve your community!
 
 ## Adding Modules
+
+*Get modules at [JankDota.com!](http://jankdota.com/jankbot/modules)*
+
 Jankbot is designed to use custom modules to extend his abilities. To add a
 module, begin by placing the module source file in the `bot_modules/` directory.
 Then, edit `config.json` and add the name of the module to the `modules`
@@ -155,6 +160,22 @@ If your steam ID was 12345654321, your config file would look like this:
 
 To add more administrators, simply add their Steam IDs to the list, separating
 by commas.
+
+Jankbot shows logs in the command line, but also saves logs in a file called
+`output.log`.
+
+Out of the box, Jankbot supports the following admin commands:
+
+`admin quit` shuts down Jankbot (Note: if you run Jankbot with forever he will
+simply restart)
+
+`admin dump friends` dumps the friend data to the console and output.log
+
+`admin dump users` dumps Jankbot's current user knowledge to the console and
+output.log.
+
+`admin broadcast YOUR_MESSAGE_HERE` broadcasts your given message to all of his
+friends.
 
 ## FAQ
 **Why won't Jankbot accept friend requests?**
