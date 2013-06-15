@@ -26,7 +26,11 @@ Keep in mind that in order to have a full privilaged Steam account, **you must
 make at least one transaction on the account.** If you do not do this, you will
 not be able to add the bot to your friends list.
 
-**To begin**, download the Jankbot source. Using a terminal, run:
+**To begin**, download the Jankbot source code. You can get this from
+http://jankdota.com/jankbot or from
+[here on Github](https://github.com/twisterghost/jankbot/archive/master.zip).
+
+Next, using a terminal, run:
 
 `cd /path/to/jankbot/folder` (Be sure to use the path you unzipped it to!)
 
@@ -75,6 +79,19 @@ dictionaries we would love you forever!**
 
 Anyway, to use a different dictionary file, change that value to point to the
 dictionary you'd like to use.
+
+**Installation TL;DR**
+
+*Please be sure you understand what you're doing if you use this summary!*
+
+1. Install [NodeJS 0.10.0 or higher](http://nodejs.org/)
+2. Make a steam account with at least one purchase on it
+3. Download Jankbot's source code
+4. Unzip it to a folder
+5. CD to that folder in a terminal
+6. Run `npm install`
+7. Create `config.json` and use the template above
+8. Edit config.json to fit your needs
 
 ## Running Jankbot
 
