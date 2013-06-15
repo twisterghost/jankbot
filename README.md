@@ -7,20 +7,28 @@ player communities. The system is open for use and devleoped with scale in mind
 so that any size group can make use of it. Jankbot is written in NodeJS.
 
 ## Installation
+Installing jankbot is pretty simple, really!
+
 You will need:
 * NodeJS v0.10.x or higher
 * NPM (comes with node)
 * A Steam account with full privilages
 
-Keep in mind that in order to have a full privilaged Steam account, you must
-make at least one transaction on the account. If you do not do this, you will
+Keep in mind that in order to have a full privilaged Steam account, **you must
+make at least one transaction on the account.** If you do not do this, you will
 not be able to add the bot to your friends list.
 
-To begin, download the Jankbot source. Using a terminal, cd into the source
-directory and run `npm install`.
+**To begin**, download the Jankbot source. Using a terminal, run:
 
-**NOTE:** You may have issues installing the node packages for Steam. It is
-recommended that you use a linux operating system and use NodeJS v0.10.x
+`cd /path/to/jankbot/folder` (Be sure to use the path you unzipped it to!)
+
+Then, run `npm install`
+
+You will see a bunch of text. If you aren't a programmer, don't worry about that
+stuff.
+
+**NOTE:** You may have issues installing the nodejs packages for Steam. It is
+*recommended* that you use a linux operating system and use NodeJS v0.10.x
 
 Once the packages are installed, you will need to set up the config file.
 Create a file called `config.json` and use this template:
@@ -30,15 +38,47 @@ Create a file called `config.json` and use this template:
   "username": "your_bot_account_username",
   "password": "your_bot_account_password",
   "admins" : [],
-  "modules" : [
-  ],
-  "displayName" : "Jankbot"
+  "modules" : [],
+  "displayName" : "Jankbot",
+  "dictionary"  : "english.json"
 }
+
 ```
 
-Once you edit the config file with the proper username and password, you're set!
-Run your newly installed Jankbot with `node jankbot` and you should be ready to
-roll!
+Let's run through this quickly. This file is loaded into Jankbot and configures
+him to run to your specifications. Set the username and password to match the
+credientials of the steam account you want Jankbot to use.
+
+The next part is `"admins" : [],`. This is a list of the administator accounts
+that Jankbot should accept admin commands from.
+
+Next we have `"modules" : [],`. This is a list of the modules you want Jankbot
+to use. Get more modules from http://jankdota.com/jankbot/modules!
+
+Now we have `"displayName" : "Jankbot",`. This is pretty self explanatory. This
+is the name Jankbot will show up as on your friends list.
+
+Finally we come to `"dictionary" : "english.json"`. Jankbot is built for DotA 2
+which is highly international. So, Jankbot can learn different languages!
+Unfortunately, JankDota.com members aren't fluent in much else besides English
+and idiocy, so we only have an English dictionary out of the box. **HINT HINT
+if any multilingual people out there want to translate and make some
+dictionaries we would love you forever!**
+
+Anyway, to use a different dictionary file, change that value to point to the
+dictionary you'd like to use.
+
+## Running Jankbot
+
+Once you have the config file set up and you've run `npm install` in the Jankbot
+directory on your machine and you have a Steam account ready to go with at least
+one purchase, you are READY TO RUN JANKBOT, WOOHOO!
+
+**To run Jankbot:** `node jankbot`
+
+And that's it! Jankbot should now log in to steam and accept friend requests.
+Simply add him as you would another user and he will add you back, ready to help
+improve your community!m
 
 ## Adding Modules
 Jankbot is designed to use custom modules to extend his abilities. To add a
@@ -57,7 +97,8 @@ For example, if you were adding a module called "quotes" with a source file
   "modules" : [
     "quotes"
   ],
-  "displayName" : "Jankbot"
+  "displayName" : "Jankbot",
+  "dictionary"  : "english.json"
 }
 ```
 
