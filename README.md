@@ -7,7 +7,8 @@ A Steam bot for Dota 2 communities
 3. [Running Jankbot](#running-jankbot)
 4. [Administrating Your Jankbot](#administrating-your-jankbot)
 5. [FAQ](#faq)
-6. [License](#license)
+6. [For Developers](#for-developers)
+7. [License](#license)
 
 ## Introduction
 Jankbot is an open source module-oriented Steam bot designed to help organize
@@ -80,7 +81,7 @@ dictionaries we would love you forever!**
 Anyway, to use a different dictionary file, change that value to point to the
 dictionary you'd like to use.
 
-**Installation TL;DR**
+### Installation TL;DR
 
 *Please be sure you understand what you're doing if you use this summary!*
 
@@ -147,7 +148,8 @@ If your steam ID was 12345654321, your config file would look like this:
   "admins" : ["12345654321"],
   "modules" : [
   ],
-  "displayName" : "Jankbot"
+  "displayName" : "Jankbot",
+  "dictionary"  : "english.json"
 }
 ```
 
@@ -182,6 +184,22 @@ Remember that you will need to restart Jankbot after updating.
 
 By all means, refer to Jankbot as Jankettebot. Just feels easier saying 'he'
 instead of 'it' or 'Jankbot' all the time.
+
+**I'm still having trouble. How can I get help?**
+Tons of ways! You can email the head developer at twisterghost@jankdota.com,
+tweet @JankDota, send a reddit message to
+[/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
+problem with the code, open an issue right here on GitHub.
+
+## For Developers
+
+Jankbot is an open source project far more than open to pull requests. If you
+are a developer and wish to contribute, code review, fix a bug or whatever,
+please join in! We can only do so much alone, but together Jankbot can be
+strong!
+
+**You can find the Jankbot module developer documentation
+[here](http://jankdota.com/jankbot/docs)**
 
 ## License
 Copyright (c) 2013 Michael Barrett, JankDota.com
