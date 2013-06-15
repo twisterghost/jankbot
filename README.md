@@ -207,8 +207,9 @@ By all means, refer to Jankbot as Jankettebot. Just feels easier saying 'he'
 instead of 'it' or 'Jankbot' all the time.
 
 **I'm still having trouble. How can I get help?**
+
 Tons of ways! You can email the head developer at twisterghost@jankdota.com,
-tweet @JankDota, send a reddit message to
+tweet [@JankDota](http://twitter.com/jankdota), send a reddit message to
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
 
@@ -223,6 +224,9 @@ strong!
 [here](http://jankdota.com/jankbot/docs)**
 
 ## License
+
+Jankbot is under the MIT Open Source License:
+
 Copyright (c) 2013 Michael Barrett, JankDota.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
