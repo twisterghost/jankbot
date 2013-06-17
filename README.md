@@ -1,6 +1,8 @@
 # Jankbot
 A Steam bot for Dota 2 communities
 
+Current version: 1.0.0
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Installation](#installation)
@@ -46,6 +48,13 @@ stuff.
 *recommended* that you use a linux operating system and use NodeJS v0.10.x
 
 Once the packages are installed, you will need to set up the config file.
+
+**Option 1: Run `node config` and go through the steps.** You can skip to the
+next section if you do this route, though you may want to read option 2 to
+understand what this part does.
+
+**Option 2: Follow the instructions below to do it manually**
+
 Create a file called `config.json` and use this template:
 
 ```javascript
@@ -93,8 +102,8 @@ dictionary you'd like to use.
 4. Unzip it to a folder
 5. CD to that folder in a terminal
 6. Run `npm install`
-7. Create `config.json` and use the template above
-8. Edit config.json to fit your needs
+7. Run `node config` **or** create `config.json` and use the template above
+8. If you made your own config.json, edit config.json to fit your needs
 
 ## Running Jankbot
 
@@ -114,7 +123,15 @@ improve your community!
 
 Jankbot is designed to use custom modules to extend his abilities. To add a
 module, begin by placing the module source file in the `bot_modules/` directory.
-Then, edit `config.json` and add the name of the module to the `modules`
+
+Next, you can either use the `config` program or add the module manually.
+
+**To use the config program**, run `node config module add` and follow the
+instructions.
+
+**To add the module manually, follow the instructions below.**
+
+Edit `config.json` and add the name of the module to the `modules`
 property.
 
 For example, if you were adding a module called "quotes" with a source file
@@ -137,13 +154,24 @@ To add more modules, simply repeat the same steps and add the names of the
 modules to your config file. **Be sure to use commas to separate the module
 names!**
 
+**To remove modules**, simply run `node config module remove` and follow the
+instructions, or manually remove by reversing the steps to add the module.
+
 ## Administrating Your Jankbot
 To use the admin commands, you will need to let Jankbot know who is an admin. To
 do this, you will need to add the Steam ID numbers to the config file. To find
 out your steam ID number, run Jankbot and message him saying "ping". Jankbot
 will respond saying "pong" and your Steam ID.
 
+Another way to get your ID is to visit http://steamidfinder.com/ and type in
+your Steam login. It will come back with something like `STEAM_0:0:#########`.
+Take that text and paste it into the search box and search again, then it will
+give your 17 digit steam ID.
+
 Once you have your Steam ID, add it to the `admins` property in the config file.
+
+**You can again use the config program or do this manually.**
+
 If your steam ID was 12345654321, your config file would look like this:
 
 ```javascript
@@ -176,6 +204,10 @@ output.log.
 
 `admin broadcast YOUR_MESSAGE_HERE` broadcasts your given message to all of his
 friends.
+
+**Note:** Currently, admin commands are not set up to be multilingual due to
+issues with word structure and language structure. This will be changed as soon
+as a proper solution is found.
 
 ## FAQ
 **Why won't Jankbot accept friend requests?**
