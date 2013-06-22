@@ -26,6 +26,7 @@ You will need:
 * NodeJS v0.10.x or higher
 * NPM (comes with NodeJS)
 * A Steam account with full privilages
+* If on Windows, install the [Windows Prereqs](http://dev.jankdota.com/jankbot/Jankbot_Windows_Prereqs.zip).
 
 Keep in mind that in order to have a fully privilaged Steam account, **you must
 make at least one transaction on the account.** If you do not do this, you will
@@ -97,13 +98,14 @@ dictionary you'd like to use.
 *Please be sure you understand what you're doing if you use this summary!*
 
 1. Install [NodeJS 0.10.0 or higher](http://nodejs.org/)
-2. Make a steam account with at least one purchase on it
-3. Download Jankbot's source code
-4. Unzip it to a folder
-5. CD to that folder in a terminal
-6. Run `npm install`
-7. Run `node config` **or** create `config.json` and use the template above
-8. If you made your own config.json, edit config.json to fit your needs
+2. If on Windows, install the [Windows Prereqs](http://dev.jankdota.com/jankbot/Jankbot_Windows_Prereqs.zip).
+3. Make a steam account with at least one purchase on it
+4. Download Jankbot's source code
+5. Unzip it to a folder
+6. CD to that folder in a terminal
+7. Run `npm install`
+8. Run `node config` **or** create `config.json` and use the template above
+9. If you made your own config.json, edit config.json to fit your needs
 
 ## Running Jankbot
 
