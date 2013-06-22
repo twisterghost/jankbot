@@ -30,7 +30,7 @@ if (process.argv[2] == "module") {
       function(answer) {
         if (fs.existsSync(process.cwd() + "/bot_modules/" + answer + ".js")) {
           config['modules'].push(answer);
-          fs.writeFileSync("config.json", JSON.stringify(config));
+          fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
           console.log("Module successfully added.");
           process.exit();
         } else {
@@ -48,7 +48,7 @@ if (process.argv[2] == "module") {
         if (config.modules.indexOf(answer) != -1) {
           var position = config.modules.indexOf(answer);
           config['modules'].splice(position, 1);
-          fs.writeFileSync("config.json", JSON.stringify(config));
+          fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
           console.log("Module successfully uninstalled.".green);
           if (fs.existsSync(process.cwd() + "/bot_modules/" + answer + ".js")) {
             fs.unlinkSync(process.cwd() + "/bot_modules/" + answer + ".js");
@@ -119,9 +119,9 @@ if (process.argv[2] == "module") {
                 config['dictionary'] = answer;
               }
 
-              fs.writeFileSync("config.json", JSON.stringify(config));
+              fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
               console.log("Your config.json file will look like:");
-              console.log(config);
+              console.log(JSON.stringify(config, null, 2));
               console.log("\nYou're all set!".green);
               process.exit();
             });
