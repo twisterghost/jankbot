@@ -14,7 +14,12 @@ var rl = readline.createInterface({
 });
 
 // Open config.json or create it.
-var config = JSON.parse(fs.readFileSync("config.json"));
+if (fs.existsSync("config.json")) {
+  var config = JSON.parse(fs.readFileSync("config.json"));
+} else {
+  config = {};
+  config.modules = [];
+}
 
 // For adding modules.
 if (process.argv[2] == "module") {
