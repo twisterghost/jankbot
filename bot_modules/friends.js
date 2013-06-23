@@ -21,6 +21,41 @@ exports.nameOf = function(id) {
 }
 
 
+// Returns the ID of a friend based on the given name.
+// Returns undefined if that friend is not found.
+exports.idOf = function(name) {
+  for (var friend in friends) {
+    if (friends[friend].name == name) {
+      return friend;
+    }
+  }
+  return undefined;
+}
+
+
+// Saves a custom property about a friend. Returns true if it was able to
+// successfully save.
+exports.set = function(id, property, value) {
+  if (friends.hasOwnProperty(id)) {
+    friends[id][property] = value;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+// Gets a custom property about a friend. Returns undefined if that property
+// does not exist.
+exports.get = function(id, property) {
+  if (friends.hasOwnProperty(id)) {
+    return friends[id][property];
+  } else {
+    return undefined;
+  }
+}
+
+
 // Attempts to add someone to internal friends list.
 exports.addFriend = function(source) {
   if (!friends.hasOwnProperty(source)) {
