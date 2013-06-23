@@ -23,6 +23,10 @@ var DICT = JSON.parse(fs.readFileSync(CONFIG.dictionary));
 // Set admins.
 var ADMINS = CONFIG.admins;
 
+if (ADMINS == null) {
+  ADMINS = [];
+}
+
 // Load modules.
 var modules = [];
 for (var i = 0; i < CONFIG.modules.length; i++) {
@@ -136,9 +140,11 @@ bot.on('message', function(source, message, type, chatter) {
 
   // Loop through other modules.
   for (var i = 0; i < modules.length; i++) {
-    if (modules[i].canHandle(original)) {
-      modules[i].handle(original, source, bot);
-      return;
+    if (typeof modules[i].canHandle === 'function') {
+      if (modules[i].canHandle(original)) {
+        modules[i].handle(original, source, bot);
+        return;
+      }
     }
   }
 
@@ -170,7 +176,9 @@ function randomResponse() {
 function shutdown() {
   friends.save();
   for (var i = 0; i < modules.length; i++) {
-    modules[i].onExit();
+    if (typeof modules[i].onExit === 'function') {
+      modules[i].onExit();
+    }
   }
   process.exit();
 }
