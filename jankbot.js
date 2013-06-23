@@ -23,6 +23,10 @@ var DICT = JSON.parse(fs.readFileSync(CONFIG.dictionary));
 // Set admins.
 var ADMINS = CONFIG.admins;
 
+if (ADMINS == null) {
+  ADMINS = [];
+}
+
 // Load modules.
 var modules = [];
 for (var i = 0; i < CONFIG.modules.length; i++) {
