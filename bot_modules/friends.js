@@ -23,13 +23,31 @@ exports.nameOf = function(id) {
 
 // Returns the ID of a friend based on the given name.
 // Returns undefined if that friend is not found.
-exports.idOf = function(name) {
-  for (var friend in friends) {
-    if (friends[friend].name == name) {
-      return friend;
+exports.idOf = function(name, fuzzy) {
+
+  // Fuzzy search.
+  if (fuzzy) {
+    for (var friend in friends) {
+      var thisFriend = friends[friend].name;
+
+      // If this fuzzily matched, get info.
+      if (fuzzyMatch(thisFriend, name)) {
+        return friend;
+      }
     }
+
+    // No matches, return undefined.
+    return undefined;
+  } else {
+
+    // Exact search.
+    for (var friend in friends) {
+      if (friends[friend].name == name) {
+        return friend;
+      }
+    }
+    return undefined;
   }
-  return undefined;
 }
 
 
@@ -151,3 +169,10 @@ exports.broadcast = function(message, source, bot) {
       exports.messageUser(friend, message, bot);
   }
 }
+
+// Thanks to Dokkat for this function
+// http://codereview.stackexchange.com/users/19757/dokkat
+function fuzzyMatch(str,pattern){
+    pattern = pattern.split("").reduce(function(a,b){ return a+".*"+b; });
+    return (new RegExp(pattern)).test(str);
+};
