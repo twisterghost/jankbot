@@ -4,6 +4,8 @@ var Steam = require('steam');
 
 var friends = {};
 
+var MAX_MESSAGE_HOLD = 10;
+
 
 // Load saved friends lists.
 if (fs.existsSync('friendslist')) {
@@ -56,6 +58,7 @@ exports.idOf = function(name, fuzzy) {
 exports.set = function(id, property, value) {
   if (friends.hasOwnProperty(id)) {
     friends[id][property] = value;
+    exports.save();
     return true;
   } else {
     return false;
@@ -81,6 +84,7 @@ exports.addFriend = function(source) {
     friends[source] = {};
     friends[source].messages = [];
     friends[source].mute = false;
+    exports.save();
   }
 }
 
@@ -105,6 +109,9 @@ exports.getAllFriends = function() {
 // Add a message to a friend's message queue.
 function pushMessageQueue(friend, message) {
   friends[friend].messages.push(message);
+  if (friends[friend].messages.length > MAX_MESSAGE_HOLD) {
+    friends[friend].messages.splice(0, friends[friend].messages.length - MAX_MESSAGE_HOLD);
+  }
 }
 
 
@@ -135,6 +142,7 @@ exports.setMute = function(friend, mute) {
   if (friendExists(friend)) {
     friends[friend].mute = mute;
   }
+  exports.save();
 }
 
 
@@ -158,6 +166,7 @@ exports.messageUser = function(user, message, bot) {
   } else {
     pushMessageQueue(user, message);
   }
+  exports.save();
 }
 
 
