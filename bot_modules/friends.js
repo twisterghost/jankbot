@@ -58,6 +58,7 @@ exports.idOf = function(name, fuzzy) {
 exports.set = function(id, property, value) {
   if (friends.hasOwnProperty(id)) {
     friends[id][property] = value;
+    exports.save();
     return true;
   } else {
     return false;
@@ -83,6 +84,7 @@ exports.addFriend = function(source) {
     friends[source] = {};
     friends[source].messages = [];
     friends[source].mute = false;
+    exports.save();
   }
 }
 
@@ -140,6 +142,7 @@ exports.setMute = function(friend, mute) {
   if (friendExists(friend)) {
     friends[friend].mute = mute;
   }
+  exports.save();
 }
 
 
@@ -163,6 +166,7 @@ exports.messageUser = function(user, message, bot) {
   } else {
     pushMessageQueue(user, message);
   }
+  exports.save();
 }
 
 
