@@ -4,6 +4,8 @@ var Steam = require('steam');
 
 var friends = {};
 
+var MAX_MESSAGE_HOLD = 10;
+
 
 // Load saved friends lists.
 if (fs.existsSync('friendslist')) {
@@ -105,6 +107,9 @@ exports.getAllFriends = function() {
 // Add a message to a friend's message queue.
 function pushMessageQueue(friend, message) {
   friends[friend].messages.push(message);
+  if (friends[friend].messages.length > MAX_MESSAGE_HOLD) {
+    friends[friend].messages.splice(0, friends[friend].messages.length - MAX_MESSAGE_HOLD);
+  }
 }
 
 

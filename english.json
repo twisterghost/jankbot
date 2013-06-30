@@ -24,7 +24,7 @@
     "lfg" : "Alert my friends that you are looking to play.",
     "inhouse" : "Alert my friends that you are hosting an inhouse.",
     "help" : "Shows this help message.",
-    "mute" : "Shuts me up. All missed messages will be saved.",
+    "mute" : "Shuts me up. Your 10 latest missed messages will be saved.",
     "unmute" : "Resumes messages from me. Saved messages will be delivered.",
     "ping" : "PONG! I'll tell you your Steam ID."
     },
@@ -40,7 +40,7 @@
   },
 
   "mute_response" : "Okay, I will stop bugging you. Your missed messages will be delivered when you unmute me.",
-  "unmute_response" : "Hello! Here are the messages you missed: \n{messages}",
+  "unmute_response" : "Hello! Here are the latest messages you missed: \n{messages}",
 
   "ping_response" : "PONG. Your user id is {userid}",
 
