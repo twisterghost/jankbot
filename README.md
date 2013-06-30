@@ -257,6 +257,15 @@ strong!
 **You can find the Jankbot module developer documentation
 [here](http://jankdota.com/jankbot/docs)**
 
+### Contributing
+If you would like to contribute to the Jankbot project on GitHub, fork this repo
+and send pull requests. We are more than happy to review and add changes. We
+ask that **all pull requests are pulling into the
+[master-test](https://github.com/twisterghost/jankbot/tree/master-test)
+branch.** We will handle merging to master when the build is stable.
+
+You may also feel free to add yourself to the `contributors` file.
+
 ## License
 
 Jankbot is under the MIT Open Source License:
