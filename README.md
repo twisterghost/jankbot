@@ -1,7 +1,7 @@
 # Jankbot
 A Steam bot for Dota 2 communities
 
-Current version: 1.0.0
+Current version: 1.0.1
 
 ## Table of Contents
 1. [Introduction](#introduction)
