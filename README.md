@@ -98,7 +98,7 @@ dictionary you'd like to use.
 *Please be sure you understand what you're doing if you use this summary!*
 
 1. Install [NodeJS 0.10.0 or higher](http://nodejs.org/)
-2. If on Windows, install the [Windows Prereqs](http://dev.jankdota.com/jankbot/Jankbot_Windows_Prereqs.zip).
+2. If on Windows, install the [Windows Prereqs](https://github.com/twisterghost/jankbot/raw/windows-prereqs/Jankbot_Windows_Prereqs.zip).
 3. Make a steam account with at least one purchase on it
 4. Download Jankbot's source code
 5. Unzip it to a folder
