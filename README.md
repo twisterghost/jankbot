@@ -1,3 +1,5 @@
+**Version 2 of Jankbot is now in development! Track the progress on the [unstable dev branch](https://github.com/twisterghost/jankbot/tree/jankbot-v2-dev)**
+
 # Jankbot
 A Steam bot for Dota 2 communities
 
