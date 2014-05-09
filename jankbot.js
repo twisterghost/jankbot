@@ -18,7 +18,7 @@ var argv = require('optimist');
 var CONFIG = JSON.parse(fs.readFileSync("config.json"));
 
 // Load dictionary.
-var DICT = JSON.parse(fs.readFileSync(CONFIG.dictionary));
+var DICT = JSON.parse(fs.readFileSync('dict/' + CONFIG.dictionary));
 
 // Set admins.
 var ADMINS = CONFIG.admins;
