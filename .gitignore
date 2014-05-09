@@ -4,3 +4,5 @@ quoteslist
 output.log
 config.json
 changelog
+*.log
+data
