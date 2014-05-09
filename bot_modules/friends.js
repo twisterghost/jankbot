@@ -33,7 +33,7 @@ exports.idOf = function(name, fuzzy) {
       var thisFriend = friends[friend].name;
 
       // If this fuzzily matched, get info.
-      if (fuzzyMatch(thisFriend, name)) {
+      if (fuzzyMatch(thisFriend.toLowerCase(), name.toLowerCase())) {
         return friend;
       }
     }
