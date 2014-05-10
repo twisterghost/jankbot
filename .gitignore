@@ -1,6 +1,6 @@
 node_modules/
+bot_modules
 friendslist
-quoteslist
 output.log
 config.json
 changelog

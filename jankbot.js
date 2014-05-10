@@ -7,8 +7,8 @@
 // Imports.
 var fs = require('fs');
 var Steam = require('steam');
-var friends = require('./bot_modules/friends.js');
-var logger = require('./bot_modules/logger.js');
+var friends = require('./core/friends.js');
+var logger = require('./core/logger.js');
 var minimap = require('minimap');
 
 // Define command line arguments.
@@ -29,9 +29,20 @@ if (ADMINS == null) {
 
 // Load modules.
 var modules = [];
-for (var i = 0; i < CONFIG.modules.length; i++) {
-  modules.push(require("./bot_modules/" + CONFIG.modules[i] + ".js"));
-}
+var modulesPath = __dirname + '/bot_modules/'
+fs.readdirSync(modulesPath).forEach(function (dir) {
+  fs.readdirSync(modulesPath + dir).forEach(function (file) {
+
+    // Load up the modules based on their module.json file.
+    if (file == 'module.json') {
+      var moduleConfig = JSON.parse(fs.readFileSync(modulesPath + dir + '/' + file));
+      console.log("Loading module " + moduleConfig.name + " by " + moduleConfig.author + "...");
+      modules.push(require(modulesPath + dir + '/' + moduleConfig.main));
+    }
+  });
+});
+
+console.log("Loaded " + modules.length + " module(s).");
 
 // Global variables.
 var myName = CONFIG.displayName;
