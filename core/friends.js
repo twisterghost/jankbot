@@ -6,6 +6,8 @@ var friends = {};
 
 var MAX_MESSAGE_HOLD = 10;
 
+var testMode = false;
+
 
 // Load saved friends lists.
 if (fs.existsSync('friendslist')) {
@@ -154,7 +156,9 @@ function friendExists(friend) {
 
 // Saves the friends list.
 exports.save = function() {
-  fs.writeFileSync("friendslist", JSON.stringify(friends));
+  if (!testMode) {
+    fs.writeFileSync("friendslist", JSON.stringify(friends));
+  }
 }
 
 
@@ -176,6 +180,28 @@ exports.broadcast = function(message, source, bot) {
   for (var friend in friends) {
     if (friend != source)
       exports.messageUser(friend, message, bot);
+  }
+}
+
+// Load mock data for testing and block saving.
+exports.initTest = function() {
+  testMode = true;
+  friends = {
+    "1": {
+      "messages":[],
+      "mute":false,
+      "name":"Test Friend 1"
+    },
+    "2": {
+      "messages":[],
+      "mute":false,
+      "name":"Test Friend 2"
+    },
+    "3": {
+      "messages":[],
+      "mute":false,
+      "name":"Final Test Friend"
+    }
   }
 }
 
