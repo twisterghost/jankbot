@@ -9,6 +9,7 @@ var fs = require('fs');
 var Steam = require('steam');
 var friends = require('./core/friends.js');
 var logger = require('./core/logger.js');
+var dota2 = require('./core/dota2.js');
 var minimap = require('minimap');
 
 // Define command line arguments.
@@ -49,11 +50,15 @@ var myName = CONFIG.displayName;
 
 // Log in and set name.
 var bot = new Steam.SteamClient();
-bot.logOn(CONFIG.username, CONFIG.password);
+bot.logOn({
+  accountName: CONFIG.username,
+  password: CONFIG.password
+});
 bot.on('loggedOn', function() {
   logger.log(DICT.SYSTEM.system_loggedin);
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
+  dota2.init(bot);
 });
 
 
