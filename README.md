@@ -261,7 +261,7 @@ runs when Jankbot is shutting down.
 returns the help string for your module for when the a user
 says 'help' to Jankbot.
 
-### Core Modules
+#### Core Modules
 
 Jankbot has 3 core modules to give functionality to modules. To use these 
 modules, simply require them to your file with:
@@ -277,7 +277,64 @@ Replacing 'modulename' with the module you need.
 The friends.js module gives access to the friends list, messaging and friend
 management. It exposes a cornucopia of helpful functios:
 
-##### nameOf
+##### nameOf(id)
+
+Returns the current known steam name of the given user id.
+
+##### idOf(name [, fuzzy])
+
+Returns the steam ID of the given steam name. Set `fuzzy` to true to use fuzzy
+search.
+
+##### set(id, property, value)
+
+Sets an arbitrary property on the user with the given id.
+
+##### get(id, property)
+
+Gets an arbitrary property from the user with the given id. Returns `undefined`
+if the property was not found.
+
+##### getAllFriends()
+
+Returns the entire friends list object. Be gentle.
+
+##### getMute(id)
+
+Returns true if the user with the given ID has set Jankbot to mute.
+
+##### setMute(id, mute)
+
+Sets the mute status for the given user to on (true) or off (false).
+
+##### messageUser(id, message)
+
+Messages the user with the given id the given message.
+
+##### broadcast(message, id)
+
+Broadcasts a message to every user except the user with the given ID.
+
+#### logger.js
+
+The logger.js module is Jankbot's logging system. It should be used over
+console.log for bookkeeping purposes.
+
+##### log(message)
+
+Logs the given message.
+
+##### error(message)
+
+Errors with the given message.
+
+#### dota2.js
+
+The good stuff. This module gives access to Dota 2 functionality. This core
+module is very new and only has a few built in functions, but exposes `client`,
+which is the full Dota2 client. For more info, see 
+[node-dota2](https://github.com/RJacksonm1/node-dota2)
+
 
 ### Contributing
 If you would like to contribute to the Jankbot project on GitHub, fork this repo
