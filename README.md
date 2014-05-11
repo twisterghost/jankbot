@@ -78,9 +78,6 @@ credientials of the steam account you want Jankbot to use.
 The next part is `"admins" : [],`. This is a list of the administator accounts
 that Jankbot should accept admin commands from.
 
-Next we have `"modules" : [],`. This is a list of the modules you want Jankbot
-to use. Get more modules from http://jankdota.com/jankbot/modules!
-
 Now we have `"displayName" : "Jankbot",`. This is pretty self explanatory. This
 is the name Jankbot will show up as on your friends list.
 
