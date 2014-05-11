@@ -59,6 +59,7 @@ bot.on('loggedOn', function() {
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
   dota2.init(bot);
+  friends.init(bot);
 });
 
 
@@ -67,7 +68,7 @@ bot.on('message', function(source, message, type, chatter) {
 
   // Be sure this person is remembered and run friends list name update.
   friends.addFriend(source);
-  friends.updateFriendsNames(bot);
+  friends.updateFriendsNames();
   friends.updateTimestamp(source);
 
   // If the message is blank (blank messages are received from 'is typing').
@@ -92,11 +93,11 @@ bot.on('message', function(source, message, type, chatter) {
     // Authenticate as admin.
     if (isAdmin(source)) {
       admin(input, source, original, function(resp) {
-        friends.messageUser(source, resp, bot);
+        friends.messageUser(source, resp);
       });
       return;
     } else {
-      friends.messageUser(source, DICT.ERRORS.err_not_admin, bot);
+      friends.messageUser(source, DICT.ERRORS.err_not_admin);
       return;
     }
   }
@@ -105,8 +106,8 @@ bot.on('message', function(source, message, type, chatter) {
   else if (message == DICT.CMDS.lfg) {
     var broadcastMsg = minimap.map({"user" : fromUser},
         DICT.LFG_RESPONSES.lfg_broadcast);
-    friends.broadcast(broadcastMsg, source, bot);
-    friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender, bot);
+    friends.broadcast(broadcastMsg, source);
+    friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender);
     return;
   }
 
@@ -114,27 +115,27 @@ bot.on('message', function(source, message, type, chatter) {
   else if (message == DICT.CMDS.inhouse) {
     var broadcastMsg = minimap.map({"host" : fromUser},
         DICT.INHOUSE_RESPONSES.inhouse_broadcast);
-    friends.broadcast(broadcastMsg, source, bot);
-    friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender, bot);
+    friends.broadcast(broadcastMsg, source);
+    friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender);
     return;
   }
 
   // Respond to pings.
   else if (message == DICT.CMDS.ping) {
     var responseStr = minimap.map({"userid" : source}, DICT.ping_response);
-    friends.messageUser(source, responseStr, bot);
+    friends.messageUser(source, responseStr);
     return;
   }
 
   // Help message.
   else if (message == DICT.CMDS.help) {
-    friends.messageUser(source, help(), bot);
+    friends.messageUser(source, help());
     return;
   }
 
   // Mute.
   else if (message == DICT.CMDS.mute) {
-    friends.messageUser(source, DICT.mute_response, bot);
+    friends.messageUser(source, DICT.mute_response);
     friends.setMute(source, true);
     return;
   }
@@ -142,14 +143,14 @@ bot.on('message', function(source, message, type, chatter) {
   // Unmute player and give missed messaged.
   else if (message == DICT.CMDS.unmute) {
     friends.setMute(source, false);
-    friends.messageUser(source, DICT.unmute_response, bot);
+    friends.messageUser(source, DICT.unmute_response);
     return;
   }
 
   // Respond to greetings.
   else if (isGreeting(message)) {
     var responseStr = minimap.map({"user" : fromUser}, DICT.greeting_response);
-    friends.messageUser(source, responseStr, bot);
+    friends.messageUser(source, responseStr);
     return;
   }
 
@@ -157,14 +158,14 @@ bot.on('message', function(source, message, type, chatter) {
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].canHandle === 'function') {
       if (modules[i].canHandle(original)) {
-        modules[i].handle(original, source, bot);
+        modules[i].handle(original, source);
         return;
       }
     }
   }
 
   // Default
-  friends.messageUser(source, randomResponse(), bot);
+  friends.messageUser(source, randomResponse());
 
 });
 
@@ -178,7 +179,7 @@ bot.on('relationship', function(other, type){
     bot.addFriend(other);
     logger.log(minimap.map({"userid" : other}, DICT.SYSTEM.system_added_friend));
     friends.addFriend(other);
-    friends.updateFriendsNames(bot);
+    friends.updateFriendsNames();
   }
 });
 
@@ -289,7 +290,7 @@ function admin(input, source, original, callback) {
   if (input[1] == "broadcast") {
     var adminMessage = original.replace("admin broadcast", "");
     logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
-    friends.broadcast(adminMessage, source, bot);
+    friends.broadcast(adminMessage, source);
     callback(DICT.ADMIN.broadcast_sent);
   }
 }

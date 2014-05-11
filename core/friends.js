@@ -4,7 +4,7 @@ var Steam = require('steam');
 var friends = {};
 var blacklist = [];
 var testMode = false;
-
+var bot;
 
 // Load saved friends lists.
 if (fs.existsSync('friendslist')) {
@@ -15,6 +15,10 @@ if (fs.existsSync('blacklist')) {
   blacklist = JSON.parse(fs.readFileSync('blacklist'));
 }
 
+
+exports.init = function(botInstance) {
+  bot = botInstance;
+}
 
 // Returns the name of the given ID based on friends list.
 exports.nameOf = function(id) {
@@ -136,7 +140,7 @@ exports.removeFriend = function(id, cb) {
 }
 
 // Grabs what names it can from bot.users and applies them to the friends list.
-exports.updateFriendsNames = function(bot) {
+exports.updateFriendsNames = function() {
   for (var friend in friends) {
     if (bot.users.hasOwnProperty(friend)) {
       friends[friend].name = bot.users[friend].playerName;
@@ -186,7 +190,7 @@ exports.save = function() {
 
 
 // Sends a message to a user.
-exports.messageUser = function(user, message, bot, broadcast) {
+exports.messageUser = function(user, message, broadcast) {
 
   // If this isn't a broadcast, send it to the user.
   if (!broadcast) {
@@ -203,11 +207,11 @@ exports.messageUser = function(user, message, bot, broadcast) {
 
 
 // Broadcasts a message to everyone but source.
-exports.broadcast = function(message, source, bot) {
+exports.broadcast = function(message, source) {
   logger.log("Broadcasting: " + message);
   for (var friend in friends) {
     if (friend != source)
-      exports.messageUser(friend, message, bot, true);
+      exports.messageUser(friend, message, true);
   }
 }
 

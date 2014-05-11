@@ -1,7 +1,7 @@
 # Jankbot
 A Steam bot for Dota 2 communities
 
-Current version: 1.0.1
+Current version: 2.0.0
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -10,7 +10,8 @@ Current version: 1.0.1
 4. [Administrating Your Jankbot](#administrating-your-jankbot)
 5. [FAQ](#faq)
 6. [For Developers](#for-developers)
-7. [License](#license)
+7. [Module API](#module-api)
+8. [License](#license)
 
 ## Introduction
 Jankbot is an open source module-oriented Steam bot designed to help organize
@@ -20,20 +21,21 @@ so that any size group can make use of it. Jankbot is written in NodeJS.
 The Jankbot project is rapidly developing and is very welcome to pull requests.
 
 ## Installation
-Installing jankbot is pretty simple, really!
+Installing jankbot is pretty simple, really! Jankbot was designed
+and developed on Linux machines. There shouldn't be any trouble installing on a
+Linux distro, or OSX. Installing and running on Windows is possible, but
+unsupported and requires prerequisites to be installed.
 
 You will need:
 * NodeJS v0.10.x or higher
 * NPM (comes with NodeJS)
-* A Steam account with full privilages
-* If on Windows, install the [Windows Prereqs](http://dev.jankdota.com/jankbot/Jankbot_Windows_Prereqs.zip).
+* A Steam account with full privilages (and Steam Guard disabled)
 
 Keep in mind that in order to have a fully privilaged Steam account, **you must
 make at least one transaction on the account.** If you do not do this, you will
 not be able to add the bot to your friends list.
 
-**To begin**, download the Jankbot source code. You can get this from
-http://jankdota.com/jankbot or from
+**To begin**, download the Jankbot source code. You can get this
 [here on Github](https://github.com/twisterghost/jankbot/archive/master.zip).
 
 Next, using a terminal, run:
@@ -63,7 +65,6 @@ Create a file called `config.json` and use this template:
   "username": "your_bot_account_username",
   "password": "your_bot_account_password",
   "admins" : [],
-  "modules" : [],
   "displayName" : "Jankbot",
   "dictionary"  : "english.json"
 }
@@ -98,14 +99,13 @@ dictionary you'd like to use.
 *Please be sure you understand what you're doing if you use this summary!*
 
 1. Install [NodeJS 0.10.0 or higher](http://nodejs.org/)
-2. If on Windows, install the [Windows Prereqs](https://github.com/twisterghost/jankbot/raw/windows-prereqs/Jankbot_Windows_Prereqs.zip).
-3. Make a steam account with at least one purchase on it
-4. Download Jankbot's source code
-5. Unzip it to a folder
-6. CD to that folder in a terminal
-7. Run `npm install`
-8. Run `node config` **or** create `config.json` and use the template above
-9. If you made your own config.json, edit config.json to fit your needs
+2. Make a steam account with at least one purchase on it
+3. Download Jankbot's source code
+4. Unzip it to a folder
+5. CD to that folder in a terminal
+6. Run `npm install`
+7. Run `node config` **or** create `config.json` and use the template above
+8. If you made your own config.json, edit config.json to fit your needs
 
 ## Running Jankbot
 
@@ -121,43 +121,9 @@ improve your community!
 
 ## Adding Modules
 
-*Get modules at [JankDota.com!](http://jankdota.com/jankbot/modules)*
-
 Jankbot is designed to use custom modules to extend his abilities. To add a
-module, begin by placing the module source file in the `bot_modules/` directory.
-
-Next, you can either use the `config` program or add the module manually.
-
-**To use the config program**, run `node config module add` and follow the
-instructions.
-
-**To add the module manually, follow the instructions below.**
-
-Edit `config.json` and add the name of the module to the `modules`
-property.
-
-For example, if you were adding a module called "quotes" with a source file
-`quotes.js`, your config.json file would look like this:
-
-```javascript
-{
-  "username": "your_bot_account_username",
-  "password": "your_bot_account_password",
-  "admins" : [],
-  "modules" : [
-    "quotes"
-  ],
-  "displayName" : "Jankbot",
-  "dictionary"  : "english.json"
-}
-```
-
-To add more modules, simply repeat the same steps and add the names of the
-modules to your config file. **Be sure to use commas to separate the module
-names!**
-
-**To remove modules**, simply run `node config module remove` and follow the
-instructions, or manually remove by reversing the steps to add the module.
+module, begin by placing the module source files in the `bot_modules/`
+directory. Jankbot will load the module next time you run the program.
 
 ## Administrating Your Jankbot
 To use the admin commands, you will need to let Jankbot know who is an admin. To
@@ -219,14 +185,8 @@ must make at least 1 transaction on the account to make use of friends lists.
 
 **How do I keep Jankbot running after I close the terminal?**
 
-You may want to look into [forever](https://github.com/nodejitsu/forever). It
-will keep scripts running...well, forever.
-
-**What will happen if I delete the friends or logger modules?**
-
-Puppies around the world will die and Jankbot will not be able to function.
-Those modules are part of the core of Jankbot and are there to be used by other
-modules.
+You may want to look into [pm2](https://github.com/unitech/pm2). It is a handy
+program manager that will keep it running in the background.
 
 **How do I update Jankbot?**
 
@@ -242,7 +202,7 @@ instead of 'it' or 'Jankbot' all the time.
 
 **I'm still having trouble. How can I get help?**
 
-Tons of ways! You can email the head developer at twisterghost@jankdota.com,
+Tons of ways! You can email the head developer at michael@jankdota.com,
 tweet [@JankDota](http://twitter.com/jankdota), send a reddit message to
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
@@ -254,8 +214,70 @@ are a developer and wish to contribute, code review, fix a bug or whatever,
 please join in! We can only do so much alone, but together Jankbot can be
 strong!
 
-**You can find the Jankbot module developer documentation
-[here](http://jankdota.com/jankbot/docs)**
+## Module API
+
+Jankbot is designed to be extended by modules. This means anyone can write
+extensions for Jankbot using the absurdly simple Jankbot API.
+
+### Square 1
+
+Create a directory for your module and add a `module.json` file that looks like
+this:
+
+```javascript
+{
+  "name": "Module Name",
+  "author": "Author Name",
+  "main": "module-file.js",
+  "license": "MIT",
+  "description": "Description of the module"
+}
+```
+
+Edit `module.json` to your liking. This is the file Jankbot will use to identify
+your module when it is loading. After that, just make your module file (with the
+same file name as you put in `module.json`) and begin writing your module!
+
+### The API
+
+Your module needs to have at least these four functions exported:
+
+##### exports.canHandle(input)
+
+is passed the raw text that a user says to Jankbot. This function should simply 
+return true or false based on if it is capable of handling the command.
+
+##### exports.handle(input, source)
+
+is the function that actually handles the input. It is called if `canHandle()` 
+returns true and is passed the raw text, and the ID of the user who send the command.
+
+##### exports.onExit() 
+
+runs when Jankbot is shutting down.
+
+##### exports.getHelp() 
+
+returns the help string for your module for when the a user
+says 'help' to Jankbot.
+
+### Core Modules
+
+Jankbot has 3 core modules to give functionality to modules. To use these 
+modules, simply require them to your file with:
+
+```javascript
+var modulename = require('../../core/modulename');
+```
+
+Replacing 'modulename' with the module you need.
+
+#### friends.js
+
+The friends.js module gives access to the friends list, messaging and friend
+management. It exposes a cornucopia of helpful functios:
+
+##### nameOf
 
 ### Contributing
 If you would like to contribute to the Jankbot project on GitHub, fork this repo
