@@ -122,7 +122,7 @@ improve your community!
 ## Adding Modules
 
 Jankbot is designed to use custom modules to extend his abilities. To add a
-module, begin by placing the module source files in the `bot_modules/`
+module, place the module source folder in the `bot_modules/`
 directory. Jankbot will load the module next time you run the program.
 
 ## Administrating Your Jankbot
@@ -172,6 +172,19 @@ output.log.
 
 `admin broadcast YOUR_MESSAGE_HERE` broadcasts your given message to all of his
 friends.
+
+`admin lookup ID` will look up the user with the given ID and dump their info.
+
+`admin inactive` will list all users who have not interacted with the bot in the
+past week.
+
+`admin kick ID` will unfriend the user with the given ID.
+
+`admin add ID` will friend the user with the given ID.
+
+`admin blacklist ID` will ban the user with the given ID from this bot.
+
+`admin unblacklist ID` will unban the user with the given ID.
 
 **Note:** Currently, admin commands are not set up to be multilingual due to
 issues with word structure and language structure. This will be changed as soon

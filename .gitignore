@@ -1,6 +1,7 @@
 node_modules/
 bot_modules
 friendslist
+blacklist
 output.log
 config.json
 changelog
