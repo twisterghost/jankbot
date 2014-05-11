@@ -6,7 +6,7 @@
   },
 
   "ERRORS" : {
-    "err_not_admin" : "You are not an admin!"
+    "err_not_admin" : "That command requires admin status."
   },
 
   "CMDS" : {
@@ -18,14 +18,14 @@
     "ping" : "ping"
   },
 
-  "help_message" : "I'm Jankbot, here to help with your every day DotA!",
+  "help_message" : "I'm Jankbot, here to help with your every day Dota!",
 
   "CMD_HELP" : {
     "lfg" : "Alert my friends that you are looking to play.",
     "inhouse" : "Alert my friends that you are hosting an inhouse.",
     "help" : "Shows this help message.",
-    "mute" : "Shuts me up. Your 10 latest missed messages will be saved.",
-    "unmute" : "Resumes messages from me. Saved messages will be delivered.",
+    "mute" : "Stops broadcasts from reaching you.",
+    "unmute" : "Allows broadcasts to reach you.",
     "ping" : "PONG! I'll tell you your Steam ID."
     },
 
@@ -39,8 +39,8 @@
     "inhouse_broadcast" : "{host} is hosting an inhouse."
   },
 
-  "mute_response" : "Okay, I will stop bugging you. Your missed messages will be delivered when you unmute me.",
-  "unmute_response" : "Hello! Here are the latest messages you missed: \n{messages}",
+  "mute_response" : "Okay, broadcasts will no longer reach you until you unmute me.",
+  "unmute_response" : "Okay, broadcasts will now reach you.",
 
   "ping_response" : "PONG. Your user id is {userid}",
 
@@ -51,7 +51,12 @@
     "dump_friends" : "Dumping friends JSON to console...",
     "dump_users" : "Dumping users JSON to console...",
     "broadcast_log" : "Admin broadcast request: {message}",
-    "broadcast_sent" : "Your broadcast has been sent."
+    "broadcast_sent" : "Your broadcast has been sent.",
+    "remove_friend_success" : "Removed friend {id}",
+    "remove_friend_error" : "No such friend {id}",
+    "lookup_success" : "The requested friend's name is {name}",
+    "lookup_error" : "No known friend with that ID.",
+    "no_inactive_users": "No users on this bot are inactive!"
   },
 
   "random_responses" : [

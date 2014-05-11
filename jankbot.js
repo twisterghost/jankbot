@@ -63,6 +63,7 @@ bot.on('message', function(source, message, type, chatter) {
   // Be sure this person is remembered and run friends list name update.
   friends.addFriend(source);
   friends.updateFriendsNames(bot);
+  friends.updateTimestamp(source);
 
   // If the message is blank (blank messages are received from 'is typing').
   if (message == '') {
@@ -136,9 +137,7 @@ bot.on('message', function(source, message, type, chatter) {
   // Unmute player and give missed messaged.
   else if (message == DICT.CMDS.unmute) {
     friends.setMute(source, false);
-    var responseStr = minimap.map({"messages" : friends.getHeldMessages(source)},
-        DICT.unmute_response);
-    friends.messageUser(source, responseStr, bot);
+    friends.messageUser(source, DICT.unmute_response, bot);
     return;
   }
 
@@ -216,12 +215,56 @@ function admin(input, source, original, callback) {
     callback(DICT.ADMIN.dump_users);
   }
 
+  // Look up friend ID.
+  if (input[1] == "lookup") {
+    var list = friends.getAllFriends();
+    if (list.hasOwnProperty(input[2])) {
+      var friend = list[input[2]];
+      callback(JSON.stringify(friend, null, "  "));
+    } else {
+      callback(DICT.ADMIN.lookup_error);
+    }
+  }
+
+  // Scan for inactive users.
+  if (input[1] == "inactive") {
+    var ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
+    var list = friends.getAllFriends();
+    var inactiveUsers = [];
+    for (var friend in list) {
+
+      // If this user hasn't used this bot in a week, log it.
+      console.log(list[friend].lastMessageTime);
+      console.log(new Date().getTime() - ONE_WEEK);
+      if (new Date(list[friend].lastMessageTime).getTime() < (new Date().getTime() - ONE_WEEK)) {
+        inactiveUsers.push(list[friend]);
+      }
+    }
+
+    if (inactiveUsers.length == 0) {
+      callback(DICT.ADMIN.no_inactive_users);
+    } else {
+      callback(JSON.stringify(inactiveUsers, null, "  "));
+    }
+  }
+
+  // Kick friend.
+  if (input[1] == "kick") {
+    var friendId = input[2];
+    friends.removeFriend(friendId, function(success) {
+      if (success) {
+        callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_success));
+      } else {
+        callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_error));
+      }
+    }); 
+  }
+
   if (input[1] == "broadcast") {
     var adminMessage = original.replace("admin broadcast", "");
     logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
     friends.broadcast(adminMessage, source, bot);
     callback(DICT.ADMIN.broadcast_sent);
-
   }
 }
 

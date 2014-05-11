@@ -1,11 +1,7 @@
 var fs = require('fs');
 var logger = require('./logger.js');
 var Steam = require('steam');
-
 var friends = {};
-
-var MAX_MESSAGE_HOLD = 10;
-
 var testMode = false;
 
 
@@ -55,6 +51,14 @@ exports.idOf = function(name, fuzzy) {
 }
 
 
+// Updates the timestamp for the given id.
+exports.updateTimestamp = function(id) {
+  if (friends.hasOwnProperty(id)) {
+    friends[id].lastMessageTime = new Date();
+  }
+}
+
+
 // Saves a custom property about a friend. Returns true if it was able to
 // successfully save.
 exports.set = function(id, property, value) {
@@ -84,12 +88,22 @@ exports.addFriend = function(source) {
   if (!friends.hasOwnProperty(source)) {
     logger.log("Adding friend: " + source);
     friends[source] = {};
-    friends[source].messages = [];
+    friends[source].lastMessageTime = new Date();
     friends[source].mute = false;
     exports.save();
   }
 }
 
+exports.removeFriend = function(id, cb) {
+  if (friends.hasOwnProperty(id)) {
+    logger.log('Unfriending: ' + id);
+    delete friends[id];
+    cb(true);
+    exports.save();
+  } else {
+    cb(false);
+  }
+}
 
 // Grabs what names it can from bot.users and applies them to the friends list.
 exports.updateFriendsNames = function(bot) {
@@ -105,28 +119,6 @@ exports.updateFriendsNames = function(bot) {
 // Return all friends.
 exports.getAllFriends = function() {
   return friends;
-}
-
-
-// Add a message to a friend's message queue.
-function pushMessageQueue(friend, message) {
-  friends[friend].messages.push(message);
-  if (friends[friend].messages.length > MAX_MESSAGE_HOLD) {
-    friends[friend].messages.splice(0, friends[friend].messages.length - MAX_MESSAGE_HOLD);
-  }
-}
-
-
-// Return all messages from a friends message queue and clear it.
-exports.getHeldMessages = function(friend) {
-  if (friends[friend].messages.length == 0) {
-    return "There were no messages for you while I was muted.";
-  } else {
-    var resp = "";
-    resp = friends[friend].messages.join("\n");
-    friends[friend].messages = [];
-    return resp;
-  }
 }
 
 
@@ -163,14 +155,19 @@ exports.save = function() {
 
 
 // Sends a message to a user.
-exports.messageUser = function(user, message, bot) {
-  if (!exports.getMute(user)) {
+exports.messageUser = function(user, message, bot, broadcast) {
+
+  // If this isn't a broadcast, send it to the user.
+  if (!broadcast) {
     logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
     bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
-  } else {
-    pushMessageQueue(user, message);
+    return;
+
+  // Otherwise, only send it to them if they aren't muted.
+  } else if (!exports.getMute(user)) {
+    logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
+    bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
   }
-  exports.save();
 }
 
 
@@ -179,7 +176,7 @@ exports.broadcast = function(message, source, bot) {
   logger.log("Broadcasting: " + message);
   for (var friend in friends) {
     if (friend != source)
-      exports.messageUser(friend, message, bot);
+      exports.messageUser(friend, message, bot, true);
   }
 }
 
@@ -190,17 +187,20 @@ exports.initTest = function() {
     "1": {
       "messages":[],
       "mute":false,
-      "name":"Test Friend 1"
+      "name":"Test Friend 1",
+      "lastMessageTime": new Date()
     },
     "2": {
       "messages":[],
       "mute":false,
-      "name":"Test Friend 2"
+      "name":"Test Friend 2",
+      "lastMessageTime": new Date() - 1000
     },
     "3": {
       "messages":[],
       "mute":false,
-      "name":"Final Test Friend"
+      "name":"Final Test Friend",
+      "lastMessageTime": new Date()
     }
   }
 }
