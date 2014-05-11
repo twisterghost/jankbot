@@ -155,6 +155,10 @@ exports.getAllFriends = function() {
   return friends;
 }
 
+exports.getBlacklist = function() {
+  return blacklist;
+}
+
 
 // Get if the friend is muted or not.
 exports.getMute = function(friend) {
@@ -218,6 +222,7 @@ exports.broadcast = function(message, source) {
 // Load mock data for testing and block saving.
 exports.initTest = function() {
   testMode = true;
+  blacklist = [];
   friends = {
     "1": {
       "messages":[],
