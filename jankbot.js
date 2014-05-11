@@ -167,6 +167,9 @@ bot.on('message', function(source, message, type, chatter) {
 // Add friends automatically.
 bot.on('relationship', function(other, type){
   if(type == Steam.EFriendRelationship.PendingInvitee) {
+    if (checkIsBlacklisted(other)) {
+      logger.log(minimap.map({userid: other}, DICT.SYSTEM.system_blacklist_attempt));
+    }
     bot.addFriend(other);
     logger.log(minimap.map({"userid" : other}, DICT.SYSTEM.system_added_friend));
     friends.addFriend(other);
@@ -234,8 +237,6 @@ function admin(input, source, original, callback) {
     for (var friend in list) {
 
       // If this user hasn't used this bot in a week, log it.
-      console.log(list[friend].lastMessageTime);
-      console.log(new Date().getTime() - ONE_WEEK);
       if (new Date(list[friend].lastMessageTime).getTime() < (new Date().getTime() - ONE_WEEK)) {
         inactiveUsers.push(list[friend]);
       }
@@ -251,6 +252,7 @@ function admin(input, source, original, callback) {
   // Kick friend.
   if (input[1] == "kick") {
     var friendId = input[2];
+    bot.removeFriend(input[2]);
     friends.removeFriend(friendId, function(success) {
       if (success) {
         callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_success));
@@ -258,6 +260,25 @@ function admin(input, source, original, callback) {
         callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_error));
       }
     }); 
+  }
+
+  // Blacklist an id.
+  if (input[1] == "blacklist") {
+    friends.blacklist(input[2]);
+    callback(DICT.ADMIN.blacklist_add);
+  }
+
+
+  // Unblacklist an id.
+  if (input[1] == "unblacklist") {
+    friends.unBlacklist(input[2]);
+    callback(DICT.ADMIN.blacklist_remove);
+  }
+
+
+  if (input[1] == "add") {
+    bot.addFriend(input[2]);
+    friends.addFriend(input[2]);
   }
 
   if (input[1] == "broadcast") {

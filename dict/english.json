@@ -2,7 +2,8 @@
   "SYSTEM" : {
     "system_loggedin" : "Successfully logged in.",
     "system_msg_received" : "Received from {user}: {message}",
-    "system_added_friend" : "Added new friend: {userid}"
+    "system_added_friend" : "Added new friend: {userid}",
+    "system_blacklist_attempt" : "Blacklisted id {userid} attempted to friend the bot."
   },
 
   "ERRORS" : {
@@ -56,7 +57,9 @@
     "remove_friend_error" : "No such friend {id}",
     "lookup_success" : "The requested friend's name is {name}",
     "lookup_error" : "No known friend with that ID.",
-    "no_inactive_users": "No users on this bot are inactive!"
+    "no_inactive_users": "No users on this bot are inactive!",
+    "blacklist_add" : "Added user to the blacklist",
+    "blacklist_remove" : "Removed the user from the blacklist"
   },
 
   "random_responses" : [

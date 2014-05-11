@@ -2,12 +2,17 @@ var fs = require('fs');
 var logger = require('./logger.js');
 var Steam = require('steam');
 var friends = {};
+var blacklist = [];
 var testMode = false;
 
 
 // Load saved friends lists.
 if (fs.existsSync('friendslist')) {
   friends = JSON.parse(fs.readFileSync('friendslist'));
+}
+
+if (fs.existsSync('blacklist')) {
+  blacklist = JSON.parse(fs.readFileSync('blacklist'));
 }
 
 
@@ -83,6 +88,31 @@ exports.get = function(id, property) {
 }
 
 
+// Add a user ID to the blacklist.
+exports.blacklist = function(id) {
+  if (blacklist.indexOf(id) == -1) {
+    blacklist.push(id);
+  }
+  exports.save();
+}
+
+
+// Removes the given ID from the blacklist.
+exports.unBlacklist = function(id) {
+  var index = blacklist.indexOf(id);
+  if (index != -1) {
+    blacklist = blacklist.splice(index, 1);
+  }
+  exports.save();
+}
+
+
+// Returns true if the given id is blacklisted.
+exports.checkIsBlacklisted = function(id) {
+  return blacklist.indexOf(id) != -1;
+}
+
+
 // Attempts to add someone to internal friends list.
 exports.addFriend = function(source) {
   if (!friends.hasOwnProperty(source)) {
@@ -150,6 +180,7 @@ function friendExists(friend) {
 exports.save = function() {
   if (!testMode) {
     fs.writeFileSync("friendslist", JSON.stringify(friends));
+    fs.writeFileSync("blacklist", JSON.stringify(blacklist));
   }
 }
 
