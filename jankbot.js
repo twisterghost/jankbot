@@ -309,7 +309,9 @@ function help() {
     resp += cmd + " - " + DICT.CMD_HELP[cmd] + "\n";
   }
   for (var i = 0; i < modules.length; i++) {
-    resp += "\n" + modules[i].getHelp();
+    if (typeof modules[i].getHelp === 'function') {
+      resp += "\n" + modules[i].getHelp();
+    }
   }
   return resp;
 }
