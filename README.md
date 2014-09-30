@@ -252,19 +252,20 @@ same file name as you put in `module.json`) and begin writing your module!
 
 Your module needs to have at least these four functions exported:
 
-##### exports.canHandle(input)
-
-is passed the raw text that a user says to Jankbot. This function should simply 
-return true or false based on if it is capable of handling the command.
-
 ##### exports.handle(input, source)
 
-is the function that actually handles the input. It is called if `canHandle()` 
-returns true and is passed the raw text, and the ID of the user who send the command.
+is the hook into Jankbot's execution system. Jankbot will pass the raw text 
+and the ID of the user who sent the command to this function (input and source).
+This function should parse the user input and decide if your module is capable
+of handling the input, and if so, act upon the input. This function should 
+return `true` if it handles the input, and false (or no return) otherwise. 
+Returning `true` to Jankbot will stop other modules from checking the input. If
+for some reason you want to handle the input but still allow other modules to
+execute, simply do your work here and do not return anything.
 
 ##### exports.onExit() 
 
-runs when Jankbot is shutting down.
+runs when Jankbot is shutting down. Useful for ensuring proper saves.
 
 ##### exports.getHelp() 
 

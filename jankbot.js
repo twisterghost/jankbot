@@ -156,9 +156,8 @@ bot.on('message', function(source, message, type, chatter) {
 
   // Loop through other modules.
   for (var i = 0; i < modules.length; i++) {
-    if (typeof modules[i].canHandle === 'function') {
-      if (modules[i].canHandle(original)) {
-        modules[i].handle(original, source);
+    if (typeof modules[i].handle === 'function') {
+      if (modules[i].handle(original, source)) {
         return;
       }
     }
