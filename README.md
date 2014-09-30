@@ -24,7 +24,8 @@ The Jankbot project is rapidly developing and is very welcome to pull requests.
 Installing jankbot is pretty simple, really! Jankbot was designed
 and developed on Linux machines. There shouldn't be any trouble installing on a
 Linux distro, or OSX. Installing and running on Windows is possible, but
-unsupported and requires prerequisites to be installed.
+unsupported and requires prerequisites to be installed. Windows does not ship
+with the resources to connect securely to Steam.
 
 You will need:
 * NodeJS v0.10.x or higher
@@ -35,7 +36,7 @@ Keep in mind that in order to have a fully privilaged Steam account, **you must
 make at least one transaction on the account.** If you do not do this, you will
 not be able to add the bot to your friends list.
 
-**To begin**, download the Jankbot source code. You can get this
+**To begin**, download or clone the Jankbot source code. You can get this
 [here on Github](https://github.com/twisterghost/jankbot/archive/master.zip).
 
 Next, using a terminal, run:
