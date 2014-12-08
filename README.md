@@ -28,7 +28,7 @@ You will need:
 * NodeJS v0.10.x or higher
 * NPM (comes with NodeJS)
 * A Steam account with full privilages
-* If on Windows, install the [Windows Prereqs](http://dev.jankdota.com/jankbot/Jankbot_Windows_Prereqs.zip).
+* If on Windows, install the [Windows Prereqs](https://github.com/twisterghost/jankbot/raw/windows-prereqs/Jankbot_Windows_Prereqs.zip).
 
 Keep in mind that in order to have a fully privilaged Steam account, **you must
 make at least one transaction on the account.** If you do not do this, you will
@@ -123,7 +123,7 @@ improve your community!
 
 ## Adding Modules
 
-*Get modules at [JankDota.com!](http://jankdota.com/jankbot/modules)*
+*Get modules at [JankDota.com!](http://jankdota.com/jankbot/modules) (temporarily unavailable until v2)*
 
 Jankbot is designed to use custom modules to extend his abilities. To add a
 module, begin by placing the module source file in the `bot_modules/` directory.
@@ -221,8 +221,11 @@ must make at least 1 transaction on the account to make use of friends lists.
 
 **How do I keep Jankbot running after I close the terminal?**
 
-You may want to look into [forever](https://github.com/nodejitsu/forever). It
-will keep scripts running...well, forever.
+You may want to look into [pm2](https://github.com/Unitech/pm2). It lets you
+start up scripts and forget about them. Take care though, it will try to keep
+your Jankbot alive at all costs. This means that if your jankbot has the wrong
+credentials when connecting to steam, pm2 will make it keep trying, and may make
+steam angry.
 
 **What will happen if I delete the friends or logger modules?**
 
@@ -257,7 +260,8 @@ please join in! We can only do so much alone, but together Jankbot can be
 strong!
 
 **You can find the Jankbot module developer documentation
-[here](http://jankdota.com/jankbot/docs)**
+[here](http://jankdota.com/jankbot/docs) (temporarily unavailable until v2.
+Will be converted to a github wiki.**
 
 ### Contributing
 If you would like to contribute to the Jankbot project on GitHub, fork this repo
