@@ -1,0 +1,85 @@
+{
+  "SYSTEM" : {
+    "system_loggedin" : "Erfolgreich eingeloggt.",
+    "system_msg_received" : "Empfange von {user}: {message}",
+    "system_added_friend" : "Freund hinzugefügt: {userid}"
+    "system_blacklist_attempt" : "Blacklisted id {userid} attempted to friend the bot."
+  },
+
+  "ERRORS" : {
+    "err_not_admin" : "Dieser Befehl verlangt den Adminstatus"
+  },
+
+  "CMDS" : {
+    "lfg" : "lfg",
+    "inhouse" : "inhouse",
+    "help" : "help",
+    "mute" : "mute",
+    "unmute" : "unmute",
+    "ping" : "ping"
+  },
+
+  "help_message" : "Ich bin Jankbot, hier um dir bei Dota zu helfen!",
+
+  "CMD_HELP" : {
+    "lfg" : "Weise meine Freunde darauf hin, dass ich spielen möchte.",
+    "inhouse" : "Weise meine Freunde darauf hin, dass ich ein Match hoste.",
+    "help" : "Zeige diese Hilfenachricht.",
+    "mute" : "Beendet mich. Deine 10 letzen verpassten Nachrichten werden gespeichert.",
+    "unmute" : "Startet mich wieder. Gespeicherte Nachrichten werden zugestellt.",
+    "ping" : "PONG! Ich sage dir deine Steam ID."
+    },
+
+  "LFG_RESPONSES" : {
+    "lfg_response_sender" : "Ich habe meine Freunde daruf hingewiesen, dass du spielen möchtest.",
+    "lfg_broadcast" : "{user} möchte spielen."
+  },
+
+  "INHOUSE_RESPONSES" : {
+    "inhouse_response_sender" : "Ich habe meine Freunde darauf hingewiesen, dass du ein Match hostest.",
+    "inhouse_broadcast" : "{host} hostet ein Match."
+  },
+
+  "mute_response" : "Okay, broadcasts will no longer reach you until you unmute me.",
+  "unmute_response" : "Okay, broadcasts will now reach you.",
+
+  "ping_response" : "PONG. Your user id is {userid}",
+
+  "greeting_response" : "Hello there, {user}!",
+
+  "ADMIN" : {
+    "quit" : "Okay, quitting...",
+    "dump_friends" : "Dumping friends JSON to console...",
+    "dump_users" : "Dumping users JSON to console...",
+    "broadcast_log" : "Admin broadcast request: {message}",
+    "broadcast_sent" : "Your broadcast has been sent.",
+    "remove_friend_success" : "Removed friend {id}",
+    "remove_friend_error" : "No such friend {id}",
+    "lookup_success" : "The requested friend's name is {name}",
+    "lookup_error" : "No known friend with that ID.",
+    "no_inactive_users": "No users on this bot are inactive!",
+    "blacklist_add" : "Added user to the blacklist",
+    "blacklist_remove" : "Removed the user from the blacklist"
+  },
+
+  "random_responses" : [
+    "Come again?",
+    "Wuzzat?",
+    "Wut",
+    "Huh?",
+    "Sure.....what?",
+    "Not a clue what you want.",
+    "WAT.",
+    "Perhaps try 'help'?"
+  ],
+
+  "greetings" : [
+    "hey",
+    "sup",
+    "hello",
+    "hola",
+    "yo",
+    "howdy",
+    "hi"
+  ]
+}
