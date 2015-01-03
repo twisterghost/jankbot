@@ -40,46 +40,41 @@
     "inhouse_broadcast" : "{host} hostet ein Match."
   },
 
-  "mute_response" : "Okay, broadcasts will no longer reach you until you unmute me.",
-  "unmute_response" : "Okay, broadcasts will now reach you.",
+  "mute_response" : "Okay, Broadcasts werden dich nicht mehr erreichen bis du mich demutest.",
+  "unmute_response" : "Okay, Broadcasts werden dich nun erreichen.",
 
-  "ping_response" : "PONG. Your user id is {userid}",
+  "ping_response" : "PONG. Deine Benutzer ID lautet {userid}",
 
-  "greeting_response" : "Hello there, {user}!",
+  "greeting_response" : "Hallo {user}!",
 
   "ADMIN" : {
-    "quit" : "Okay, quitting...",
-    "dump_friends" : "Dumping friends JSON to console...",
-    "dump_users" : "Dumping users JSON to console...",
-    "broadcast_log" : "Admin broadcast request: {message}",
-    "broadcast_sent" : "Your broadcast has been sent.",
-    "remove_friend_success" : "Removed friend {id}",
-    "remove_friend_error" : "No such friend {id}",
-    "lookup_success" : "The requested friend's name is {name}",
-    "lookup_error" : "No known friend with that ID.",
-    "no_inactive_users": "No users on this bot are inactive!",
-    "blacklist_add" : "Added user to the blacklist",
-    "blacklist_remove" : "Removed the user from the blacklist"
+    "quit" : "Okay, beende...",
+    "dump_friends" : "Gebe Freunde JSON in Konsole aus...",
+    "dump_users" : "Gebe Benutzer JSON in Konsole aus...",
+    "broadcast_log" : "Admin Broadcastanfrage: {message}",
+    "broadcast_sent" : "Dein Broadcast wurde gesendet.",
+    "remove_friend_success" : "Freund {id} entfernt",
+    "remove_friend_error" : "Kein Freund mit ID {id}",
+    "lookup_success" : "der name des angefragten Freundes lautet {name}",
+    "lookup_error" : "Kein Freund mit dieser ID bekannt.",
+    "no_inactive_users": "Keine Benutzer inaktiv!",
+    "blacklist_add" : "Nutzer nur Blacklist hinzugefügt",
+    "blacklist_remove" : "Benutzer von Freundesliste entfernt"
   },
 
   "random_responses" : [
-    "Come again?",
-    "Wuzzat?",
-    "Wut",
-    "Huh?",
-    "Sure.....what?",
-    "Not a clue what you want.",
+    "Hmmm...?",
+    "Sicher...waas?",
+    "Ich hab keine Ahnung, was du willst.",
     "WAT.",
-    "Perhaps try 'help'?"
+    "Probier dochmal 'help'?"
   ],
 
   "greetings" : [
-    "hey",
-    "sup",
-    "hello",
-    "hola",
-    "yo",
-    "howdy",
-    "hi"
+    "Hey",
+    "Hallo",
+    "Yo",
+    "Howdy",
+    "Hi"
   ]
 }
