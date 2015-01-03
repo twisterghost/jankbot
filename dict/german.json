@@ -58,7 +58,7 @@
     "lookup_success" : "der Name des angefragten Freundes lautet {name}",
     "lookup_error" : "Kein Freund mit dieser ID bekannt.",
     "no_inactive_users": "Keine Benutzer inaktiv!",
-    "blacklist_add" : "Nutzer zur Blacklist hinzugefügt",
+    "blacklist_add" : "Benutzer zur Blacklist hinzugefügt",
     "blacklist_remove" : "Benutzer von Blacklist entfernt"
   },
 
