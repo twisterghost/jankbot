@@ -3,6 +3,8 @@ A Steam bot for Dota 2 communities
 
 Current version: 2.0.0
 
+[![Build Status](https://travis-ci.org/twisterghost/jankbot.svg?branch=jankbot-v2-dev)](https://travis-ci.org/twisterghost/jankbot)
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Installation](#installation)
