@@ -194,6 +194,20 @@ as a proper solution is found.
 You need to be sure that the account Jankbot is using has full permissions. You
 must make at least 1 transaction on the account to make use of friends lists.
 
+**How do I add Jankbot modules?**
+
+Starting with Jankbot v2, to add a module, simply download the module and place
+the folder inside of Jankbot's `bot_modules/` directory. Jankbot will
+auto-discover modules on startup.
+
+**Where can I find Jankbot modules?**
+
+We are currently working on a solution for finding Jankbot modules more easily,
+but for now, you can find a decent selection 
+[here](https://github.com/JankGaming/jankbot-modules). If you are a developer
+and have made your own module, you can submit a pull request to that repository
+to have your module added to the list.
+
 **How do I keep Jankbot running after I close the terminal?**
 
 You may want to look into [pm2](https://github.com/unitech/pm2). It is a handy
