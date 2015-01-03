@@ -275,7 +275,7 @@ same file name as you put in `module.json`) and begin writing your module!
 
 ### The API
 
-Your module needs to have at least these four functions exported:
+Your module needs to have at least these three functions exported:
 
 ##### exports.handle(input, source)
 
@@ -311,7 +311,7 @@ Replacing 'modulename' with the module you need.
 #### friends.js
 
 The friends.js module gives access to the friends list, messaging and friend
-management. It exposes a cornucopia of helpful functios:
+management. It exposes a cornucopia of helpful functions:
 
 ##### nameOf(id)
 
