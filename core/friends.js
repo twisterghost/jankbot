@@ -92,6 +92,14 @@ exports.get = function(id, property) {
 }
 
 
+// Run callback for each friend, passing in the friend ID.
+exports.forEach = function(callback) {
+  for (var friend in friends) {
+    callback(friend);
+  }
+};
+
+
 // Add a user ID to the blacklist.
 exports.blacklist = function(id) {
   if (blacklist.indexOf(id) == -1) {

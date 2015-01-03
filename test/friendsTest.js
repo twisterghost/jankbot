@@ -170,4 +170,14 @@ describe('friends.js', function() {
     });
   });
 
+  describe('#forEach()', function() {
+    it('should run a function for each friend', function() {
+      var friendIds = '';
+      friends.forEach(function(friend) {
+        friendIds += friend;
+      });
+      expect(friendIds).to.equal('123');
+    });
+  });
+
 });

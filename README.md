@@ -351,6 +351,16 @@ Messages the user with the given id the given message.
 
 Broadcasts a message to every user except the user with the given ID.
 
+##### forEach(callback)
+
+Runs the given `callback` for each friend, passing in the friend ID:
+
+```JavaScript
+friends.forEach(function(friend) {
+  friends.set(friend, 'somekey', 'somevalue');
+});
+```
+
 #### logger.js
 
 The logger.js module is Jankbot's logging system. It should be used over
