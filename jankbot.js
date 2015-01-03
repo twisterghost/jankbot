@@ -41,7 +41,13 @@ if (fs.existsSync(modulesPath)) {
       if (file == 'module.json') {
         var moduleConfig = JSON.parse(fs.readFileSync(modulesPath + dir + '/' + file));
         console.log("Loading module " + moduleConfig.name + " by " + moduleConfig.author + "...");
-        modules.push(require(modulesPath + dir + '/' + moduleConfig.main));
+        var module = require(path.join(modulesPath, dir, '/', moduleConfig.main));
+
+        if (module.setDictionary) {
+          module.setDictionary(CONFIG.dictionary);
+        }
+
+        modules.push(module);
       }
     });
   });
