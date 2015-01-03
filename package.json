@@ -13,7 +13,8 @@
     "request": "~2.16.6",
     "minimap": "0.0.3",
     "colors": "~0.6.0-1",
-    "dota2": "~0.6.0"
+    "dota2": "~0.6.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "chai": "~1.9.1",
