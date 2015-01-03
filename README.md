@@ -247,7 +247,7 @@ instead of 'it' or 'Jankbot' all the time.
 
 **I'm still having trouble. How can I get help?**
 
-Tons of ways! You can email the head developer at twisterghost@jankdota.com,
+Tons of ways! You can email the head developer at michael@jankdota.com,
 tweet [@JankDota](http://twitter.com/jankdota), send a reddit message to
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
