@@ -4,7 +4,7 @@
   "description": "A Dota-centric steambot by JankDota",
   "main": "jankbot.js",
   "scripts": {
-    "test": "mocha --recursive test"
+    "test": "./node_modules/mocha/bin/mocha --recursive test"
   },
   "license": "MIT",
   "dependencies": {
@@ -16,6 +16,7 @@
     "dota2": "~0.6.0"
   },
   "devDependencies": {
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "mocha": "~2.1.0"
   }
 }
