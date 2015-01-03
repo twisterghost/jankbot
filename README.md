@@ -189,6 +189,14 @@ issues with word structure and language structure. This will be changed as soon
 as a proper solution is found.
 
 ## FAQ
+
+**I'm getting errors when Jankbot attempts to log in, why?**
+
+Be sure you have disabled Steam Guard on the account you want to use Jankbot
+with. Steam Guard is the two-factor authentication system that helps to prevent
+unauthorized logins, but Jankbot is not able to handle this, because it requires
+you to enter a code sent to your email address.
+
 **Why won't Jankbot accept friend requests?**
 
 You need to be sure that the account Jankbot is using has full permissions. You
@@ -203,7 +211,7 @@ auto-discover modules on startup.
 **Where can I find Jankbot modules?**
 
 We are currently working on a solution for finding Jankbot modules more easily,
-but for now, you can find a decent selection 
+but for now, you can find a decent selection
 [here](https://github.com/JankGaming/jankbot-modules). If you are a developer
 and have made your own module, you can submit a pull request to that repository
 to have your module added to the list.
@@ -269,27 +277,27 @@ Your module needs to have at least these four functions exported:
 
 ##### exports.handle(input, source)
 
-is the hook into Jankbot's execution system. Jankbot will pass the raw text 
+is the hook into Jankbot's execution system. Jankbot will pass the raw text
 and the ID of the user who sent the command to this function (input and source).
 This function should parse the user input and decide if your module is capable
-of handling the input, and if so, act upon the input. This function should 
-return `true` if it handles the input, and false (or no return) otherwise. 
+of handling the input, and if so, act upon the input. This function should
+return `true` if it handles the input, and false (or no return) otherwise.
 Returning `true` to Jankbot will stop other modules from checking the input. If
 for some reason you want to handle the input but still allow other modules to
 execute, simply do your work here and do not return anything.
 
-##### exports.onExit() 
+##### exports.onExit()
 
 runs when Jankbot is shutting down. Useful for ensuring proper saves.
 
-##### exports.getHelp() 
+##### exports.getHelp()
 
 returns the help string for your module for when the a user
 says 'help' to Jankbot.
 
 #### Core Modules
 
-Jankbot has 3 core modules to give functionality to modules. To use these 
+Jankbot has 3 core modules to give functionality to modules. To use these
 modules, simply require them to your file with:
 
 ```javascript
@@ -358,7 +366,7 @@ Errors with the given message.
 
 The good stuff. This module gives access to Dota 2 functionality. This core
 module is very new and only has a few built in functions, but exposes `client`,
-which is the full Dota2 client. For more info, see 
+which is the full Dota2 client. For more info, see
 [node-dota2](https://github.com/RJacksonm1/node-dota2)
 
 

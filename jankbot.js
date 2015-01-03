@@ -11,6 +11,7 @@ var friends = require('./core/friends.js');
 var logger = require('./core/logger.js');
 var dota2 = require('./core/dota2.js');
 var minimap = require('minimap');
+var path = require('path');
 
 // Define command line arguments.
 var argv = require('optimist');
@@ -30,20 +31,31 @@ if (ADMINS == null) {
 
 // Load modules.
 var modules = [];
-var modulesPath = __dirname + '/bot_modules/'
-fs.readdirSync(modulesPath).forEach(function (dir) {
-  fs.readdirSync(modulesPath + dir).forEach(function (file) {
+var modulesPath = path.join(__dirname, '/bot_modules/');
 
-    // Load up the modules based on their module.json file.
-    if (file == 'module.json') {
-      var moduleConfig = JSON.parse(fs.readFileSync(modulesPath + dir + '/' + file));
-      console.log("Loading module " + moduleConfig.name + " by " + moduleConfig.author + "...");
-      modules.push(require(modulesPath + dir + '/' + moduleConfig.main));
-    }
+if (fs.existsSync(modulesPath)) {
+  fs.readdirSync(modulesPath).forEach(function (dir) {
+    fs.readdirSync(modulesPath + dir).forEach(function (file) {
+
+      // Load up the modules based on their module.json file.
+      if (file == 'module.json') {
+        var moduleConfig = JSON.parse(fs.readFileSync(modulesPath + dir + '/' + file));
+        console.log("Loading module " + moduleConfig.name + " by " + moduleConfig.author + "...");
+        var module = require(path.join(modulesPath, dir, '/', moduleConfig.main));
+
+        if (module.setDictionary) {
+          module.setDictionary(CONFIG.dictionary);
+        }
+
+        modules.push(module);
+      }
+    });
   });
-});
+  console.log('Loaded ' + modules.length + ' module(s).');
+} else {
+  console.log('No bot_modules directory found, skipping module import.');
+}
 
-console.log("Loaded " + modules.length + " module(s).");
 
 // Global variables.
 var myName = CONFIG.displayName;
@@ -264,7 +276,7 @@ function admin(input, source, original, callback) {
       } else {
         callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_error));
       }
-    }); 
+    });
   }
 
   // Blacklist an id.
