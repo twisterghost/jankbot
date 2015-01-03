@@ -3,7 +3,7 @@
     "system_loggedin" : "Erfolgreich eingeloggt.",
     "system_msg_received" : "Empfange von {user}: {message}",
     "system_added_friend" : "Freund hinzugefügt: {userid}",
-    "system_blacklist_attempt" : "Blacklisted id {userid} attempted to friend the bot."
+    "system_blacklist_attempt" : "Geblacklistete ID {userid} versuchte den bot hinzuzufügen."
   },
 
   "ERRORS" : {
