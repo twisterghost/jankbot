@@ -55,11 +55,11 @@
     "broadcast_sent" : "Dein Broadcast wurde gesendet.",
     "remove_friend_success" : "Freund {id} entfernt",
     "remove_friend_error" : "Kein Freund mit ID {id}",
-    "lookup_success" : "der name des angefragten Freundes lautet {name}",
+    "lookup_success" : "der Name des angefragten Freundes lautet {name}",
     "lookup_error" : "Kein Freund mit dieser ID bekannt.",
     "no_inactive_users": "Keine Benutzer inaktiv!",
-    "blacklist_add" : "Nutzer nur Blacklist hinzugefügt",
-    "blacklist_remove" : "Benutzer von Freundesliste entfernt"
+    "blacklist_add" : "Nutzer zur Blacklist hinzugefügt",
+    "blacklist_remove" : "Benutzer von Blacklist entfernt"
   },
 
   "random_responses" : [
