@@ -9,7 +9,6 @@
   "license": "MIT",
   "dependencies": {
     "steam": "~0.6.6",
-    "optimist": "~0.3.5",
     "request": "~2.16.6",
     "minimap": "0.0.3",
     "colors": "~0.6.0-1",

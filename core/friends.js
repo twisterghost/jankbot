@@ -1,3 +1,7 @@
+/**
+ * friends - Friend list manager and message interaction module for Jankbot.
+ */
+
 var fs = require('fs');
 var logger = require('./logger.js');
 var Steam = require('steam');
@@ -12,15 +16,16 @@ if (fs.existsSync('friendslist')) {
   friends = JSON.parse(fs.readFileSync('friendslist'));
 }
 
+// Load saved blacklist.
 if (fs.existsSync('blacklist')) {
   blacklist = JSON.parse(fs.readFileSync('blacklist'));
 }
 
-
+// Initialize this module with a bot instance and config data.
 exports.init = function(botInstance, jankbotConfig) {
   bot = botInstance;
   config = jankbotConfig;
-}
+};
 
 // Returns the name of the given ID based on friends list.
 exports.nameOf = function(id) {
@@ -29,8 +34,7 @@ exports.nameOf = function(id) {
   } else {
     return "Someone";
   }
-}
-
+};
 
 // Returns the ID of a friend based on the given name.
 // Returns undefined if that friend is not found.
@@ -59,7 +63,7 @@ exports.idOf = function(name, fuzzy) {
     }
     return undefined;
   }
-}
+};
 
 
 // Updates the timestamp for the given id.
@@ -67,7 +71,7 @@ exports.updateTimestamp = function(id) {
   if (friends.hasOwnProperty(id)) {
     friends[id].lastMessageTime = new Date();
   }
-}
+};
 
 
 // Saves a custom property about a friend. Returns true if it was able to
@@ -80,7 +84,7 @@ exports.set = function(id, property, value) {
   } else {
     return false;
   }
-}
+};
 
 
 // Gets a custom property about a friend. Returns undefined if that property
@@ -91,7 +95,7 @@ exports.get = function(id, property) {
   } else {
     return undefined;
   }
-}
+};
 
 
 // Run callback for each friend, passing in the friend ID.
@@ -108,7 +112,7 @@ exports.blacklist = function(id) {
     blacklist.push(id);
   }
   exports.save();
-}
+};
 
 
 // Removes the given ID from the blacklist.
@@ -118,13 +122,13 @@ exports.unBlacklist = function(id) {
     blacklist = blacklist.splice(index, 1);
   }
   exports.save();
-}
+};
 
 
 // Returns true if the given id is blacklisted.
 exports.checkIsBlacklisted = function(id) {
   return blacklist.indexOf(id) != -1;
-}
+};
 
 
 // Attempts to add someone to internal friends list.
@@ -136,8 +140,9 @@ exports.addFriend = function(source) {
     friends[source].mute = false;
     exports.save();
   }
-}
+};
 
+// Remove a friend from internal memory.
 exports.removeFriend = function(id, cb) {
   if (friends.hasOwnProperty(id)) {
     logger.log('Unfriending: ' + id);
@@ -147,7 +152,7 @@ exports.removeFriend = function(id, cb) {
   } else {
     cb(false);
   }
-}
+};
 
 // Grabs what names it can from bot.users and applies them to the friends list.
 exports.updateFriendsNames = function() {
@@ -157,18 +162,17 @@ exports.updateFriendsNames = function() {
     }
   }
   exports.save();
-}
-
+};
 
 // Return all friends.
 exports.getAllFriends = function() {
   return friends;
-}
+};
 
+// Return the blacklist.
 exports.getBlacklist = function() {
   return blacklist;
-}
-
+};
 
 // Get if the friend is muted or not.
 exports.getMute = function(friend) {
@@ -177,17 +181,17 @@ exports.getMute = function(friend) {
   } else {
     return false;
   }
-}
+};
 
-
+// Set the mute status for a friend to true or false.
 exports.setMute = function(friend, mute) {
   if (friendExists(friend)) {
     friends[friend].mute = mute;
   }
   exports.save();
-}
+};
 
-
+// Return true if the given friend ID is listed as an admin.
 exports.isAdmin = function(friend) {
   return config.admins.indexOf(friend) != -1;
 };
@@ -195,8 +199,7 @@ exports.isAdmin = function(friend) {
 // Check that a friend exists.
 function friendExists(friend) {
   return friends.hasOwnProperty(friend);
-}
-
+};
 
 // Saves the friends list.
 exports.save = function() {
@@ -204,8 +207,7 @@ exports.save = function() {
     fs.writeFileSync("friendslist", JSON.stringify(friends));
     fs.writeFileSync("blacklist", JSON.stringify(blacklist));
   }
-}
-
+};
 
 // Sends a message to a user.
 exports.messageUser = function(user, message, broadcast) {
@@ -221,8 +223,7 @@ exports.messageUser = function(user, message, broadcast) {
     logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
     bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
   }
-}
-
+};
 
 // Broadcasts a message to everyone but source.
 exports.broadcast = function(message, source) {
@@ -231,7 +232,7 @@ exports.broadcast = function(message, source) {
     if (friend != source)
       exports.messageUser(friend, message, true);
   }
-}
+};
 
 // Load mock data for testing and block saving.
 exports.initTest = function() {
@@ -257,7 +258,7 @@ exports.initTest = function() {
       "lastMessageTime": new Date()
     }
   }
-}
+};
 
 // Thanks to Dokkat for this function
 // http://codereview.stackexchange.com/users/19757/dokkat
