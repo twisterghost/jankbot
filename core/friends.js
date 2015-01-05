@@ -1,5 +1,6 @@
 var fs = require('fs');
 var logger = require('./logger.js');
+var config = require('../config.json');
 var Steam = require('steam');
 var friends = {};
 var blacklist = [];
@@ -185,6 +186,10 @@ exports.setMute = function(friend, mute) {
   exports.save();
 }
 
+
+exports.isAdmin = function(friend) {
+  return config.admins.indexOf(friend) != -1;
+};
 
 // Check that a friend exists.
 function friendExists(friend) {
