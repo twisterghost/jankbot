@@ -1,11 +1,11 @@
 var fs = require('fs');
 var logger = require('./logger.js');
-var config = require('../config.json');
 var Steam = require('steam');
 var friends = {};
 var blacklist = [];
 var testMode = false;
 var bot;
+var config;
 
 // Load saved friends lists.
 if (fs.existsSync('friendslist')) {
@@ -17,8 +17,9 @@ if (fs.existsSync('blacklist')) {
 }
 
 
-exports.init = function(botInstance) {
+exports.init = function(botInstance, jankbotConfig) {
   bot = botInstance;
+  config = jankbotConfig;
 }
 
 // Returns the name of the given ID based on friends list.

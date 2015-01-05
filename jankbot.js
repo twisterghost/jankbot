@@ -71,7 +71,7 @@ bot.on('loggedOn', function() {
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(myName);
   dota2.init(bot);
-  friends.init(bot);
+  friends.init(bot, CONFIG);
 });
 
 

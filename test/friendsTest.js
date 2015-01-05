@@ -1,6 +1,11 @@
 var expect = require('chai').expect;
 var friends = require('../core/friends.js');
 friends.initTest();
+friends.init({}, {
+  admins: [
+    '1'
+  ]
+});
 
 describe('friends.js', function() {
 
@@ -177,6 +182,13 @@ describe('friends.js', function() {
         friendIds += friend;
       });
       expect(friendIds).to.equal('123');
+    });
+  });
+
+  describe('#isAdmin()', function() {
+    it('should return true if a friend is an administrator', function() {
+      expect(friends.isAdmin('1')).to.be.true;
+      expect(friends.isAdmin('2')).to.be.false;
     });
   });
 
