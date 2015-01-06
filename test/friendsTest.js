@@ -45,6 +45,10 @@ describe('friends.js', function() {
       expect(friends.idOf('Fnl')).to.be.undefined;
     });
 
+    it('should return undefined for a failed fuzzy find', function() {
+      expect(friends.idOf('abcd')).to.be.undefined;
+    });
+
     it('should return undefined for an unknown friend name', function() {
       expect(friends.idOf('q', true)).to.be.undefined;
     });
