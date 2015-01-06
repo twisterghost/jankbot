@@ -42,12 +42,14 @@ exports.idOf = function(name, fuzzy) {
 
   // Fuzzy search.
   if (fuzzy) {
-    for (var friend in friends) {
-      var thisFriend = friends[friend].name;
+    for (var fuzzyFriend in friends) {
+      if (friends[fuzzyFriend].name) {
+        var thisFriend = friends[fuzzyFriend].name;
 
-      // If this fuzzily matched, get info.
-      if (thisFriend && fuzzyMatch(thisFriend.toLowerCase(), name.toLowerCase())) {
-        return friend;
+        // If this fuzzily matched, get info.
+        if (fuzzyMatch(thisFriend.toLowerCase(), name.toLowerCase())) {
+          return fuzzyFriend;
+        }
       }
     }
 
@@ -56,9 +58,9 @@ exports.idOf = function(name, fuzzy) {
   } else {
 
     // Exact search.
-    for (var friend in friends) {
-      if (friends[friend].name == name) {
-        return friend;
+    for (var exactFriend in friends) {
+      if (friends[exactFriend].name === name) {
+        return exactFriend;
       }
     }
     return undefined;
@@ -101,14 +103,16 @@ exports.get = function(id, property) {
 // Run callback for each friend, passing in the friend ID.
 exports.forEach = function(callback) {
   for (var friend in friends) {
-    callback(friend);
+    if (friend) {
+      callback(friend);
+    }
   }
 };
 
 
 // Add a user ID to the blacklist.
 exports.blacklist = function(id) {
-  if (blacklist.indexOf(id) == -1) {
+  if (blacklist.indexOf(id) === -1) {
     blacklist.push(id);
   }
   exports.save();
@@ -118,7 +122,7 @@ exports.blacklist = function(id) {
 // Removes the given ID from the blacklist.
 exports.unBlacklist = function(id) {
   var index = blacklist.indexOf(id);
-  if (index != -1) {
+  if (index !== -1) {
     blacklist = blacklist.splice(index, 1);
   }
   exports.save();
@@ -127,7 +131,7 @@ exports.unBlacklist = function(id) {
 
 // Returns true if the given id is blacklisted.
 exports.checkIsBlacklisted = function(id) {
-  return blacklist.indexOf(id) != -1;
+  return blacklist.indexOf(id) !== -1;
 };
 
 
@@ -193,13 +197,13 @@ exports.setMute = function(friend, mute) {
 
 // Return true if the given friend ID is listed as an admin.
 exports.isAdmin = function(friend) {
-  return config.admins.indexOf(friend) != -1;
+  return config.admins.indexOf(friend) !== -1;
 };
 
 // Check that a friend exists.
 function friendExists(friend) {
   return friends.hasOwnProperty(friend);
-};
+}
 
 // Saves the friends list.
 exports.save = function() {
@@ -229,8 +233,9 @@ exports.messageUser = function(user, message, broadcast) {
 exports.broadcast = function(message, source) {
   logger.log("Broadcasting: " + message);
   for (var friend in friends) {
-    if (friend != source)
+    if (friend !== source) {
       exports.messageUser(friend, message, true);
+    }
   }
 };
 
@@ -257,7 +262,7 @@ exports.initTest = function() {
       "name":"Final Test Friend",
       "lastMessageTime": new Date()
     }
-  }
+  };
 };
 
 // Thanks to Dokkat for this function
@@ -265,4 +270,4 @@ exports.initTest = function() {
 function fuzzyMatch(str,pattern){
     pattern = pattern.split("").reduce(function(a,b){ return a+".*"+b; });
     return (new RegExp(pattern)).test(str);
-};
+}

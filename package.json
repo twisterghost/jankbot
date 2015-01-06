@@ -4,19 +4,22 @@
   "description": "A Dota-centric steambot by JankDota",
   "main": "jankbot.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --recursive test"
+    "test": "./node_modules/mocha/bin/mocha --recursive test",
+    "ci": "grunt jshint && npm run test"
   },
   "license": "MIT",
   "dependencies": {
     "steam": "~0.6.6",
     "request": "~2.16.6",
     "minimap": "0.0.3",
-    "colors": "~0.6.0-1",
     "dota2": "~0.6.0",
     "lodash": "~2.4.1"
   },
   "devDependencies": {
     "chai": "~1.9.1",
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "load-grunt-tasks": "^2.0.0",
     "mocha": "~2.1.0"
   }
 }
