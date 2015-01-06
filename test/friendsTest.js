@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 var expect = require('chai').expect;
 var friends = require('../core/friends.js');
 friends.initTest();
