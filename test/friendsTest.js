@@ -30,7 +30,7 @@ describe('friends.js', function() {
 
     it('should return "Someone" if the id is unknown', function() {
       expect(friends.nameOf('10')).to.equal('Someone');
-    })
+    });
   });
 
   describe('#idOf()', function() {
