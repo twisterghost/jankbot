@@ -73,7 +73,7 @@ bot.on('loggedOn', function() {
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
-bot.on('message', function(source, message, type, chatter) {
+bot.on('message', function(source, message) {
 
   // Be sure this person is remembered and run friends list name update.
   // friends.addFriend() can be run however many times on the same friend ID without duplicating.
@@ -187,8 +187,10 @@ bot.on('message', function(source, message, type, chatter) {
 // Add friends back automatically if they are not blacklisted.
 bot.on('relationship', function(other, type){
   if(type === Steam.EFriendRelationship.PendingInvitee) {
-    if (checkIsBlacklisted(other)) {
+    if (friends.checkIsBlacklisted(other)) {
       logger.log(minimap.map({userid: other}, DICT.SYSTEM.system_blacklist_attempt));
+      bot.removeFriend(other);
+      return;
     }
     bot.addFriend(other);
     logger.log(minimap.map({"userid" : other}, DICT.SYSTEM.system_added_friend));
@@ -251,12 +253,12 @@ function admin(input, source, original, callback) {
     var ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
     var inactiveList = friends.getAllFriends();
     var inactiveUsers = [];
-    for (var friend in inactiveList) {
+    for (var inactiveFriend in inactiveList) {
 
       // If this user hasn't used this bot in a week, log it.
-      if (new Date(inactiveList[friend].lastMessageTime).getTime() <
+      if (new Date(inactiveList[inactiveFriend].lastMessageTime).getTime() <
           (new Date().getTime() - ONE_WEEK)) {
-        inactiveUsers.push(inactiveList[friend]);
+        inactiveUsers.push(inactiveList[inactiveFriend]);
       }
     }
 
@@ -311,7 +313,9 @@ function admin(input, source, original, callback) {
 function help() {
   var resp = DICT.help_message + "\n";
   for (var cmd in DICT.CMDS) {
-    resp += cmd + " - " + DICT.CMD_HELP[cmd] + "\n";
+    if (typeof cmd === 'string') {
+      resp += cmd + " - " + DICT.CMD_HELP[cmd] + "\n";
+    }
   }
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].getHelp === 'function') {
@@ -322,5 +326,5 @@ function help() {
 }
 
 function isGreeting(message) {
-  return DICT.greetings.indexOf(message) != -1;
+  return DICT.greetings.indexOf(message) !== -1;
 }
