@@ -11,7 +11,7 @@ describe('dictionaries',function() {
           var file = path.join('dict/', dictFiles[f]);
           console.log('parsing file ' + file);
           var source = fs.readFileSync(file);
-          expect(function(){JSON.parse(source);}).to.not.throw(Error);
+          expect({JSON.parse(source);}).to.not.throw(Error);
         }
     });
   });
