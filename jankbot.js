@@ -14,7 +14,7 @@ var dota2 = require('./core/dota2.js');
 var minimap = require('minimap');
 
 // Load config file.
-var CONFIG = JSON.parse(fs.readFileSync("config.json"));
+var CONFIG = JSON.parse(fs.readFileSync('config.json'));
 
 // Load dictionary.
 var DICT = JSON.parse(fs.readFileSync('dict/' + CONFIG.dictionary));
@@ -38,7 +38,7 @@ if (fs.existsSync(modulesPath)) {
       // Load up the modules based on their module.json file.
       if (file === 'module.json') {
         var moduleConfig = JSON.parse(fs.readFileSync(modulesPath + dir + '/' + file));
-        logger.log("Loading module " + moduleConfig.name + " by " + moduleConfig.author + "...");
+        logger.log('Loading module ' + moduleConfig.name + ' by ' + moduleConfig.author + '...');
         var module = require(path.join(modulesPath, dir, '/', moduleConfig.main));
 
         if (module.setDictionary) {
@@ -92,16 +92,16 @@ bot.on('message', function(source, message) {
   var fromUser = friends.nameOf(source);
 
   // Log the received message.
-  logger.log(minimap.map({"user" : fromUser, "message" : original},
+  logger.log(minimap.map({'user' : fromUser, 'message' : original},
       DICT.SYSTEM.system_msg_received));
 
   // Create the input variable which we give to modules for parsing.
-  var input = message.split(" ");
+  var input = message.split(' ');
   var responseStr;
 
   // First, check if this is an admin function request.
   // TODO: Modularize admin commands.
-  if (input[0] === "admin") {
+  if (input[0] === 'admin') {
 
     // Authenticate as admin.
     if (friends.isAdmin(source)) {
@@ -117,7 +117,7 @@ bot.on('message', function(source, message) {
 
   // Looking for group / general play.
   else if (message === DICT.CMDS.lfg) {
-    var lfgMessage = minimap.map({"user" : fromUser},
+    var lfgMessage = minimap.map({'user' : fromUser},
         DICT.LFG_RESPONSES.lfg_broadcast);
     friends.broadcast(lfgMessage, source);
     friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender);
@@ -126,7 +126,7 @@ bot.on('message', function(source, message) {
 
   // Starting inhouses.
   else if (message === DICT.CMDS.inhouse) {
-    var inhouseMessage = minimap.map({"host" : fromUser},
+    var inhouseMessage = minimap.map({'host' : fromUser},
         DICT.INHOUSE_RESPONSES.inhouse_broadcast);
     friends.broadcast(inhouseMessage, source);
     friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender);
@@ -135,7 +135,7 @@ bot.on('message', function(source, message) {
 
   // Respond to pings.
   else if (message === DICT.CMDS.ping) {
-    responseStr = minimap.map({"userid" : source}, DICT.ping_response);
+    responseStr = minimap.map({'userid' : source}, DICT.ping_response);
     friends.messageUser(source, responseStr);
     return;
   }
@@ -162,7 +162,7 @@ bot.on('message', function(source, message) {
 
   // Respond to greetings.
   else if (isGreeting(message)) {
-    responseStr = minimap.map({"user" : fromUser}, DICT.greeting_response);
+    responseStr = minimap.map({'user' : fromUser}, DICT.greeting_response);
     friends.messageUser(source, responseStr);
     return;
   }
@@ -193,7 +193,7 @@ bot.on('relationship', function(other, type){
       return;
     }
     bot.addFriend(other);
-    logger.log(minimap.map({"userid" : other}, DICT.SYSTEM.system_added_friend));
+    logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
     friends.addFriend(other);
     friends.updateFriendsNames();
   }
@@ -220,36 +220,36 @@ function shutdown() {
 function admin(input, source, original, callback) {
 
   // Quit function
-  if (input[1] === "quit") {
+  if (input[1] === 'quit') {
     callback(DICT.ADMIN.quit);
     shutdown();
   }
 
   // Dump friends info.
-  if (input[1] === "dump" && input[2] === "friends") {
+  if (input[1] === 'dump' && input[2] === 'friends') {
     logger.log(JSON.stringify(friends.getAllFriends()));
     callback(DICT.ADMIN.dump_friends);
   }
 
   // Dump users info.
-  if (input[1] === "dump" && input[2] === "users") {
+  if (input[1] === 'dump' && input[2] === 'users') {
     logger.log(JSON.stringify(bot.users));
     callback(DICT.ADMIN.dump_users);
   }
 
   // Look up friend ID.
-  if (input[1] === "lookup") {
+  if (input[1] === 'lookup') {
     var lookupList = friends.getAllFriends();
     if (lookupList.hasOwnProperty(input[2])) {
       var friend = lookupList[input[2]];
-      callback(JSON.stringify(friend, null, "  "));
+      callback(JSON.stringify(friend, null, '  '));
     } else {
       callback(DICT.ADMIN.lookup_error);
     }
   }
 
   // Scan for inactive users.
-  if (input[1] === "inactive") {
+  if (input[1] === 'inactive') {
     var ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
     var inactiveList = friends.getAllFriends();
     var inactiveUsers = [];
@@ -265,12 +265,12 @@ function admin(input, source, original, callback) {
     if (inactiveUsers.length === 0) {
       callback(DICT.ADMIN.no_inactive_users);
     } else {
-      callback(JSON.stringify(inactiveUsers, null, "  "));
+      callback(JSON.stringify(inactiveUsers, null, '  '));
     }
   }
 
   // Kick friend.
-  if (input[1] === "kick") {
+  if (input[1] === 'kick') {
     var friendId = input[2];
     bot.removeFriend(input[2]);
     friends.removeFriend(friendId, function(success) {
@@ -283,26 +283,26 @@ function admin(input, source, original, callback) {
   }
 
   // Blacklist an id.
-  if (input[1] === "blacklist") {
+  if (input[1] === 'blacklist') {
     friends.blacklist(input[2]);
     callback(DICT.ADMIN.blacklist_add);
   }
 
   // Unblacklist an id.
-  if (input[1] === "unblacklist") {
+  if (input[1] === 'unblacklist') {
     friends.unBlacklist(input[2]);
     callback(DICT.ADMIN.blacklist_remove);
   }
 
   // Add a friend.
-  if (input[1] === "add") {
+  if (input[1] === 'add') {
     bot.addFriend(input[2]);
     friends.addFriend(input[2]);
   }
 
   // Broadcast a message.
-  if (input[1] === "broadcast") {
-    var adminMessage = original.replace("admin broadcast", "");
+  if (input[1] === 'broadcast') {
+    var adminMessage = original.replace('admin broadcast', '');
     logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
     friends.broadcast(adminMessage, source);
     callback(DICT.ADMIN.broadcast_sent);
@@ -311,15 +311,15 @@ function admin(input, source, original, callback) {
 
 // Help text.
 function help() {
-  var resp = DICT.help_message + "\n";
+  var resp = DICT.help_message + '\n';
   for (var cmd in DICT.CMDS) {
     if (typeof cmd === 'string') {
-      resp += cmd + " - " + DICT.CMD_HELP[cmd] + "\n";
+      resp += cmd + ' - ' + DICT.CMD_HELP[cmd] + '\n';
     }
   }
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].getHelp === 'function') {
-      resp += "\n" + modules[i].getHelp();
+      resp += '\n' + modules[i].getHelp();
     }
   }
   return resp;

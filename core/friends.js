@@ -32,7 +32,7 @@ exports.nameOf = function(id) {
   if (friends.hasOwnProperty(id)) {
     return friends[id].name;
   } else {
-    return "Someone";
+    return 'Someone';
   }
 };
 
@@ -138,7 +138,7 @@ exports.checkIsBlacklisted = function(id) {
 // Attempts to add someone to internal friends list.
 exports.addFriend = function(source) {
   if (!friends.hasOwnProperty(source)) {
-    logger.log("Adding friend: " + source);
+    logger.log('Adding friend: ' + source);
     friends[source] = {};
     friends[source].lastMessageTime = new Date();
     friends[source].mute = false;
@@ -208,8 +208,8 @@ function friendExists(friend) {
 // Saves the friends list.
 exports.save = function() {
   if (!testMode) {
-    fs.writeFileSync("friendslist", JSON.stringify(friends));
-    fs.writeFileSync("blacklist", JSON.stringify(blacklist));
+    fs.writeFileSync('friendslist', JSON.stringify(friends));
+    fs.writeFileSync('blacklist', JSON.stringify(blacklist));
   }
 };
 
@@ -218,20 +218,20 @@ exports.messageUser = function(user, message, broadcast) {
 
   // If this isn't a broadcast, send it to the user.
   if (!broadcast) {
-    logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
+    logger.log('Message sent to ' + exports.nameOf(user) +  ': ' + message);
     bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
     return;
 
   // Otherwise, only send it to them if they aren't muted.
   } else if (!exports.getMute(user)) {
-    logger.log("Message sent to " + exports.nameOf(user) +  ": " + message);
+    logger.log('Message sent to ' + exports.nameOf(user) +  ': ' + message);
     bot.sendMessage(user, message, Steam.EChatEntryType.ChatMsg);
   }
 };
 
 // Broadcasts a message to everyone but source.
 exports.broadcast = function(message, source) {
-  logger.log("Broadcasting: " + message);
+  logger.log('Broadcasting: ' + message);
   for (var friend in friends) {
     if (friend !== source) {
       exports.messageUser(friend, message, true);
@@ -244,23 +244,23 @@ exports.initTest = function() {
   testMode = true;
   blacklist = [];
   friends = {
-    "1": {
-      "messages":[],
-      "mute":false,
-      "name":"Test Friend 1",
-      "lastMessageTime": new Date()
+    '1': {
+      'messages':[],
+      'mute':false,
+      'name':'Test Friend 1',
+      'lastMessageTime': new Date()
     },
-    "2": {
-      "messages":[],
-      "mute":false,
-      "name":"Test Friend 2",
-      "lastMessageTime": new Date() - 1000
+    '2': {
+      'messages':[],
+      'mute':false,
+      'name':'Test Friend 2',
+      'lastMessageTime': new Date() - 1000
     },
-    "3": {
-      "messages":[],
-      "mute":false,
-      "name":"Final Test Friend",
-      "lastMessageTime": new Date()
+    '3': {
+      'messages':[],
+      'mute':false,
+      'name':'Final Test Friend',
+      'lastMessageTime': new Date()
     }
   };
 };
@@ -268,6 +268,6 @@ exports.initTest = function() {
 // Thanks to Dokkat for this function
 // http://codereview.stackexchange.com/users/19757/dokkat
 function fuzzyMatch(str,pattern){
-    pattern = pattern.split("").reduce(function(a,b){ return a+".*"+b; });
+    pattern = pattern.split('').reduce(function(a,b){ return a+'.*'+b; });
     return (new RegExp(pattern)).test(str);
 }

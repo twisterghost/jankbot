@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
+
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -19,6 +20,21 @@ module.exports = function(grunt) {
             'test/*.js'
           ]
         }]
+      }
+    },
+
+    compress: {
+      main: {
+        options: {
+          archive: 'jankbot.zip'
+        },
+        files: [
+          {src: ['config.js']},
+          {src: ['jankbot.js']},
+          {src: ['package.json']},
+          {src: ['dict/*']},
+          {src: ['core/*']}
+        ]
       }
     }
   });
