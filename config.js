@@ -17,11 +17,11 @@ if (fs.existsSync("config.json")) {
   var config = JSON.parse(fs.readFileSync("config.json"));
 } else {
   config = {};
-  config.modules = [];
 }
 
 // Default config execution.
-console.log("This will set up your config.json file for Jankbot.\n".green);
+console.log("This will set up your config.json file for Jankbot.\n");
+console.log("Leaving an answer blank will use the current config option.\n");
 
 // Get username.
 rl.question("What Steam account should Jankbot log in with?\n(username) ", function(answer) {
@@ -37,7 +37,7 @@ rl.question("What Steam account should Jankbot log in with?\n(username) ", funct
       }
 
       // Get admins.
-      console.log("\nNOTE: You for this you will need your steam ID. This is NOT your screen name.".bold.red);
+      console.log("\nNOTE: You for this you will need your steam ID. This is NOT your screen name.");
       console.log("We recommend using http://steamidfinder.com/");
       console.log("Enter your personal Steam account name and you will get something like STEAM_0:0:#######");
       console.log("Take that and paste it in to the search box again and you will get a 17 digit number.");
@@ -64,7 +64,7 @@ rl.question("What Steam account should Jankbot log in with?\n(username) ", funct
             fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
             console.log("Your config.json file will look like:");
             console.log(JSON.stringify(config, null, 2));
-            console.log("\nYou're all set!".green);
+            console.log("\nYou're all set!");
             process.exit();
           });
         });
