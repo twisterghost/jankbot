@@ -9,9 +9,9 @@ describe('dictionaries',function() {
       var dictFiles = fs.readdirSync('dict/');
       for(var f in dictFiles) {
           var file = path.join('dict/', dictFiles[f]);
-          console.log("parsing file " + file);
+          console.log('parsing file ' + file);
           var source = fs.readFileSync(file);
-          expect(function(){JSON.parse(source)}).to.not.throw(Error);
+          expect(function(){JSON.parse(source);}).to.not.throw(Error);
         }
     });
   });
