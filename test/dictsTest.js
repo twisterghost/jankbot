@@ -4,7 +4,7 @@ var path = require('path');
 
 var parseJson = function (source) {
     JSON.parse(source);
-}
+};
 
 describe('dictionaries',function() {
   describe('#parseJSON',function() {
