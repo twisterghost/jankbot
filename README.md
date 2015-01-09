@@ -27,8 +27,9 @@ The Jankbot project is rapidly developing and is very welcome to pull requests.
 ## Installation
 Jankbot was designed and developed on Linux machines. There shouldn't be any
 trouble installing on a Linux distro, or OSX. **Installing and running on Windows
-is possible, but unsupported** and requires prerequisites to be installed. Windows
-does not ship with the resources to connect securely to Steam.
+is possible, but unsupported** and
+[requires prerequisites to be installed](https://github.com/twisterghost/jankbot/wiki/Windows-Prerequisites).
+Windows does not ship with the resources to connect securely to Steam.
 
 **[In-depth installation instructions](https://github.com/twisterghost/jankbot/wiki/Installation-&-Setup)**
 
