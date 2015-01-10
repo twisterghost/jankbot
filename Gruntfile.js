@@ -33,7 +33,11 @@ module.exports = function(grunt) {
           {src: ['jankbot.js']},
           {src: ['package.json']},
           {src: ['dict/*']},
-          {src: ['core/*']}
+          {src: ['core/*']},
+          {src: ['install']},
+          {src: ['jankbot']},
+          {src: ['config']},
+          {src: ['scripts/*']}
         ]
       }
     }
@@ -41,6 +45,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'jshint'
+  ]);
+
+  grunt.registerTask('release', [
+    'compress'
   ]);
 };
 
