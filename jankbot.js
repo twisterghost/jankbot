@@ -14,7 +14,7 @@ var dota2 = require('./core/dota2.js');
 var minimap = require('minimap');
 
 // Load config file.
-var CONFIG = JSON.parse(fs.readFileSync('config.json'));
+var CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
 
 // Load dictionary.
 var DICT = JSON.parse(fs.readFileSync(path.join('dict/', CONFIG.dictionary)));

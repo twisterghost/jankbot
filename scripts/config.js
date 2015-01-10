@@ -13,8 +13,8 @@ var rl = readline.createInterface({
 });
 
 // Open config.json or create it.
-if (fs.existsSync('config.json')) {
-  var config = JSON.parse(fs.readFileSync('config.json'));
+if (fs.existsSync('data/config.json')) {
+  var config = JSON.parse(fs.readFileSync('data/config.json'));
 } else {
   config = {};
 }
@@ -67,7 +67,7 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
               config.dictionary = answer;
             }
 
-            fs.writeFileSync('config.json', JSON.stringify(config, null, 2));
+            fs.writeFileSync('data/config.json', JSON.stringify(config, null, 2));
             console.log('Your config.json file will look like:');
             console.log(JSON.stringify(config, null, 2));
             console.log('\nYou\'re all set!');

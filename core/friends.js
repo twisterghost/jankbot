@@ -12,13 +12,13 @@ var bot;
 var config;
 
 // Load saved friends lists.
-if (fs.existsSync('friendslist')) {
-  friends = JSON.parse(fs.readFileSync('friendslist'));
+if (fs.existsSync('data/friendslist')) {
+  friends = JSON.parse(fs.readFileSync('data/friendslist'));
 }
 
 // Load saved blacklist.
-if (fs.existsSync('blacklist')) {
-  blacklist = JSON.parse(fs.readFileSync('blacklist'));
+if (fs.existsSync('data/blacklist')) {
+  blacklist = JSON.parse(fs.readFileSync('data/blacklist'));
 }
 
 // Initialize this module with a bot instance and config data.
@@ -208,8 +208,8 @@ function friendExists(friend) {
 // Saves the friends list.
 exports.save = function() {
   if (!testMode) {
-    fs.writeFileSync('friendslist', JSON.stringify(friends));
-    fs.writeFileSync('blacklist', JSON.stringify(blacklist));
+    fs.writeFileSync('data/friendslist', JSON.stringify(friends));
+    fs.writeFileSync('data/blacklist', JSON.stringify(blacklist));
   }
 };
 
