@@ -5,7 +5,8 @@
   "main": "jankbot.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive test",
-    "ci": "grunt jshint && npm run test"
+    "ci": "grunt jshint && npm run test",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha"
   },
   "license": "MIT",
   "dependencies": {
@@ -20,6 +21,7 @@
     "grunt": "~0.4.5",
     "grunt-contrib-compress": "^0.13.0",
     "grunt-contrib-jshint": "^0.10.0",
+    "istanbul": "^0.3.5",
     "load-grunt-tasks": "^2.0.0",
     "mocha": "~2.1.0"
   }
