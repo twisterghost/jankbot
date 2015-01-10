@@ -42,8 +42,8 @@ Windows does not ship with the resources to connect securely to Steam.
 3. Download Jankbot's [latest release](https://github.com/twisterghost/jankbot/releases)
 4. Unzip it to a folder
 5. Open that folder in a terminal
-6. Run `npm install`
-7. Run `node config` and follow the prompt
+6. Run `./install`
+7. Run `./config` and follow the prompt
 
 ## Running Jankbot
 
@@ -51,7 +51,7 @@ Once you have the config file set up and you've run `npm install` in the Jankbot
 directory on your machine and you have a Steam account ready to go with at least
 one purchase, you are READY TO RUN JANKBOT, WOOHOO!
 
-**To run Jankbot:** `node jankbot`
+**To run Jankbot:** `./jankbot`
 
 And that's it! Jankbot should now log in to steam and accept friend requests.
 Simply add him as you would another user and he will add you back, ready to help
