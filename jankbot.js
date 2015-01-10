@@ -17,7 +17,7 @@ var minimap = require('minimap');
 var CONFIG = JSON.parse(fs.readFileSync('config.json'));
 
 // Load dictionary.
-var DICT = JSON.parse(fs.readFileSync('dict/' + CONFIG.dictionary));
+var DICT = JSON.parse(fs.readFileSync(path.join('dict/', CONFIG.dictionary)));
 
 // Set admins.
 var ADMINS = CONFIG.admins;
@@ -33,13 +33,14 @@ var modulesPath = path.join(__dirname, '/bot_modules/');
 // If the modules firectory exists, load all modules from it.
 if (fs.existsSync(modulesPath)) {
   fs.readdirSync(modulesPath).forEach(function (dir) {
-    fs.readdirSync(modulesPath + dir).forEach(function (file) {
+    fs.readdirSync(path.join(modulesPath, dir)).forEach(function (file) {
 
       // Load up the modules based on their module.json file.
       if (file === 'module.json') {
-        var moduleConfig = JSON.parse(fs.readFileSync(modulesPath + dir + '/' + file));
+        var moduleConfigPath = path.join(modulesPath, dir, file);
+        var moduleConfig = JSON.parse(fs.readFileSync(moduleConfigPath));
         logger.log('Loading module ' + moduleConfig.name + ' by ' + moduleConfig.author + '...');
-        var module = require(path.join(modulesPath, dir, '/', moduleConfig.main));
+        var module = require(path.join(modulesPath, dir, moduleConfig.main));
 
         if (module.setDictionary) {
           module.setDictionary(CONFIG.dictionary);
