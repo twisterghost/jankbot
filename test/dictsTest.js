@@ -3,7 +3,9 @@ var fs = require('fs');
 var path = require('path');
 
 var parseJson = function (source) {
-    JSON.parse(source);
+    return function() {
+      JSON.parse(source);
+    }
 };
 
 describe('dictionaries',function() {
@@ -14,7 +16,8 @@ describe('dictionaries',function() {
           var file = path.join('dict/', dictFiles[f]);
           console.log('parsing file ' + file);
           var source = fs.readFileSync(file);
-          expect(parseJson(source)).to.not.throw(Error);
+          var parse = parseJson(source);
+          expect(parse).to.not.throw(Error);
         }
     });
   });
