@@ -53,6 +53,8 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
           function(answer) {
         if (answer) {
           config.admins = answer.split(' ');
+        } else if (!config.admins) {
+          config.admins = [];
         }
 
         // Get display name.

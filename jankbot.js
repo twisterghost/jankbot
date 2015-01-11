@@ -11,6 +11,7 @@ var friends = require('./core/friends.js');
 var logger = require('./core/logger.js');
 var Steam = require('steam');
 var dota2 = require('./core/dota2.js');
+var admin = require('./core/admin.js');
 var minimap = require('minimap');
 
 // Ensure data/ exists
@@ -77,6 +78,7 @@ bot.on('loggedOn', function() {
   bot.setPersonaName(CONFIG.displayName);
   dota2.init(bot);
   friends.init(bot, CONFIG);
+  admin.init(bot, DICT, shutdown);
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
@@ -112,9 +114,7 @@ bot.on('message', function(source, message) {
 
     // Authenticate as admin.
     if (friends.isAdmin(source)) {
-      admin(input, source, original, function(resp) {
-        friends.messageUser(source, resp);
-      });
+      admin.command(source, input, original);
       return;
     } else {
       friends.messageUser(source, DICT.ERRORS.err_not_admin);
@@ -221,99 +221,6 @@ function shutdown() {
     }
   }
   process.exit();
-}
-
-// Handler for admin functionality.
-function admin(input, source, original, callback) {
-
-  // Quit function
-  if (input[1] === 'quit') {
-    callback(DICT.ADMIN.quit);
-    shutdown();
-  }
-
-  // Dump friends info.
-  if (input[1] === 'dump' && input[2] === 'friends') {
-    logger.log(JSON.stringify(friends.getAllFriends()));
-    callback(DICT.ADMIN.dump_friends);
-  }
-
-  // Dump users info.
-  if (input[1] === 'dump' && input[2] === 'users') {
-    logger.log(JSON.stringify(bot.users));
-    callback(DICT.ADMIN.dump_users);
-  }
-
-  // Look up friend ID.
-  if (input[1] === 'lookup') {
-    var lookupList = friends.getAllFriends();
-    if (lookupList.hasOwnProperty(input[2])) {
-      var friend = lookupList[input[2]];
-      callback(JSON.stringify(friend, null, '  '));
-    } else {
-      callback(DICT.ADMIN.lookup_error);
-    }
-  }
-
-  // Scan for inactive users.
-  if (input[1] === 'inactive') {
-    var ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
-    var inactiveList = friends.getAllFriends();
-    var inactiveUsers = [];
-    for (var inactiveFriend in inactiveList) {
-
-      // If this user hasn't used this bot in a week, log it.
-      if (new Date(inactiveList[inactiveFriend].lastMessageTime).getTime() <
-          (new Date().getTime() - ONE_WEEK)) {
-        inactiveUsers.push(inactiveList[inactiveFriend]);
-      }
-    }
-
-    if (inactiveUsers.length === 0) {
-      callback(DICT.ADMIN.no_inactive_users);
-    } else {
-      callback(JSON.stringify(inactiveUsers, null, '  '));
-    }
-  }
-
-  // Kick friend.
-  if (input[1] === 'kick') {
-    var friendId = input[2];
-    bot.removeFriend(input[2]);
-    friends.removeFriend(friendId, function(success) {
-      if (success) {
-        callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_success));
-      } else {
-        callback(minimap.map({id: friendId}, DICT.ADMIN.remove_friend_error));
-      }
-    });
-  }
-
-  // Blacklist an id.
-  if (input[1] === 'blacklist') {
-    friends.blacklist(input[2]);
-    callback(DICT.ADMIN.blacklist_add);
-  }
-
-  // Unblacklist an id.
-  if (input[1] === 'unblacklist') {
-    friends.unBlacklist(input[2]);
-    callback(DICT.ADMIN.blacklist_remove);
-  }
-
-  // Add a friend.
-  if (input[1] === 'add') {
-    bot.addFriend(input[2]);
-    friends.addFriend(input[2]);
-  }
-
-  // Broadcast a message.
-  if (input[1] === 'broadcast') {
-    var adminMessage = original.replace('admin broadcast', '');
-    logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
-    friends.broadcast(adminMessage, source);
-    callback(DICT.ADMIN.broadcast_sent);
-  }
 }
 
 // Help text.
