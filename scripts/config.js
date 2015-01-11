@@ -12,6 +12,11 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
+// Ensure the data directory exists.
+if (!fs.existsSync('data')) {
+  fs.mkdirSync('data');
+}
+
 // Open config.json or create it.
 if (fs.existsSync('data/config.json')) {
   var config = JSON.parse(fs.readFileSync('data/config.json'));

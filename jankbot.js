@@ -13,6 +13,12 @@ var Steam = require('steam');
 var dota2 = require('./core/dota2.js');
 var minimap = require('minimap');
 
+// Ensure data/ exists
+if (!fs.existsSync('data')) {
+  logger.error('The data directory is missing. Please run ./config to set up Jankbot.');
+  process.exit(1);
+}
+
 // Load config file.
 var CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
 
