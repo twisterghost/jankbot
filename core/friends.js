@@ -230,7 +230,7 @@ exports.messageUser = function(user, message, broadcast) {
 };
 
 // Broadcasts a message to everyone but source.
-exports.broadcast = function(message, source) {
+exports.broadcast = function(source, message) {
   logger.log('Broadcasting: ' + message);
   for (var friend in friends) {
     if (friend !== source) {

@@ -99,7 +99,7 @@ var actions = {
   broadcast: function(source, input, original) {
     var adminMessage = original.replace('admin broadcast', '');
     logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
-    friends.broadcast(adminMessage, source);
+    friends.broadcast(source, adminMessage);
     friends.messageUser(source, DICT.ADMIN.broadcast_sent);
   }
 

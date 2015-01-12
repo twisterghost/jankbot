@@ -51,14 +51,14 @@ var actions = {
   lfg: function(source, fromUser) {
     var lfgMessage = minimap.map({'user' : fromUser},
         DICT.LFG_RESPONSES.lfg_broadcast);
-    friends.broadcast(lfgMessage, source);
+    friends.broadcast(source, lfgMessage);
     friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender);
   },
 
   inhouse: function(source, fromUser) {
     var inhouseMessage = minimap.map({'host' : fromUser},
         DICT.INHOUSE_RESPONSES.inhouse_broadcast);
-    friends.broadcast(inhouseMessage, source);
+    friends.broadcast(source, inhouseMessage);
     friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender);
   },
 
