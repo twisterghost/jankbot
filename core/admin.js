@@ -17,6 +17,7 @@ exports.command = function(source, input, original) {
   var command = input[1];
   if (actions.hasOwnProperty(command)) {
     actions[command](source, input, original);
+    return;
   } else {
     return;
   }

@@ -12,6 +12,7 @@ var logger = require('./core/logger.js');
 var Steam = require('steam');
 var dota2 = require('./core/dota2.js');
 var admin = require('./core/admin.js');
+var basic = require('./core/basic.js');
 var minimap = require('minimap');
 
 // Ensure data/ exists
@@ -74,11 +75,16 @@ bot.logOn({
 // Once logged on, configure self and initialize core modules.
 bot.on('loggedOn', function() {
   logger.log(DICT.SYSTEM.system_loggedin);
+
+  // Tell steam our screen name and status.
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(CONFIG.displayName);
+
+  // Initialize core modules.
   dota2.init(bot);
   friends.init(bot, CONFIG);
   admin.init(bot, DICT, shutdown);
+  basic.init(DICT, help);
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
@@ -106,10 +112,8 @@ bot.on('message', function(source, message) {
 
   // Create the input variable which we give to modules for parsing.
   var input = message.split(' ');
-  var responseStr;
 
   // First, check if this is an admin function request.
-  // TODO: Modularize admin commands.
   if (input[0] === 'admin') {
 
     // Authenticate as admin.
@@ -122,59 +126,12 @@ bot.on('message', function(source, message) {
     }
   }
 
-  // Looking for group / general play.
-  else if (message === DICT.CMDS.lfg) {
-    var lfgMessage = minimap.map({'user' : fromUser},
-        DICT.LFG_RESPONSES.lfg_broadcast);
-    friends.broadcast(lfgMessage, source);
-    friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender);
+  // Next, check if it is a default action.
+  if (basic.command(source, input, original)) {
     return;
   }
 
-  // Starting inhouses.
-  else if (message === DICT.CMDS.inhouse) {
-    var inhouseMessage = minimap.map({'host' : fromUser},
-        DICT.INHOUSE_RESPONSES.inhouse_broadcast);
-    friends.broadcast(inhouseMessage, source);
-    friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender);
-    return;
-  }
-
-  // Respond to pings.
-  else if (message === DICT.CMDS.ping) {
-    responseStr = minimap.map({'userid' : source}, DICT.ping_response);
-    friends.messageUser(source, responseStr);
-    return;
-  }
-
-  // Help message.
-  else if (message === DICT.CMDS.help) {
-    friends.messageUser(source, help());
-    return;
-  }
-
-  // Mute.
-  else if (message === DICT.CMDS.mute) {
-    friends.messageUser(source, DICT.mute_response);
-    friends.setMute(source, true);
-    return;
-  }
-
-  // Unmute player and give missed messaged.
-  else if (message === DICT.CMDS.unmute) {
-    friends.setMute(source, false);
-    friends.messageUser(source, DICT.unmute_response);
-    return;
-  }
-
-  // Respond to greetings.
-  else if (isGreeting(message)) {
-    responseStr = minimap.map({'user' : fromUser}, DICT.greeting_response);
-    friends.messageUser(source, responseStr);
-    return;
-  }
-
-  // Loop through other modules.
+  // Finally, loop through other modules.
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].handle === 'function') {
 
@@ -185,7 +142,7 @@ bot.on('message', function(source, message) {
     }
   }
 
-  // Default
+  // If nothing was matched, send a random response back.
   friends.messageUser(source, randomResponse());
 
 });
@@ -237,8 +194,4 @@ function help() {
     }
   }
   return resp;
-}
-
-function isGreeting(message) {
-  return DICT.greetings.indexOf(message) !== -1;
 }
