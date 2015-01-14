@@ -14,7 +14,6 @@ describe('dictionaries',function() {
       var dictFiles = fs.readdirSync('dict/');
       for(var f in dictFiles) {
           var file = path.join('dict/', dictFiles[f]);
-          console.log('parsing file ' + file);
           var source = fs.readFileSync(file);
           var parse = parseJson(source);
           expect(parse).to.not.throw(Error);

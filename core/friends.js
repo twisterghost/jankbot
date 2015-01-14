@@ -240,10 +240,10 @@ exports.broadcast = function(source, message) {
 };
 
 // Load mock data for testing and block saving.
-exports.initTest = function() {
+exports.initTest = function(friendData) {
   testMode = true;
   blacklist = [];
-  friends = {
+  friends = friendData || {
     '1': {
       'messages':[],
       'mute':false,
