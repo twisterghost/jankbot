@@ -40,6 +40,14 @@ module.exports = function(grunt) {
           {src: ['scripts/*']}
         ]
       }
+    },
+
+    clean: {
+      all: [
+        'coverage',
+        'output.log',
+        'npm-debug.log'
+      ]
     }
   });
 
@@ -50,5 +58,6 @@ module.exports = function(grunt) {
   grunt.registerTask('release', [
     'compress'
   ]);
+
 };
 
