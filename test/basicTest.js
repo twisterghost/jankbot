@@ -3,7 +3,6 @@ var friends = require('../core/friends.js');
 var basic = require('../core/basic.js');
 var logger = require('../core/logger.js');
 var sinon = require('sinon');
-var fs = require('fs');
 
 var spiedBot;
 
@@ -45,7 +44,7 @@ describe('Basic Functionality', function() {
   beforeEach(function() {
     spiedBot = {
       sendMessage: sinon.spy()
-    }
+    };
     friends.init(spiedBot, fakeConfig);
   });
 
