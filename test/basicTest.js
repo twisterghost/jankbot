@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 var expect = require('chai').expect;
 var friends = require('../core/friends.js');
 var basic = require('../core/basic.js');
@@ -51,6 +52,42 @@ describe('Basic Functionality', function() {
   it('broadcasts a message when it hears "lfg"', function() {
     basic.command('1', ['lfg'], 'lfg');
     expect(spiedBot.sendMessage.callCount).to.equal(3);
+  });
+
+  it('broadcasts a message when it hears "inhouse"', function() {
+    basic.command('1', ['inhouse'], 'inhouse');
+    expect(spiedBot.sendMessage.callCount).to.equal(3);
+  });
+
+  it('responds with a steam ID when it hears "ping"', function() {
+    basic.command('1', ['ping'], 'ping');
+    expect(spiedBot.sendMessage.args[0][1].indexOf('1')).to.be.above(-1);
+  });
+
+  it('calls the help function and responds when it hears "help"', function() {
+    basic.command('1', ['help'], 'help');
+    expect(helpFunction.called).to.be.true;
+    expect(spiedBot.sendMessage.called).to.be.true;
+  });
+
+  it('sets the mute status to true when it hears "mute"', function() {
+    basic.command('1', ['mute'], 'mute');
+    expect(friends.getMute('1')).to.be.true;
+  });
+
+  it('sets the mute status to false when it hears "unmute"', function() {
+    friends.setMute('1', true);
+    basic.command('1', ['unmute'], 'unmute');
+    expect(friends.getMute('1')).to.be.false;
+  });
+
+  it('responds to greetings', function() {
+    basic.command('1', [dictionary.greetings[0]], dictionary.greetings[0]);
+    expect(spiedBot.sendMessage.called).to.be.true;
+  });
+
+  it('returns false if it has no idea what to do', function() {
+    expect(basic.command('1', ['ddd'], 'ddd')).to.be.false;
   });
 
 });
