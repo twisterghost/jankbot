@@ -29,6 +29,7 @@ exports.init = function(botInstance, jankbotConfig) {
 
 // Returns the name of the given ID based on friends list.
 exports.nameOf = function(id) {
+  logger.log();
   if (friends.hasOwnProperty(id)) {
     return friends[id].name;
   } else {
@@ -67,14 +68,10 @@ exports.idOf = function(name, fuzzy) {
   }
 };
 
-
 // Updates the timestamp for the given id.
 exports.updateTimestamp = function(id) {
-  if (friends.hasOwnProperty(id)) {
-    friends[id].lastMessageTime = new Date();
-  }
+  exports.set(id, 'lastMessageTime', new Date());
 };
-
 
 // Saves a custom property about a friend. Returns true if it was able to
 // successfully save.
@@ -88,7 +85,6 @@ exports.set = function(id, property, value) {
   }
 };
 
-
 // Gets a custom property about a friend. Returns undefined if that property
 // does not exist.
 exports.get = function(id, property) {
@@ -99,7 +95,6 @@ exports.get = function(id, property) {
   }
 };
 
-
 // Run callback for each friend, passing in the friend ID.
 exports.forEach = function(callback) {
   for (var friend in friends) {
@@ -109,7 +104,6 @@ exports.forEach = function(callback) {
   }
 };
 
-
 // Add a user ID to the blacklist.
 exports.blacklist = function(id) {
   if (blacklist.indexOf(id) === -1) {
@@ -117,7 +111,6 @@ exports.blacklist = function(id) {
   }
   exports.save();
 };
-
 
 // Removes the given ID from the blacklist.
 exports.unBlacklist = function(id) {
@@ -128,12 +121,10 @@ exports.unBlacklist = function(id) {
   exports.save();
 };
 
-
 // Returns true if the given id is blacklisted.
 exports.checkIsBlacklisted = function(id) {
   return blacklist.indexOf(id) !== -1;
 };
-
 
 // Attempts to add someone to internal friends list.
 exports.addFriend = function(source) {
@@ -162,6 +153,7 @@ exports.removeFriend = function(id, cb) {
 exports.updateFriendsNames = function() {
   for (var friend in friends) {
     if (bot.users.hasOwnProperty(friend)) {
+      console.log(bot.users[friend].playerName);
       friends[friend].name = bot.users[friend].playerName;
     }
   }
@@ -243,30 +235,12 @@ exports.broadcast = function(source, message) {
 exports.initTest = function(friendData) {
   testMode = true;
   blacklist = [];
-  friends = friendData || {
-    '1': {
-      'messages':[],
-      'mute':false,
-      'name':'Test Friend 1',
-      'lastMessageTime': new Date()
-    },
-    '2': {
-      'messages':[],
-      'mute':false,
-      'name':'Test Friend 2',
-      'lastMessageTime': new Date() - 1000
-    },
-    '3': {
-      'messages':[],
-      'mute':false,
-      'name':'Final Test Friend',
-      'lastMessageTime': new Date()
-    }
-  };
+  friends = friendData;
 };
 
 // Thanks to Dokkat for this function
 // http://codereview.stackexchange.com/users/19757/dokkat
+/* istanbul ignore next */
 function fuzzyMatch(str,pattern){
     pattern = pattern.split('').reduce(function(a,b){ return a+'.*'+b; });
     return (new RegExp(pattern)).test(str);

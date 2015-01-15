@@ -1,17 +1,67 @@
 /*jshint expr: true*/
+var mockery = require('mockery');
 var expect = require('chai').expect;
-var friends = require('../core/friends.js');
-friends.initTest();
-friends.init({}, {
-  admins: [
-    '1'
-  ]
+var sinon = require('sinon');
+var _ = require('lodash');
+
+// Set up mocks for testing.
+var loggerMock = {
+  log: function() {},
+  error: function() {}
+};
+
+var mockFriendData = {
+  '1': {
+    'messages':[],
+    'mute':false,
+    'name':'Test Friend 1',
+    'lastMessageTime': new Date()
+  },
+  '2': {
+    'messages':[],
+    'mute':false,
+    'name':'Test Friend 2',
+    'lastMessageTime': new Date() - 1000
+  },
+  '3': {
+    'messages':[],
+    'mute':false,
+    'name':'Final Test Friend',
+    'lastMessageTime': new Date()
+  }
+};
+
+var botMock = {
+  users: {
+    '1': {
+      playerName: 'tested'
+    }
+  },
+  sendMessage: sinon.spy()
+};
+
+mockery.registerMock('./logger.js', loggerMock);
+mockery.enable({
+  useCleanCache: true,
+  warnOnUnregistered: false
 });
+
+var friends = require('../core/friends.js');
+
+
+
+
 
 describe('friends.js', function() {
 
   beforeEach(function() {
-    friends.initTest();
+    friends.initTest(_.cloneDeep(mockFriendData));
+    botMock.sendMessage = sinon.spy();
+    friends.init(botMock, {
+      admins: [
+        '1'
+      ]
+    });
   });
 
   describe('#getAllFriends()', function() {
@@ -75,7 +125,7 @@ describe('friends.js', function() {
     });
 
     it('should return undefined for an unknown parameter', function() {
-      expect(friends.get('1', 'test')).to.be.undefined;
+      expect(friends.get('1', 'test2')).to.be.undefined;
     });
   });
 
@@ -196,5 +246,36 @@ describe('friends.js', function() {
       expect(friends.isAdmin('2')).to.be.false;
     });
   });
+
+  describe('#updateFriendsNames()', function() {
+    it('updates the internal friend list with names from the bot data', function() {
+      friends.updateFriendsNames();
+      expect(friends.getAllFriends()['1'].name).to.equal(botMock.users['1'].playerName);
+    });
+  });
+
+  describe('#messageUser()', function() {
+    it('sends a message to the specified user', function() {
+      friends.messageUser('testID', 'hello world');
+      expect(botMock.sendMessage.calledWith('testID', 'hello world')).to.be.true;
+    });
+
+    it('wont message the user if they are muted and its a broadcast', function() {
+      friends.setMute('1', true);
+      friends.messageUser('1', 'hello world', true);
+      expect(botMock.sendMessage.callCount).to.equal(0);
+    });
+  });
+
+  describe('#broadcast', function() {
+    it('tries to message all users except the one who sent it', function() {
+      friends.broadcast('1', 'hello world');
+      expect(botMock.sendMessage.callCount).to.equal(2);
+      expect(botMock.sendMessage.calledWith('2', 'hello world')).to.be.true;
+      expect(botMock.sendMessage.calledWith('3', 'hello world')).to.be.true;
+    });
+  });
+
+  mockery.disable();
 
 });
