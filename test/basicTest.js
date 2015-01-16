@@ -4,6 +4,14 @@ var friends = require('../core/friends.js');
 var basic = require('../core/basic.js');
 var logger = require('../core/logger.js');
 var sinon = require('sinon');
+var mockery = require('mockery');
+var mockSteam = require('./mocks/mockSteam');
+
+mockery.registerMock('steam', mockSteam);
+mockery.enable({
+  useCleanCache: true,
+  warnOnUnregistered: false
+});
 
 var spiedBot;
 

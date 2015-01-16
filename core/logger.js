@@ -7,6 +7,8 @@ var noiseFree = false;
 
 exports.log = function(message) {
   fs.appendFile('output.log', 'LOG: ' + message + '\n');
+
+  /* istanbul ignore next */
   if (!noiseFree) {
     console.log(message);
   }
@@ -14,6 +16,8 @@ exports.log = function(message) {
 
 exports.error = function(message) {
   fs.appendFile('output.log', 'ERR: ' + message + '\n');
+
+  /* istanbul ignore next */
   if (!noiseFree) {
     console.log(message);
   }

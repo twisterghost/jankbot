@@ -12,11 +12,13 @@ var bot;
 var config;
 
 // Load saved friends lists.
+/* istanbul ignore next */
 if (fs.existsSync('data/friendslist')) {
   friends = JSON.parse(fs.readFileSync('data/friendslist'));
 }
 
 // Load saved blacklist.
+/* istanbul ignore next */
 if (fs.existsSync('data/blacklist')) {
   blacklist = JSON.parse(fs.readFileSync('data/blacklist'));
 }
@@ -116,7 +118,7 @@ exports.blacklist = function(id) {
 exports.unBlacklist = function(id) {
   var index = blacklist.indexOf(id);
   if (index !== -1) {
-    blacklist = blacklist.splice(index, 1);
+    blacklist.splice(index, 1);
   }
   exports.save();
 };
@@ -153,7 +155,6 @@ exports.removeFriend = function(id, cb) {
 exports.updateFriendsNames = function() {
   for (var friend in friends) {
     if (bot.users.hasOwnProperty(friend)) {
-      console.log(bot.users[friend].playerName);
       friends[friend].name = bot.users[friend].playerName;
     }
   }
@@ -198,6 +199,7 @@ function friendExists(friend) {
 }
 
 // Saves the friends list.
+/* istanbul ignore next */
 exports.save = function() {
   if (!testMode) {
     fs.writeFileSync('data/friendslist', JSON.stringify(friends));

@@ -3,6 +3,7 @@ var mockery = require('mockery');
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
+var mockSteam = require('./mocks/mockSteam');
 
 // Set up mocks for testing.
 var loggerMock = {
@@ -41,16 +42,13 @@ var botMock = {
 };
 
 mockery.registerMock('./logger.js', loggerMock);
+mockery.registerMock('steam', mockSteam);
 mockery.enable({
   useCleanCache: true,
   warnOnUnregistered: false
 });
 
 var friends = require('../core/friends.js');
-
-
-
-
 
 describe('friends.js', function() {
 
@@ -116,6 +114,10 @@ describe('friends.js', function() {
       expect(friends.getAllFriends()['1'].test).to.equal('hello world');
       expect(result).to.be.true;
     });
+
+    it('should return false when it cant find a friend', function() {
+      expect(friends.set('1000', 'test', 'hello')).to.be.false;
+    });
   });
 
   describe('#get()', function() {
@@ -126,6 +128,10 @@ describe('friends.js', function() {
 
     it('should return undefined for an unknown parameter', function() {
       expect(friends.get('1', 'test2')).to.be.undefined;
+    });
+
+    it('should return undefined for a friend that doesnt exist', function() {
+      expect(friends.get('100', 'test')).to.be.undefined;
     });
   });
 
@@ -144,7 +150,7 @@ describe('friends.js', function() {
 
   describe('#unBlacklist()', function() {
     it('should remove a user from the blacklist', function() {
-      friends.rawBlacklist = ['1234'];
+      friends.blacklist('1234');
       friends.unBlacklist('1234');
       expect(friends.getBlacklist().length).to.equal(0);
     });
@@ -228,6 +234,10 @@ describe('friends.js', function() {
       friends.setMute('1234', true);
       expect(friends.getMute('1234')).to.be.true;
     });
+
+    it('returns false when the user doesnt exist', function() {
+      expect(friends.getMute('1000')).to.be.false;
+    });
   });
 
   describe('#forEach()', function() {
@@ -251,6 +261,15 @@ describe('friends.js', function() {
     it('updates the internal friend list with names from the bot data', function() {
       friends.updateFriendsNames();
       expect(friends.getAllFriends()['1'].name).to.equal(botMock.users['1'].playerName);
+    });
+  });
+
+  describe('#updateTimstamp()', function() {
+    it('updates the lastMessageTime property of a freind', function() {
+      var startDate = new Date(friends.get('2', 'lastMessageTime')).getTime();
+      friends.updateTimestamp('2');
+      var newDate = new Date(friends.get('2', 'lastMessageTime')).getTime();
+      expect(newDate).to.be.above(startDate);
     });
   });
 
