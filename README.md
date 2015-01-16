@@ -47,9 +47,8 @@ Windows does not ship with the resources to connect securely to Steam.
 
 ## Running Jankbot
 
-Once you have the config file set up and you've run `npm install` in the Jankbot
-directory on your machine and you have a Steam account ready to go with at least
-one purchase, you are READY TO RUN JANKBOT, WOOHOO!
+Once you have installed and configured Jankbot and you have a Steam account
+ready to go with at least one purchase, you are READY TO RUN JANKBOT, WOOHOO!
 
 **To run Jankbot:** `./jankbot`
 
