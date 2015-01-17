@@ -1,8 +1,23 @@
-var dota2 = require('dota2');
-var Dota2;
+var Dota2 = require('dota2');
+var dota2;
+var inGame = false;
 
 exports.init = function(bot) {
-  Dota2 = new dota2.Dota2Client(bot, true);
+  dota2 = new Dota2.Dota2Client(bot, true);
 };
 
-exports.client = Dota2;
+exports.launch = function() {
+  if (!inGame) {
+    dota2.launch();
+    inGame = true;
+  }
+};
+
+exports.gg = function() {
+  if (inGame) {
+    dota2.exit();
+    inGame = false;
+  }
+};
+
+exports.client = dota2;

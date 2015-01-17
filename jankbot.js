@@ -63,7 +63,7 @@ if (fs.existsSync(modulesPath)) {
   logger.log('No bot_modules directory found, skipping module import.');
 }
 
-// Log in and set name.
+// Create the bot instance.
 var bot = new Steam.SteamClient();
 
 // Attempt to log on to Steam.
@@ -76,7 +76,7 @@ bot.logOn({
 bot.on('loggedOn', function() {
   logger.log(DICT.SYSTEM.system_loggedin);
 
-  // Tell steam our screen name and status.
+  // Tell Steam our screen name and status.
   bot.setPersonaState(Steam.EPersonaState.Online);
   bot.setPersonaName(CONFIG.displayName);
 
