@@ -49,6 +49,8 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
       console.log('Enter a Steam account name and you will get something like STEAM_0:0:#######');
       console.log('Paste that in to the search box again and you get a 17 digit number.');
       console.log('USE THAT 17 DIGIT NUMBER HERE');
+      console.log('You can also skip this part and use the "ping" command on jankbot to get your ID');
+      console.log('Then, run this script again to add yourself as an admin later.');
       rl.question('Enter the 17 digit IDs of all admin accounts, seperated by spaces.\n(admins) ',
           function(answer) {
         if (answer) {
@@ -71,6 +73,9 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
             if (answer === '') {
               config.dictionary = 'english.json';
             } else {
+              if (answer.indexOf('.json') === -1) {
+                answer += '.json';
+              }
               config.dictionary = answer;
             }
 
