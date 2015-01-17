@@ -10,6 +10,7 @@ var blacklist = [];
 var testMode = false;
 var bot;
 var config;
+var dict;
 
 // Load saved friends lists.
 /* istanbul ignore next */
@@ -24,9 +25,10 @@ if (fs.existsSync('data/blacklist')) {
 }
 
 // Initialize this module with a bot instance and config data.
-exports.init = function(botInstance, jankbotConfig) {
+exports.init = function(botInstance, jankbotConfig, dictionary) {
   bot = botInstance;
   config = jankbotConfig;
+  dict = dictionary;
 };
 
 // Returns the name of the given ID based on friends list.
@@ -190,6 +192,9 @@ exports.setMute = function(friend, mute) {
 
 // Return true if the given friend ID is listed as an admin.
 exports.isAdmin = function(friend) {
+  if (!config.admins) {
+    return false;
+  }
   return config.admins.indexOf(friend) !== -1;
 };
 
@@ -226,11 +231,30 @@ exports.messageUser = function(user, message, broadcast) {
 // Broadcasts a message to everyone but source.
 exports.broadcast = function(source, message) {
   logger.log('Broadcasting: ' + message);
+
+  var lastBroadcastTime = parseInt(exports.get(source, 'lastBroadcastTime'));
+  var TEN_MINUTES = 10 * 60 * 1000;
+  var now = new Date().getTime();
+
+  // If they have broadcasted before and it is too soon, stop it.
+  // Ignore for admins.
+  if (!exports.isAdmin(source) &&
+      lastBroadcastTime &&
+      (now - TEN_MINUTES) < lastBroadcastTime) {
+    exports.messageUser(source, dict.ERRORS.err_cant_broadcast);
+    return false;
+  }
+
+  // Save this last broadcast time.
+  exports.set(source, 'lastBroadcastTime', now);
+
   for (var friend in friends) {
     if (friend !== source) {
       exports.messageUser(friend, message, true);
     }
   }
+
+  return true;
 };
 
 // Load mock data for testing and block saving.

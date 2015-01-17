@@ -30,8 +30,14 @@ var DICT = JSON.parse(fs.readFileSync(path.join('dict/', CONFIG.dictionary)));
 // Set admins.
 var ADMINS = CONFIG.admins;
 
-if (ADMINS === null) {
+if (!ADMINS) {
   ADMINS = [];
+}
+
+// Load in optional helpfile.
+var helpInfo = '';
+if (fs.existsSync('helpfile')) {
+  helpInfo = fs.readFileSync('helpfile');
 }
 
 // Load modules.
@@ -82,7 +88,7 @@ bot.on('loggedOn', function() {
 
   // Initialize core modules.
   dota2.init(bot);
-  friends.init(bot, CONFIG);
+  friends.init(bot, CONFIG, DICT);
   admin.init(bot, DICT, shutdown);
   basic.init(DICT, help);
 });
@@ -182,7 +188,13 @@ function shutdown() {
 
 // Help text.
 function help() {
-  var resp = DICT.help_message + '\n';
+  var resp = '\n';
+  if (helpInfo === '') {
+    resp += DICT.help_message + '\n\n';
+  } else {
+    resp += helpInfo + '\n\n';
+  }
+
   for (var cmd in DICT.CMDS) {
     if (typeof cmd === 'string') {
       resp += cmd + ' - ' + DICT.CMD_HELP[cmd] + '\n';

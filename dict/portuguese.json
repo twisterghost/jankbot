@@ -2,11 +2,12 @@
   "SYSTEM" : {
     "system_loggedin" : "Login efetuado com sucesso.",
     "system_msg_received" : "Mensagem de {user}: {message}",
-    "system_added_friend" : "Novo contato adicionado: {userid}"	
+    "system_added_friend" : "Novo contato adicionado: {userid}"
   },
 
   "ERRORS" : {
-    "err_not_admin" : "Você não é um administrador!"
+    "err_not_admin" : "Você não é um administrador!",
+    "err_cant_broadcast": "Você só pode transmitir a cada 10 minutos."
   },
 
   "CMDS" : {

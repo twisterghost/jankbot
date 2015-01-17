@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
 var mockSteam = require('./mocks/mockSteam');
+var dictionary = require('../dict/english.json');
 
 // Set up mocks for testing.
 var loggerMock = {
@@ -59,7 +60,7 @@ describe('friends.js', function() {
       admins: [
         '1'
       ]
-    });
+    }, dictionary);
   });
 
   describe('#getAllFriends()', function() {
@@ -288,10 +289,34 @@ describe('friends.js', function() {
 
   describe('#broadcast', function() {
     it('tries to message all users except the one who sent it', function() {
-      friends.broadcast('1', 'hello world');
+      friends.broadcast('2', 'hello world');
+      expect(botMock.sendMessage.callCount).to.equal(2);
+      expect(botMock.sendMessage.calledWith('1', 'hello world')).to.be.true;
+      expect(botMock.sendMessage.calledWith('3', 'hello world')).to.be.true;
+    });
+
+    it('doesn\'t broadcast and returns false if a user tries to spam', function() {
+      var res = friends.broadcast('2', 'hello world');
+      expect(botMock.sendMessage.callCount).to.equal(2);
+      expect(botMock.sendMessage.calledWith('1', 'hello world')).to.be.true;
+      expect(botMock.sendMessage.calledWith('3', 'hello world')).to.be.true;
+
+      res = friends.broadcast('2', 'hello world');
+      expect(res).to.be.false;
+
+      // Only one more message sent - the error message.
+      expect(botMock.sendMessage.callCount).to.equal(3);
+    });
+
+    it ('allows admins to broadcast freely', function() {
+      var res = friends.broadcast('1', 'hello world');
       expect(botMock.sendMessage.callCount).to.equal(2);
       expect(botMock.sendMessage.calledWith('2', 'hello world')).to.be.true;
       expect(botMock.sendMessage.calledWith('3', 'hello world')).to.be.true;
+
+      res = friends.broadcast('1', 'hello world');
+      expect(res).to.be.true;
+      expect(botMock.sendMessage.callCount).to.equal(4);
     });
   });
 

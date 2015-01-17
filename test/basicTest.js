@@ -6,6 +6,7 @@ var logger = require('../core/logger.js');
 var sinon = require('sinon');
 var mockery = require('mockery');
 var mockSteam = require('./mocks/mockSteam');
+var dictionary = require('../dict/english.json');
 
 mockery.registerMock('steam', mockSteam);
 mockery.enable({
@@ -44,7 +45,7 @@ friends.initTest({
     'lastMessageTime': new Date()
   }
 });
-friends.init(spiedBot, fakeConfig);
+friends.init(spiedBot, fakeConfig, dictionary);
 
 basic.init(dictionary, helpFunction);
 

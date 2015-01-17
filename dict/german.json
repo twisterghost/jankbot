@@ -7,7 +7,8 @@
   },
 
   "ERRORS" : {
-    "err_not_admin" : "Dieser Befehl verlangt den Adminstatus"
+    "err_not_admin" : "Dieser Befehl verlangt den Adminstatus",
+    "err_cant_broadcast": "Du kannst nur alle 10 Minuten broadcasten."
   },
 
   "CMDS" : {
