@@ -46,7 +46,8 @@ module.exports = function(grunt) {
       all: [
         'coverage',
         'output.log',
-        'npm-debug.log'
+        'npm-debug.log',
+        'jankbot.zip'
       ]
     }
   });
