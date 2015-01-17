@@ -161,6 +161,10 @@ bot.on('relationship', function(other, type){
       logger.log(minimap.map({userid: other}, DICT.SYSTEM.system_blacklist_attempt));
       bot.removeFriend(other);
       return;
+    } else if (friends.count() >= 250) {
+      bot.removeFriend(other);
+      logger.log('Rejected friend request: friend limit reached');
+      return;
     }
     bot.addFriend(other);
     logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));

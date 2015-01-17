@@ -287,6 +287,12 @@ describe('friends.js', function() {
     });
   });
 
+  describe('#count()', function() {
+    it('returns the number of friends on the bot', function() {
+      expect(friends.count()).to.equal(3);
+    });
+  });
+
   describe('#broadcast', function() {
     it('tries to message all users except the one who sent it', function() {
       friends.broadcast('2', 'hello world');

@@ -257,6 +257,14 @@ exports.broadcast = function(source, message) {
   return true;
 };
 
+exports.count = function() {
+  var count = 0;
+  exports.forEach(function() {
+    count++;
+  });
+  return count;
+};
+
 // Load mock data for testing and block saving.
 exports.initTest = function(friendData) {
   testMode = true;
