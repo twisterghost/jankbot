@@ -13,6 +13,7 @@ var Steam = require('steam');
 var dota2 = require('./core/dota2.js');
 var admin = require('./core/admin.js');
 var basic = require('./core/basic.js');
+var packageInfo = require('./package.json');
 var minimap = require('minimap');
 
 // Ensure data/ exists
@@ -40,6 +41,9 @@ if (fs.existsSync('helpfile')) {
   helpInfo = fs.readFileSync('helpfile');
 }
 
+// Get the current version.
+var VERSION = packageInfo.version.split('.');
+
 // Load modules.
 var modules = [];
 var modulesPath = path.join(__dirname, '/bot_modules/');
@@ -58,6 +62,14 @@ if (fs.existsSync(modulesPath)) {
 
         if (module.setDictionary) {
           module.setDictionary(CONFIG.dictionary);
+        }
+
+        if (module.compatible) {
+          var compatibility = checkCompatibility(module.compatible);
+          if (compatibility === false) {
+            logger.log('WARNING: Module ' + moduleConfig.name + ' is not compatible with this ' +
+              'verion of Jankbot and may function improperly or cause crashes.');
+          }
         }
 
         modules.push(module);
@@ -210,4 +222,28 @@ function help() {
     }
   }
   return resp;
+}
+
+function checkCompatibility(version) {
+  var splitVersion = version.split('.');
+
+  // Broken, ignore.
+  if (splitVersion.length !== 3) {
+    return -1;
+  }
+
+  for (var i = 0; i < 3; i++) {
+    if (splitVersion[i] === '*') {
+      continue;
+    } else {
+      var jankbotVersionNumber = parseInt(VERSION[i]);
+      var moduleVersionNumber = parseInt(splitVersion[i]);
+      if (jankbotVersionNumber !== moduleVersionNumber) {
+        return false;
+      }
+    }
+
+  }
+
+  return true;
 }
