@@ -5,6 +5,7 @@
 
 // Imports.
 var fs = require('fs');
+var path = require('path');
 var readline = require('readline');
 
 var rl = readline.createInterface({
@@ -18,8 +19,9 @@ if (!fs.existsSync('data')) {
 }
 
 // Open config.json or create it.
-if (fs.existsSync('data/config.json')) {
-  var config = JSON.parse(fs.readFileSync('data/config.json'));
+var configPath = path.join('data', 'config.json');
+if (fs.existsSync(configPath)) {
+  var config = JSON.parse(fs.readFileSync(configPath));
 } else {
   config = {};
 }
@@ -79,7 +81,7 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
               config.dictionary = answer;
             }
 
-            fs.writeFileSync('data/config.json', JSON.stringify(config, null, 2));
+            fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
             console.log('Your config.json file will look like:');
             console.log(JSON.stringify(config, null, 2));
             console.log('\nYou\'re all set!');

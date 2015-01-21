@@ -125,6 +125,12 @@ tweet [@JankDota](http://twitter.com/jankdota), send a reddit message to
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
 
+## Trello
+
+Jankbot has a [public Trello page](https://trello.com/b/4zEJvVmk/jankbot) where you can see what is
+being worked on and what is being released next. If you have a Trello account, you can even vote on
+cards to weigh in on what should be done next.
+
 ## For Developers
 
 Jankbot is an open source project far more than open to pull requests. If you

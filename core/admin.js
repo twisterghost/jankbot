@@ -1,7 +1,7 @@
 // Handler for admin functionality.
+var minimap = require('minimap');
 var friends = require('./friends.js');
 var logger = require('./logger.js');
-var minimap = require('minimap');
 var DICT;
 var bot;
 var shutdown;

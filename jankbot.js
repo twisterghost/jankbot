@@ -7,14 +7,14 @@
 // Imports.
 var fs = require('fs');
 var path = require('path');
+var minimap = require('minimap');
+var Steam = require('steam');
 var friends = require('./core/friends.js');
 var logger = require('./core/logger.js');
-var Steam = require('steam');
 var dota2 = require('./core/dota2.js');
 var admin = require('./core/admin.js');
 var basic = require('./core/basic.js');
 var packageInfo = require('./package.json');
-var minimap = require('minimap');
 
 // Ensure data/ exists
 if (!fs.existsSync('data')) {
@@ -26,14 +26,7 @@ if (!fs.existsSync('data')) {
 var CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
 
 // Load dictionary.
-var DICT = JSON.parse(fs.readFileSync(path.join('dict/', CONFIG.dictionary)));
-
-// Set admins.
-var ADMINS = CONFIG.admins;
-
-if (!ADMINS) {
-  ADMINS = [];
-}
+var DICT = JSON.parse(fs.readFileSync(path.join('dict', CONFIG.dictionary)));
 
 // Load in optional helpfile.
 var helpInfo = '';
@@ -55,15 +48,21 @@ if (fs.existsSync(modulesPath)) {
 
       // Load up the modules based on their module.json file.
       if (file === 'module.json') {
+
+        // Get the module config file to load the module itself.
         var moduleConfigPath = path.join(modulesPath, dir, file);
         var moduleConfig = JSON.parse(fs.readFileSync(moduleConfigPath));
+
+        // Use the 'main' property in the config file to load the module.
         logger.log('Loading module ' + moduleConfig.name + ' by ' + moduleConfig.author + '...');
         var module = require(path.join(modulesPath, dir, moduleConfig.main));
 
+        // Check to see if the module has a setDictionary function defined, if so, call it.
         if (module.setDictionary) {
           module.setDictionary(CONFIG.dictionary);
         }
 
+        // Check if the module is compatible with this version of Jankbot.
         if (module.compatible) {
           var compatibility = checkCompatibility(module.compatible);
           if (compatibility === false) {
@@ -72,6 +71,7 @@ if (fs.existsSync(modulesPath)) {
           }
         }
 
+        // Finally, add the module to the modules list.
         modules.push(module);
       }
     });
@@ -114,7 +114,7 @@ bot.on('message', function(source, message) {
   friends.updateFriendsNames();
   friends.updateTimestamp(source);
 
-  // If the message is blank (blank messages are received from 'is typing').
+  // If the message is blank, do nothing (blank messages are received from 'is typing').
   if (message === '') {
     return;
   }
@@ -144,7 +144,7 @@ bot.on('message', function(source, message) {
     }
   }
 
-  // Next, check if it is a default action.
+  // Next, check if it is a default action. Basic will return true if it handles the input.
   if (basic.command(source, input, original)) {
     return;
   }
@@ -211,11 +211,14 @@ function help() {
     resp += helpInfo + '\n\n';
   }
 
+  // Core commands.
   for (var cmd in DICT.CMDS) {
     if (typeof cmd === 'string') {
       resp += cmd + ' - ' + DICT.CMD_HELP[cmd] + '\n';
     }
   }
+
+  // Module help texts.
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].getHelp === 'function') {
       resp += '\n' + modules[i].getHelp();
@@ -233,7 +236,9 @@ function checkCompatibility(version) {
   }
 
   for (var i = 0; i < 3; i++) {
+
     if (splitVersion[i] === '*') {
+      // * is wildcard, so skip this iteration.
       continue;
     } else {
       var jankbotVersionNumber = parseInt(VERSION[i]);
