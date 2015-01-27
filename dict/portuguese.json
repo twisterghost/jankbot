@@ -16,7 +16,8 @@
     "help" : "ajuda",
     "mute" : "mute",
     "unmute" : "unmute",
-    "ping" : "ping"
+    "ping" : "ping",
+    "whois": "whois"
   },
 
   "help_message" : "Eu sou Jankbot, estou aqui para ajuda-lo no seu dia a dia de DotA!",
@@ -27,8 +28,9 @@
     "help" : "Mostra essa mensagem de ajuda.",
     "mute" : "Me silencia. Suas 10 ultimas mensagens perdidas serão salvas.",
     "unmute" : "Você voltará a receber mensagens minhas. Mensagens salvas serão entregues.",
-    "ping" : "PONG! Vou te dizer o seu ID da Steam."
-    },
+    "ping" : "PONG! Vou te dizer o seu ID da Steam.",
+    "whois": "Pesquisar um usuário pelo seu nome completo ou parte do seu nome."
+  },
 
   "LFG_RESPONSES" : {
     "lfg_response_sender" : "Eu avisei os seus amigos que você quer jogar.",

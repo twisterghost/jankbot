@@ -40,6 +40,9 @@ exports.command = function(source, input, original) {
     case DICT.CMDS.unmute:
       actions.unmute(source);
       return true;
+    case DICT.CMDS.whois:
+      actions.whois(source, input);
+      return true;
     default:
       return false;
   }
@@ -83,6 +86,28 @@ var actions = {
   unmute: function(source) {
     friends.setMute(source, false);
     friends.messageUser(source, DICT.unmute_response);
+  },
+
+  whois: function(source, input) {
+    input.splice(0, 1);
+    input = input.join(' ');
+
+    var lookupID = friends.idOf(input, true);
+
+    if (lookupID) {
+      var friendsList = friends.getAllFriends();
+      var foundFriend = friendsList[lookupID];
+      var profileURL = 'http://steamcommunity.com/profiles/' + lookupID;
+      var friendInfo = foundFriend.name + ': \n' +
+        'Steam profile: ' + profileURL + '\n';
+      friends.messageUser(source, friendInfo);
+    } else {
+
+    // No friend found :(
+    friends.messageUser(source, 'I couldn\'t find any user I know with a name similar to ' +
+      input + '. Sorry :(');
+
+    }
   }
 
 };

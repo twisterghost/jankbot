@@ -17,7 +17,8 @@
     "help" : "help",
     "mute" : "mute",
     "unmute" : "unmute",
-    "ping" : "ping"
+    "ping" : "ping",
+    "whois": "whois"
   },
 
   "help_message" : "I'm Jankbot, here to help with your every day Dota!",
@@ -28,8 +29,9 @@
     "help" : "Shows this help message.",
     "mute" : "Stops broadcasts from reaching you.",
     "unmute" : "Allows broadcasts to reach you.",
-    "ping" : "PONG! I'll tell you your Steam ID."
-    },
+    "ping" : "PONG! I'll tell you your Steam ID.",
+    "whois": "Look up a user by their full name or a part of their name."
+  },
 
   "LFG_RESPONSES" : {
     "lfg_response_sender" : "I alerted my friends that you wish to play.",

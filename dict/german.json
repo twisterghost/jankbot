@@ -28,8 +28,9 @@
     "help" : "Zeige diese Hilfenachricht.",
     "mute" : "Beendet mich. Deine 10 letzen verpassten Nachrichten werden gespeichert.",
     "unmute" : "Startet mich wieder. Gespeicherte Nachrichten werden zugestellt.",
-    "ping" : "PONG! Ich sage dir deine Steam ID."
-    },
+    "ping" : "PONG! Ich sage dir deine Steam ID.",
+    "whois": " Suche nach einem User über den vollen Namen oder einen Teil des Namens."
+  },
 
   "LFG_RESPONSES" : {
     "lfg_response_sender" : "Ich habe meine Freunde daruf hingewiesen, dass du spielen möchtest.",
