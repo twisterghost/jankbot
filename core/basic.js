@@ -1,6 +1,6 @@
 // Handler for basic functionality.
-var friends = require('./friends.js');
 var minimap = require('minimap');
+var friends = require('./friends.js');
 var DICT;
 var helpFunction;
 

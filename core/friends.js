@@ -3,8 +3,9 @@
  */
 
 var fs = require('fs');
-var logger = require('./logger.js');
 var Steam = require('steam');
+var logger = require('./logger.js');
+
 var friends = {};
 var blacklist = [];
 var testMode = false;
@@ -33,7 +34,6 @@ exports.init = function(botInstance, jankbotConfig, dictionary) {
 
 // Returns the name of the given ID based on friends list.
 exports.nameOf = function(id) {
-  logger.log();
   if (friends.hasOwnProperty(id)) {
     return friends[id].name;
   } else {
@@ -102,7 +102,7 @@ exports.get = function(id, property) {
 // Run callback for each friend, passing in the friend ID.
 exports.forEach = function(callback) {
   for (var friend in friends) {
-    if (friend) {
+    if (friends.hasOwnProperty(friend)) {
       callback(friend);
     }
   }
@@ -156,7 +156,7 @@ exports.removeFriend = function(id, cb) {
 // Grabs what names it can from bot.users and applies them to the friends list.
 exports.updateFriendsNames = function() {
   for (var friend in friends) {
-    if (bot.users.hasOwnProperty(friend)) {
+    if (bot.users.hasOwnProperty(friend) && friends.hasOwnProperty(friend)) {
       friends[friend].name = bot.users[friend].playerName;
     }
   }
@@ -249,7 +249,7 @@ exports.broadcast = function(source, message) {
   exports.set(source, 'lastBroadcastTime', now);
 
   for (var friend in friends) {
-    if (friend !== source) {
+    if (friends.hasOwnProperty(friend) && friend !== source) {
       exports.messageUser(friend, message, true);
     }
   }
