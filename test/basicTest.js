@@ -68,6 +68,11 @@ describe('Basic Functionality', function() {
     expect(spiedBot.sendMessage.callCount).to.equal(3);
   });
 
+  it('includes a password when it hears "inhouse" with a password', function() {
+    basic.command('1', ['inhouse', 'hello'], 'inhouse hello');
+    expect(spiedBot.sendMessage.args[0][1].indexOf('hello')).to.be.above(-1);
+  });
+
   it('responds with a steam ID when it hears "ping"', function() {
     basic.command('1', ['ping'], 'ping');
     expect(spiedBot.sendMessage.args[0][1].indexOf('1')).to.be.above(-1);

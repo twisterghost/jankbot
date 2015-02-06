@@ -24,7 +24,7 @@
 
   "CMD_HELP" : {
     "lfg" : "Avise meus amigos que quero jogar.",
-    "inhouse" : "Avise seus amigos que você está hosteando uma inhouse.",
+    "inhouse" : "Avise seus amigos que você está hosteando uma inhouse. Você também pode escrever uma palavra-passe.",
     "help" : "Mostra essa mensagem de ajuda.",
     "mute" : "Me silencia. Suas 10 ultimas mensagens perdidas serão salvas.",
     "unmute" : "Você voltará a receber mensagens minhas. Mensagens salvas serão entregues.",
@@ -39,7 +39,8 @@
 
   "INHOUSE_RESPONSES" : {
     "inhouse_response_sender" : "Eu alertei os seus amigos que você está hosteando uma inhouse.",
-    "inhouse_broadcast" : "{host} está hosteando uma inhouse."
+    "inhouse_broadcast" : "{host} está hosteando uma inhouse.",
+    "inhouse_broadcast_password" : "{host} está hosteando uma inhouse. Password: {pass}"
   },
 
   "mute_response" : "Okay, vou parar de te perturbar. Suas mensagens perdidas serão recebidas quando você me desmutar (unmute).",

@@ -25,7 +25,7 @@
 
   "CMD_HELP" : {
     "lfg" : "Alert my friends that you are looking to play.",
-    "inhouse" : "Alert my friends that you are hosting an inhouse.",
+    "inhouse" : "Alert my friends that you are hosting an inhouse. You can also provide a password.",
     "help" : "Shows this help message.",
     "mute" : "Stops broadcasts from reaching you.",
     "unmute" : "Allows broadcasts to reach you.",
@@ -40,7 +40,8 @@
 
   "INHOUSE_RESPONSES" : {
     "inhouse_response_sender" : "I alerted my friends that you are hosting an inhouse.",
-    "inhouse_broadcast" : "{host} is hosting an inhouse."
+    "inhouse_broadcast" : "{host} is hosting an inhouse.",
+    "inhouse_broadcast_password" : "{host} is hosting an inhouse. Password: {pass}"
   },
 
   "mute_response" : "Okay, broadcasts will no longer reach you until you unmute me.",

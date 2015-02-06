@@ -26,7 +26,7 @@ exports.command = function(source, input, original) {
       actions.lfg(source, fromUser);
       return true;
     case DICT.CMDS.inhouse:
-     actions.inhouse(source, fromUser);
+     actions.inhouse(source, fromUser, input);
      return true;
     case DICT.CMDS.ping:
       actions.ping(source);
@@ -60,9 +60,16 @@ var actions = {
     }
   },
 
-  inhouse: function(source, fromUser) {
-    var inhouseMessage = minimap.map({'host' : fromUser},
-        DICT.INHOUSE_RESPONSES.inhouse_broadcast);
+  inhouse: function(source, fromUser, input) {
+    var inhouseMessage;
+    if (input.length > 1) {
+      input.splice(0, 1);
+      var password = input.join(' ');
+      inhouseMessage = minimap.map({'host' : fromUser, 'pass': password},
+          DICT.INHOUSE_RESPONSES.inhouse_broadcast_password);
+    } else {
+      inhouseMessage = minimap.map({'host' : fromUser}, DICT.INHOUSE_RESPONSES.inhouse_broadcast);
+    }
     var res = friends.broadcast(source, inhouseMessage);
     if (res) {
       friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender);
