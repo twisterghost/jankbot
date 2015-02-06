@@ -1,0 +1,83 @@
+{
+  "SYSTEM" : {
+    "system_loggedin" : "Erfolgreich eingeloggt.",
+    "system_msg_received" : "Empfange von {user}: {message}",
+    "system_added_friend" : "Freund hinzugefügt: {userid}",
+    "system_blacklist_attempt" : "Geblacklistete ID {userid} versuchte den bot hinzuzufügen."
+  },
+
+  "ERRORS" : {
+    "err_not_admin" : "Dieser Befehl verlangt den Adminstatus",
+    "err_cant_broadcast": "Du kannst nur alle 10 Minuten broadcasten."
+  },
+
+  "CMDS" : {
+    "lfg" : "lfg",
+    "inhouse" : "inhouse",
+    "help" : "help",
+    "mute" : "mute",
+    "unmute" : "unmute",
+    "ping" : "ping"
+  },
+
+  "help_message" : "Ich bin Jankbot, hier um dir bei Dota zu helfen!",
+
+  "CMD_HELP" : {
+    "lfg" : "Weise meine Freunde darauf hin, dass ich spielen möchte.",
+    "inhouse" : "Weise meine Freunde darauf hin, dass ich ein Match hoste. Sie können auch ein kennwort schreiben.",
+    "help" : "Zeige diese Hilfenachricht.",
+    "mute" : "Beendet mich. Deine 10 letzen verpassten Nachrichten werden gespeichert.",
+    "unmute" : "Startet mich wieder. Gespeicherte Nachrichten werden zugestellt.",
+    "ping" : "PONG! Ich sage dir deine Steam ID.",
+    "whois": " Suche nach einem User über den vollen Namen oder einen Teil des Namens."
+  },
+
+  "LFG_RESPONSES" : {
+    "lfg_response_sender" : "Ich habe meine Freunde daruf hingewiesen, dass du spielen möchtest.",
+    "lfg_broadcast" : "{user} möchte spielen."
+  },
+
+  "INHOUSE_RESPONSES" : {
+    "inhouse_response_sender" : "Ich habe meine Freunde darauf hingewiesen, dass du ein Match hostest.",
+    "inhouse_broadcast" : "{host} hostet ein Match.",
+    "inhouse_broadcast_password" : "{host} hostet ein Match. Password: {pass}"
+  },
+
+  "mute_response" : "Okay, Broadcasts werden dich nicht mehr erreichen bis du mich demutest.",
+  "unmute_response" : "Okay, Broadcasts werden dich nun erreichen.",
+
+  "ping_response" : "PONG. Deine Benutzer ID lautet {userid}",
+
+  "greeting_response" : "Hallo {user}!",
+
+  "ADMIN" : {
+    "quit" : "Okay, beende...",
+    "dump_friends" : "Gebe Freunde JSON in Konsole aus...",
+    "dump_users" : "Gebe Benutzer JSON in Konsole aus...",
+    "broadcast_log" : "Admin Broadcastanfrage: {message}",
+    "broadcast_sent" : "Dein Broadcast wurde gesendet.",
+    "remove_friend_success" : "Freund {id} entfernt",
+    "remove_friend_error" : "Kein Freund mit ID {id}",
+    "lookup_success" : "der Name des angefragten Freundes lautet {name}",
+    "lookup_error" : "Kein Freund mit dieser ID bekannt.",
+    "no_inactive_users": "Keine Benutzer inaktiv!",
+    "blacklist_add" : "Benutzer zur Blacklist hinzugefügt",
+    "blacklist_remove" : "Benutzer von Blacklist entfernt"
+  },
+
+  "random_responses" : [
+    "Hmmm...?",
+    "Sicher...waas?",
+    "Ich hab keine Ahnung, was du willst.",
+    "WAT.",
+    "Probier dochmal 'help'?"
+  ],
+
+  "greetings" : [
+    "Hey",
+    "Hallo",
+    "Yo",
+    "Howdy",
+    "Hi"
+  ]
+}

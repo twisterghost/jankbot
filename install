@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+echo "This will install dependencies for running Jankbot."
+echo "You may see a lot of warnings, but it should still install properly."
+npm install --production

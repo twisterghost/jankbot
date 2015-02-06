@@ -1,60 +1,121 @@
 /**
  * Jankbot - A Dota-centric steambot by JankDota
- * Authored by Michael Barrett (twisterghost)
+ * Authored by Michael Barrett (@twisterghost)
  * https://github.com/twisterghost/jankbot
  */
 
 // Imports.
 var fs = require('fs');
-var Steam = require('steam');
-var friends = require('./bot_modules/friends.js');
-var logger = require('./bot_modules/logger.js');
+var path = require('path');
 var minimap = require('minimap');
+var Steam = require('steam');
+var friends = require('./core/friends.js');
+var logger = require('./core/logger.js');
+var dota2 = require('./core/dota2.js');
+var admin = require('./core/admin.js');
+var basic = require('./core/basic.js');
+var packageInfo = require('./package.json');
 
-// Define command line arguments.
-var argv = require('optimist');
+// Ensure data/ exists
+if (!fs.existsSync('data')) {
+  logger.error('The data directory is missing. Please run ./config to set up Jankbot.');
+  process.exit(1);
+}
 
 // Load config file.
-var CONFIG = JSON.parse(fs.readFileSync("config.json"));
+var CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
 
 // Load dictionary.
-var DICT = JSON.parse(fs.readFileSync(CONFIG.dictionary));
+var DICT = JSON.parse(fs.readFileSync(path.join('dict', CONFIG.dictionary)));
 
-// Set admins.
-var ADMINS = CONFIG.admins;
-
-if (ADMINS == null) {
-  ADMINS = [];
+// Load in optional helpfile.
+var helpInfo = '';
+if (fs.existsSync('helpfile')) {
+  helpInfo = fs.readFileSync('helpfile');
 }
+
+// Get the current version.
+var VERSION = packageInfo.version.split('.');
 
 // Load modules.
 var modules = [];
-for (var i = 0; i < CONFIG.modules.length; i++) {
-  modules.push(require("./bot_modules/" + CONFIG.modules[i] + ".js"));
+var modulesPath = path.join(__dirname, '/bot_modules/');
+
+// If the modules firectory exists, load all modules from it.
+if (fs.existsSync(modulesPath)) {
+  fs.readdirSync(modulesPath).forEach(function (dir) {
+    fs.readdirSync(path.join(modulesPath, dir)).forEach(function (file) {
+
+      // Load up the modules based on their module.json file.
+      if (file === 'module.json') {
+
+        // Get the module config file to load the module itself.
+        var moduleConfigPath = path.join(modulesPath, dir, file);
+        var moduleConfig = JSON.parse(fs.readFileSync(moduleConfigPath));
+
+        // Use the 'main' property in the config file to load the module.
+        logger.log('Loading module ' + moduleConfig.name + ' by ' + moduleConfig.author + '...');
+        var module = require(path.join(modulesPath, dir, moduleConfig.main));
+
+        // Check to see if the module has a setDictionary function defined, if so, call it.
+        if (module.setDictionary) {
+          module.setDictionary(CONFIG.dictionary);
+        }
+
+        // Check if the module is compatible with this version of Jankbot.
+        if (module.compatible) {
+          var compatibility = checkCompatibility(module.compatible);
+          if (compatibility === false) {
+            logger.log('WARNING: Module ' + moduleConfig.name + ' is not compatible with this ' +
+              'verion of Jankbot and may function improperly or cause crashes.');
+          }
+        }
+
+        // Finally, add the module to the modules list.
+        modules.push(module);
+      }
+    });
+  });
+  logger.log('Loaded ' + modules.length + ' module(s).');
+} else {
+  logger.log('No bot_modules directory found, skipping module import.');
 }
 
-// Global variables.
-var myName = CONFIG.displayName;
-
-// Log in and set name.
+// Create the bot instance.
 var bot = new Steam.SteamClient();
-bot.logOn(CONFIG.username, CONFIG.password);
-bot.on('loggedOn', function() {
-  logger.log(DICT.SYSTEM.system_loggedin);
-  bot.setPersonaState(Steam.EPersonaState.Online);
-  bot.setPersonaName(myName);
+
+// Attempt to log on to Steam.
+bot.logOn({
+  accountName: CONFIG.username,
+  password: CONFIG.password
 });
 
+// Once logged on, configure self and initialize core modules.
+bot.on('loggedOn', function() {
+  logger.log(DICT.SYSTEM.system_loggedin);
 
-// Respond to messages.
-bot.on('message', function(source, message, type, chatter) {
+  // Tell Steam our screen name and status.
+  bot.setPersonaState(Steam.EPersonaState.Online);
+  bot.setPersonaName(CONFIG.displayName);
+
+  // Initialize core modules.
+  dota2.init(bot);
+  friends.init(bot, CONFIG, DICT);
+  admin.init(bot, DICT, shutdown);
+  basic.init(DICT, help);
+});
+
+// Respond to messages. All core Jankbot functionality starts from this function.
+bot.on('message', function(source, message) {
 
   // Be sure this person is remembered and run friends list name update.
+  // friends.addFriend() can be run however many times on the same friend ID without duplicating.
   friends.addFriend(source);
-  friends.updateFriendsNames(bot);
+  friends.updateFriendsNames();
+  friends.updateTimestamp(source);
 
-  // If the message is blank (blank messages are received from 'is typing').
-  if (message == '') {
+  // If the message is blank, do nothing (blank messages are received from 'is typing').
+  if (message === '') {
     return;
   }
 
@@ -64,113 +125,71 @@ bot.on('message', function(source, message, type, chatter) {
   var fromUser = friends.nameOf(source);
 
   // Log the received message.
-  logger.log(minimap.map({"user" : fromUser, "message" : original},
+  logger.log(minimap.map({'user' : fromUser, 'message' : original},
       DICT.SYSTEM.system_msg_received));
 
-  var input = message.split(" ");
+  // Create the input variable which we give to modules for parsing.
+  var input = message.split(' ');
 
   // First, check if this is an admin function request.
-  if (input[0] == "admin") {
+  if (input[0] === 'admin') {
 
     // Authenticate as admin.
-    if (isAdmin(source)) {
-      admin(input, source, original, function(resp) {
-        friends.messageUser(source, resp, bot);
-      });
+    if (friends.isAdmin(source)) {
+      admin.command(source, input, original);
       return;
     } else {
-      friends.messageUser(source, DICT.ERRORS.err_not_admin, bot);
+      friends.messageUser(source, DICT.ERRORS.err_not_admin);
       return;
     }
   }
 
-  // Looking for group / general play.
-  else if (message == DICT.CMDS.lfg) {
-    var broadcastMsg = minimap.map({"user" : fromUser},
-        DICT.LFG_RESPONSES.lfg_broadcast);
-    friends.broadcast(broadcastMsg, source, bot);
-    friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender, bot);
+  // Next, check if it is a default action. Basic will return true if it handles the input.
+  if (basic.command(source, input, original)) {
     return;
   }
 
-  // Starting inhouses.
-  else if (message == DICT.CMDS.inhouse) {
-    var broadcastMsg = minimap.map({"host" : fromUser},
-        DICT.INHOUSE_RESPONSES.inhouse_broadcast);
-    friends.broadcast(broadcastMsg, source, bot);
-    friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender, bot);
-    return;
-  }
-
-  // Respond to pings.
-  else if (message == DICT.CMDS.ping) {
-    var responseStr = minimap.map({"userid" : source}, DICT.ping_response);
-    friends.messageUser(source, responseStr, bot);
-    return;
-  }
-
-  // Help message.
-  else if (message == DICT.CMDS.help) {
-    friends.messageUser(source, help(), bot);
-    return;
-  }
-
-  // Mute.
-  else if (message == DICT.CMDS.mute) {
-    friends.messageUser(source, DICT.mute_response, bot);
-    friends.setMute(source, true);
-    return;
-  }
-
-  // Unmute player and give missed messaged.
-  else if (message == DICT.CMDS.unmute) {
-    friends.setMute(source, false);
-    var responseStr = minimap.map({"messages" : friends.getHeldMessages(source)},
-        DICT.unmute_response);
-    friends.messageUser(source, responseStr, bot);
-    return;
-  }
-
-  // Respond to greetings.
-  else if (isGreeting(message)) {
-    var responseStr = minimap.map({"user" : fromUser}, DICT.greeting_response);
-    friends.messageUser(source, responseStr, bot);
-    return;
-  }
-
-  // Loop through other modules.
+  // Finally, loop through other modules.
   for (var i = 0; i < modules.length; i++) {
-    if (typeof modules[i].canHandle === 'function') {
-      if (modules[i].canHandle(original)) {
-        modules[i].handle(original, source, bot);
+    if (typeof modules[i].handle === 'function') {
+
+      // If this module returns true after execution, stop parsing.
+      if (modules[i].handle(original, source)) {
         return;
       }
     }
   }
 
-  // Default
-  friends.messageUser(source, randomResponse(), bot);
+  // If nothing was matched, send a random response back.
+  friends.messageUser(source, randomResponse());
 
 });
 
 
-// Add friends automatically.
+// Add friends back automatically if they are not blacklisted.
 bot.on('relationship', function(other, type){
-  if(type == Steam.EFriendRelationship.PendingInvitee) {
+  if(type === Steam.EFriendRelationship.PendingInvitee) {
+    if (friends.checkIsBlacklisted(other)) {
+      logger.log(minimap.map({userid: other}, DICT.SYSTEM.system_blacklist_attempt));
+      bot.removeFriend(other);
+      return;
+    } else if (friends.count() >= 250) {
+      bot.removeFriend(other);
+      logger.log('Rejected friend request: friend limit reached');
+      return;
+    }
     bot.addFriend(other);
-    logger.log(minimap.map({"userid" : other}, DICT.SYSTEM.system_added_friend));
+    logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
     friends.addFriend(other);
-    friends.updateFriendsNames(bot);
+    friends.updateFriendsNames();
   }
 });
-
 
 // Responses for unknown commands.
 function randomResponse() {
   var responses = DICT.random_responses;
   return responses[Math.floor(Math.random() * responses.length)];
 }
-
 
 // Saves data and exits gracefully.
 function shutdown() {
@@ -183,57 +202,53 @@ function shutdown() {
   process.exit();
 }
 
-
-// Handler for admin functionality.
-function admin(input, source, original, callback) {
-
-  // Quit function
-  if (input[1] == "quit") {
-    callback(DICT.ADMIN.quit);
-    shutdown();
-  }
-
-  // Dump friends info.
-  if (input[1] == "dump" && input[2] == "friends") {
-    logger.log(JSON.stringify(friends.getAllFriends()));
-    callback(DICT.ADMIN.dump_friends);
-  }
-
-  // Dump users info.
-  if (input[1] == "dump" && input[2] == "users") {
-    logger.log(JSON.stringify(bot.users));
-    callback(DICT.ADMIN.dump_users);
-  }
-
-  if (input[1] == "broadcast") {
-    var adminMessage = original.replace("admin broadcast", "");
-    logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
-    friends.broadcast(adminMessage, source, bot);
-    callback(DICT.ADMIN.broadcast_sent);
-
-  }
-}
-
-
-// Returns true if the given ID is an admin.
-function isAdmin(source) {
-  return ADMINS.indexOf(source) != -1;
-}
-
-
 // Help text.
 function help() {
-  var resp = DICT.help_message + "\n";
-  for (cmd in DICT.CMDS) {
-    resp += cmd + " - " + DICT.CMD_HELP[cmd] + "\n";
+  var resp = '\n';
+  if (helpInfo === '') {
+    resp += DICT.help_message + '\n\n';
+  } else {
+    resp += helpInfo + '\n\n';
   }
+
+  // Core commands.
+  for (var cmd in DICT.CMDS) {
+    if (typeof cmd === 'string') {
+      resp += cmd + ' - ' + DICT.CMD_HELP[cmd] + '\n';
+    }
+  }
+
+  // Module help texts.
   for (var i = 0; i < modules.length; i++) {
-    resp += "\n" + modules[i].getHelp();
+    if (typeof modules[i].getHelp === 'function') {
+      resp += '\n' + modules[i].getHelp();
+    }
   }
   return resp;
 }
 
+function checkCompatibility(version) {
+  var splitVersion = version.split('.');
 
-function isGreeting(message) {
-  return DICT.greetings.indexOf(message) != -1;
+  // Broken, ignore.
+  if (splitVersion.length !== 3) {
+    return -1;
+  }
+
+  for (var i = 0; i < 3; i++) {
+
+    if (splitVersion[i] === '*') {
+      // * is wildcard, so skip this iteration.
+      continue;
+    } else {
+      var jankbotVersionNumber = parseInt(VERSION[i]);
+      var moduleVersionNumber = parseInt(splitVersion[i]);
+      if (jankbotVersionNumber !== moduleVersionNumber) {
+        return false;
+      }
+    }
+
+  }
+
+  return true;
 }

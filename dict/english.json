@@ -1,0 +1,89 @@
+{
+  "SYSTEM" : {
+    "system_loggedin" : "Successfully logged in.",
+    "system_msg_received" : "Received from {user}: {message}",
+    "system_added_friend" : "Added new friend: {userid}",
+    "system_blacklist_attempt" : "Blacklisted id {userid} attempted to friend the bot."
+  },
+
+  "ERRORS" : {
+    "err_not_admin" : "That command requires admin status.",
+    "err_cant_broadcast": "You can only broadcast every 10 minutes."
+  },
+
+  "CMDS" : {
+    "lfg" : "lfg",
+    "inhouse" : "inhouse",
+    "help" : "help",
+    "mute" : "mute",
+    "unmute" : "unmute",
+    "ping" : "ping",
+    "whois": "whois"
+  },
+
+  "help_message" : "I'm Jankbot, here to help with your every day Dota!",
+
+  "CMD_HELP" : {
+    "lfg" : "Alert my friends that you are looking to play.",
+    "inhouse" : "Alert my friends that you are hosting an inhouse. You can also provide a password.",
+    "help" : "Shows this help message.",
+    "mute" : "Stops broadcasts from reaching you.",
+    "unmute" : "Allows broadcasts to reach you.",
+    "ping" : "PONG! I'll tell you your Steam ID.",
+    "whois": "Look up a user by their full name or a part of their name."
+  },
+
+  "LFG_RESPONSES" : {
+    "lfg_response_sender" : "I alerted my friends that you wish to play.",
+    "lfg_broadcast" : "{user} is looking to play."
+  },
+
+  "INHOUSE_RESPONSES" : {
+    "inhouse_response_sender" : "I alerted my friends that you are hosting an inhouse.",
+    "inhouse_broadcast" : "{host} is hosting an inhouse.",
+    "inhouse_broadcast_password" : "{host} is hosting an inhouse. Password: {pass}"
+  },
+
+  "mute_response" : "Okay, broadcasts will no longer reach you until you unmute me.",
+  "unmute_response" : "Okay, broadcasts will now reach you.",
+
+  "ping_response" : "PONG. Your user id is {userid}",
+
+  "greeting_response" : "Hello there, {user}!",
+
+  "ADMIN" : {
+    "quit" : "Okay, quitting...",
+    "dump_friends" : "Dumping friends JSON to console...",
+    "dump_users" : "Dumping users JSON to console...",
+    "broadcast_log" : "Admin broadcast request: {message}",
+    "broadcast_sent" : "Your broadcast has been sent.",
+    "remove_friend_success" : "Removed friend {id}",
+    "remove_friend_error" : "No such friend {id}",
+    "lookup_success" : "The requested friend's name is {name}",
+    "lookup_error" : "No known friend with that ID.",
+    "no_inactive_users": "No users on this bot are inactive!",
+    "blacklist_add" : "Added user to the blacklist",
+    "blacklist_remove" : "Removed the user from the blacklist"
+  },
+
+  "random_responses" : [
+    "Come again?",
+    "Wuzzat?",
+    "Wut",
+    "Huh?",
+    "Sure.....what?",
+    "Not a clue what you want.",
+    "WAT.",
+    "Perhaps try 'help'?"
+  ],
+
+  "greetings" : [
+    "hey",
+    "sup",
+    "hello",
+    "hola",
+    "yo",
+    "howdy",
+    "hi"
+  ]
+}

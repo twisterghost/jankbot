@@ -1,0 +1,81 @@
+{
+  "SYSTEM" : {
+    "system_loggedin" : "Login efetuado com sucesso.",
+    "system_msg_received" : "Mensagem de {user}: {message}",
+    "system_added_friend" : "Novo contato adicionado: {userid}"
+  },
+
+  "ERRORS" : {
+    "err_not_admin" : "Você não é um administrador!",
+    "err_cant_broadcast": "Você só pode transmitir a cada 10 minutos."
+  },
+
+  "CMDS" : {
+    "lfg" : "lfg",
+    "inhouse" : "inhouse",
+    "help" : "ajuda",
+    "mute" : "mute",
+    "unmute" : "unmute",
+    "ping" : "ping",
+    "whois": "whois"
+  },
+
+  "help_message" : "Eu sou Jankbot, estou aqui para ajuda-lo no seu dia a dia de DotA!",
+
+  "CMD_HELP" : {
+    "lfg" : "Avise meus amigos que quero jogar.",
+    "inhouse" : "Avise seus amigos que você está hosteando uma inhouse. Você também pode escrever uma palavra-passe.",
+    "help" : "Mostra essa mensagem de ajuda.",
+    "mute" : "Me silencia. Suas 10 ultimas mensagens perdidas serão salvas.",
+    "unmute" : "Você voltará a receber mensagens minhas. Mensagens salvas serão entregues.",
+    "ping" : "PONG! Vou te dizer o seu ID da Steam.",
+    "whois": "Pesquisar um usuário pelo seu nome completo ou parte do seu nome."
+  },
+
+  "LFG_RESPONSES" : {
+    "lfg_response_sender" : "Eu avisei os seus amigos que você quer jogar.",
+    "lfg_broadcast" : "{user} quer jogar."
+  },
+
+  "INHOUSE_RESPONSES" : {
+    "inhouse_response_sender" : "Eu alertei os seus amigos que você está hosteando uma inhouse.",
+    "inhouse_broadcast" : "{host} está hosteando uma inhouse.",
+    "inhouse_broadcast_password" : "{host} está hosteando uma inhouse. Password: {pass}"
+  },
+
+  "mute_response" : "Okay, vou parar de te perturbar. Suas mensagens perdidas serão recebidas quando você me desmutar (unmute).",
+  "unmute_response" : "Olá! Aqui estão as últimas mensagens perdidas: \n{messages}",
+
+  "ping_response" : "PONG. Seu ID de usuário é {userid}",
+
+  "greeting_response" : "Olá, {user}!",
+
+  "ADMIN" : {
+    "quit" : "Okay, saindo...",
+    "dump_friends" : "Despejando JSON amigos para o console...",
+    "dump_users" : "Despejanto JSON usuários para o console...",
+    "broadcast_log" : "Pedido de transmissão do administrador: {message}",
+    "broadcast_sent" : "Sua transmissão foi enviada."
+  },
+
+  "random_responses" : [
+    "O quê?",
+    "Kê?",
+    "Fala mais alto que eu sou míope!",
+    "Ahn?",
+    "Claro..... o que?",
+    "Eu não entendi o que você quis dizer.",
+    "Em caso de dúvida, digite 'ajuda.'",
+    "Talvez tente digitar 'ajuda'?"
+  ],
+
+  "greetings" : [
+    "Olá",
+    "Tudo bem?",
+    "Oi",
+    "Hey!",
+    "Oi?",
+    "Oie",
+    "Como vai?"
+  ]
+}
