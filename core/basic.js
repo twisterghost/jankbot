@@ -86,7 +86,8 @@ var actions = {
   },
 
   help: function(source) {
-    friends.messageUser(source, helpFunction());
+    var isAdmin = friends.isAdmin(source);
+    friends.messageUser(source, helpFunction(isAdmin));
   },
 
   mute: function(source) {

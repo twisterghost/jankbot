@@ -203,7 +203,7 @@ function shutdown() {
 }
 
 // Help text.
-function help() {
+function help(isAdmin) {
   var resp = '\n';
   if (helpInfo === '') {
     resp += DICT.help_message + '\n\n';
@@ -221,7 +221,7 @@ function help() {
   // Module help texts.
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].getHelp === 'function') {
-      resp += '\n' + modules[i].getHelp();
+      resp += '\n' + modules[i].getHelp(isAdmin);
     }
   }
   return resp;
