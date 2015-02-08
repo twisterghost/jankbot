@@ -103,6 +103,18 @@ bot.on('loggedOn', function() {
   friends.init(bot, CONFIG, DICT);
   admin.init(bot, DICT, shutdown);
   basic.init(DICT, help);
+
+  // Add administrators.
+  if (CONFIG.admins) {
+    logger.log('Friending admins...');
+    for (var i = 0; i < CONFIG.admins.length; i++) {
+      var other = CONFIG.admins[i];
+      bot.addFriend(other);
+      logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
+      friends.addFriend(other);
+      friends.updateFriendsNames();
+    }
+  }
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
