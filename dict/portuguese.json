@@ -34,13 +34,13 @@
 
   "LFG_RESPONSES" : {
     "lfg_response_sender" : "Eu avisei os seus amigos que você quer jogar.",
-    "lfg_broadcast" : "{user} quer jogar."
+    "lfg_broadcast" : "{user} quer jogar.\n{url}"
   },
 
   "INHOUSE_RESPONSES" : {
     "inhouse_response_sender" : "Eu alertei os seus amigos que você está hosteando uma inhouse.",
-    "inhouse_broadcast" : "{host} está hosteando uma inhouse.",
-    "inhouse_broadcast_password" : "{host} está hosteando uma inhouse. Password: {pass}"
+    "inhouse_broadcast" : "{host} está hosteando uma inhouse.\n{url}",
+    "inhouse_broadcast_password" : "{host} está hosteando uma inhouse. Password: {pass}\n{url}"
   },
 
   "mute_response" : "Okay, vou parar de te perturbar. Suas mensagens perdidas serão recebidas quando você me desmutar (unmute).",

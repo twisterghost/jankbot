@@ -52,7 +52,7 @@ exports.command = function(source, input, original) {
 var actions = {
 
   lfg: function(source, fromUser) {
-    var lfgMessage = minimap.map({'user' : fromUser},
+    var lfgMessage = minimap.map({'user' : fromUser, url: getProfileUrl(source)},
         DICT.LFG_RESPONSES.lfg_broadcast);
     var res = friends.broadcast(source, lfgMessage);
     if (res) {
@@ -65,10 +65,14 @@ var actions = {
     if (input.length > 1) {
       input.splice(0, 1);
       var password = input.join(' ');
-      inhouseMessage = minimap.map({'host' : fromUser, 'pass': password},
-          DICT.INHOUSE_RESPONSES.inhouse_broadcast_password);
+      inhouseMessage = minimap.map({
+        'host' : fromUser,
+        'pass': password,
+        'url': getProfileUrl(source)
+      }, DICT.INHOUSE_RESPONSES.inhouse_broadcast_password);
     } else {
-      inhouseMessage = minimap.map({'host' : fromUser}, DICT.INHOUSE_RESPONSES.inhouse_broadcast);
+      inhouseMessage = minimap.map({'host' : fromUser, url: getProfileUrl(source)},
+          DICT.INHOUSE_RESPONSES.inhouse_broadcast);
     }
     var res = friends.broadcast(source, inhouseMessage);
     if (res) {
@@ -104,7 +108,7 @@ var actions = {
     if (lookupID) {
       var friendsList = friends.getAllFriends();
       var foundFriend = friendsList[lookupID];
-      var profileURL = 'http://steamcommunity.com/profiles/' + lookupID;
+      var profileURL = getProfileUrl(lookupID);
       var friendInfo = foundFriend.name + ': \n' +
         'Steam profile: ' + profileURL + '\n';
       friends.messageUser(source, friendInfo);
@@ -121,4 +125,8 @@ var actions = {
 
 function isGreeting(message) {
   return DICT.greetings.indexOf(message) !== -1;
+}
+
+function getProfileUrl(source) {
+  return 'http://steamcommunity.com/profiles/' + source;
 }

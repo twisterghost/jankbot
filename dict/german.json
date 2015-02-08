@@ -34,13 +34,13 @@
 
   "LFG_RESPONSES" : {
     "lfg_response_sender" : "Ich habe meine Freunde daruf hingewiesen, dass du spielen möchtest.",
-    "lfg_broadcast" : "{user} möchte spielen."
+    "lfg_broadcast" : "{user} möchte spielen.\n{url}"
   },
 
   "INHOUSE_RESPONSES" : {
     "inhouse_response_sender" : "Ich habe meine Freunde darauf hingewiesen, dass du ein Match hostest.",
-    "inhouse_broadcast" : "{host} hostet ein Match.",
-    "inhouse_broadcast_password" : "{host} hostet ein Match. Password: {pass}"
+    "inhouse_broadcast" : "{host} hostet ein Match.\n{url}",
+    "inhouse_broadcast_password" : "{host} hostet ein Match. Password: {pass}\n{url}"
   },
 
   "mute_response" : "Okay, Broadcasts werden dich nicht mehr erreichen bis du mich demutest.",
