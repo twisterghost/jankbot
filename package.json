@@ -12,11 +12,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "steam": "~0.6.6",
-    "request": "~2.16.6",
+    "steam": "0.6.6",
+    "request": "2.16.6",
     "minimap": "0.1.1",
-    "dota2": "~0.6.0",
-    "lodash": "~2.4.1"
+    "dota2": "0.6.0",
+    "lodash": "2.4.1"
   },
   "devDependencies": {
     "chai": "~1.9.1",
