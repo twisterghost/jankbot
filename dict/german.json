@@ -3,7 +3,7 @@
     "system_loggedin" : "Erfolgreich eingeloggt.",
     "system_msg_received" : "Empfange von {user}: {message}",
     "system_added_friend" : "Freund hinzugefügt: {userid}",
-    "system_blacklist_attempt" : "Geblacklistete ID {userid} versuchte den bot hinzuzufügen."
+    "system_blacklist_attempt" : "Geblacklistete ID {userid} versuchte den Bot hinzuzufügen."
   },
 
   "ERRORS" : {
@@ -24,7 +24,7 @@
 
   "CMD_HELP" : {
     "lfg" : "Weise meine Freunde darauf hin, dass ich spielen möchte.",
-    "inhouse" : "Weise meine Freunde darauf hin, dass ich ein Match hoste. Sie können auch ein kennwort schreiben.",
+    "inhouse" : "Weise meine Freunde darauf hin, dass ich ein Match hoste. Sie können auch ein Kennwort schreiben.",
     "help" : "Zeige diese Hilfenachricht.",
     "mute" : "Beendet mich. Deine 10 letzen verpassten Nachrichten werden gespeichert.",
     "unmute" : "Startet mich wieder. Gespeicherte Nachrichten werden zugestellt.",
@@ -33,14 +33,14 @@
   },
 
   "LFG_RESPONSES" : {
-    "lfg_response_sender" : "Ich habe meine Freunde daruf hingewiesen, dass du spielen möchtest.",
+    "lfg_response_sender" : "Ich habe meine Freunde darauf hingewiesen, dass du spielen möchtest.",
     "lfg_broadcast" : "{user} möchte spielen.\n{url}"
   },
 
   "INHOUSE_RESPONSES" : {
     "inhouse_response_sender" : "Ich habe meine Freunde darauf hingewiesen, dass du ein Match hostest.",
     "inhouse_broadcast" : "{host} hostet ein Match.\n{url}",
-    "inhouse_broadcast_password" : "{host} hostet ein Match. Password: {pass}\n{url}"
+    "inhouse_broadcast_password" : "{host} hostet ein Match. Passwort: {pass}\n{url}"
   },
 
   "mute_response" : "Okay, Broadcasts werden dich nicht mehr erreichen bis du mich demutest.",
@@ -58,7 +58,7 @@
     "broadcast_sent" : "Dein Broadcast wurde gesendet.",
     "remove_friend_success" : "Freund {id} entfernt",
     "remove_friend_error" : "Kein Freund mit ID {id}",
-    "lookup_success" : "der Name des angefragten Freundes lautet {name}",
+    "lookup_success" : "Der Name des angefragten Freundes lautet {name}",
     "lookup_error" : "Kein Freund mit dieser ID bekannt.",
     "no_inactive_users": "Keine Benutzer inaktiv!",
     "blacklist_add" : "Benutzer zur Blacklist hinzugefügt",
