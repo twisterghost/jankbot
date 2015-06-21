@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "steam": "0.6.6",
+    "steam": "0.6.7",
     "request": "2.16.6",
     "minimap": "0.1.1",
     "dota2": "0.6.0",
