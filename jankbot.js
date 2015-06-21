@@ -205,6 +205,7 @@ function randomResponse() {
 
 // Saves data and exits gracefully.
 function shutdown() {
+  console.info('Shutting down Jankbot...');
   friends.save();
   for (var i = 0; i < modules.length; i++) {
     if (typeof modules[i].onExit === 'function') {
@@ -264,3 +265,6 @@ function checkCompatibility(version) {
 
   return true;
 }
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
