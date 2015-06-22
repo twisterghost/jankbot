@@ -1,7 +1,7 @@
 # Jankbot
 A Steam chat bot, built for Dota 2, made for everyone!
 
-Current version: 2.0.0
+Current version: 2.0.2
 
 Maintained by [@twisterghost](http://twitter.com/twisterghost)
 
@@ -11,11 +11,12 @@ Maintained by [@twisterghost](http://twitter.com/twisterghost)
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Running Jankbot](#running-jankbot)
-4. [Administrating Your Jankbot](#administrating-your-jankbot)
-5. [FAQ](#faq)
-6. [For Developers](#for-developers)
-7. [Module API](#module-api)
-8. [License](#license)
+4. [Adding Modules](#adding-modules)
+5. [Administrating Your Jankbot](#administrating-your-jankbot)
+6. [FAQ](#faq)
+7. [For Developers](#for-developers)
+8. [Module API](#module-api)
+9. [License](#license)
 
 ## Introduction
 Jankbot is an open source module-oriented Steam bot designed to help organize

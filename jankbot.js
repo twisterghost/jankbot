@@ -4,7 +4,6 @@
  * https://github.com/twisterghost/jankbot
  */
 
-// Imports.
 var fs = require('fs');
 var path = require('path');
 var minimap = require('minimap');
