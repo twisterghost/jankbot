@@ -56,8 +56,7 @@ ready to go with at least one purchase, you are READY TO RUN JANKBOT, WOOHOO!
 **To run Jankbot:** `./jankbot`
 
 And that's it! Jankbot should now log in to steam and accept friend requests.
-Simply add him as you would another user and he will add you back, ready to help
-improve your community!
+Simply add him as you would another user and he will add you back, ready to help improve your community!
 
 ## Adding Modules
 
