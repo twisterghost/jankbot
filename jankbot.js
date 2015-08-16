@@ -13,7 +13,7 @@ var logger = require('./core/logger.js');
 var dota2 = require('./core/dota2.js');
 var admin = require('./core/admin.js');
 var basic = require('./core/basic.js');
-var packageInfo = require('./package.json');
+var moduleLoader = require('./lib/moduleLoader.js');
 
 // Ensure data/ exists
 if (!fs.existsSync('data')) {
@@ -33,52 +33,11 @@ if (fs.existsSync('helpfile')) {
   helpInfo = fs.readFileSync('helpfile');
 }
 
-// Get the current version.
-var VERSION = packageInfo.version.split('.');
-
 // Load modules.
-var modules = [];
-var modulesPath = path.join(__dirname, '/bot_modules/');
+moduleLoader.addModulePath('node_modules');
+moduleLoader.addModulePath('bot_modules');
+var modules = moduleLoader.loadModules();
 
-// If the modules firectory exists, load all modules from it.
-if (fs.existsSync(modulesPath)) {
-  fs.readdirSync(modulesPath).forEach(function (dir) {
-    fs.readdirSync(path.join(modulesPath, dir)).forEach(function (file) {
-
-      // Load up the modules based on their module.json file.
-      if (file === 'module.json') {
-
-        // Get the module config file to load the module itself.
-        var moduleConfigPath = path.join(modulesPath, dir, file);
-        var moduleConfig = JSON.parse(fs.readFileSync(moduleConfigPath));
-
-        // Use the 'main' property in the config file to load the module.
-        logger.log('Loading module ' + moduleConfig.name + ' by ' + moduleConfig.author + '...');
-        var module = require(path.join(modulesPath, dir, moduleConfig.main));
-
-        // Check to see if the module has a setDictionary function defined, if so, call it.
-        if (module.setDictionary) {
-          module.setDictionary(CONFIG.dictionary);
-        }
-
-        // Check if the module is compatible with this version of Jankbot.
-        if (module.compatible) {
-          var compatibility = checkCompatibility(module.compatible);
-          if (compatibility === false) {
-            logger.log('WARNING: Module ' + moduleConfig.name + ' is not compatible with this ' +
-              'verion of Jankbot and may function improperly or cause crashes.');
-          }
-        }
-
-        // Finally, add the module to the modules list.
-        modules.push(module);
-      }
-    });
-  });
-  logger.log('Loaded ' + modules.length + ' module(s).');
-} else {
-  logger.log('No bot_modules directory found, skipping module import.');
-}
 
 // Create the bot instance.
 var bot = new Steam.SteamClient();
@@ -272,32 +231,6 @@ function help(isAdmin) {
     }
   }
   return resp;
-}
-
-function checkCompatibility(version) {
-  var splitVersion = version.split('.');
-
-  // Broken, ignore.
-  if (splitVersion.length !== 3) {
-    return -1;
-  }
-
-  for (var i = 0; i < 3; i++) {
-
-    if (splitVersion[i] === '*') {
-      // * is wildcard, so skip this iteration.
-      continue;
-    } else {
-      var jankbotVersionNumber = parseInt(VERSION[i]);
-      var moduleVersionNumber = parseInt(splitVersion[i]);
-      if (jankbotVersionNumber !== moduleVersionNumber) {
-        return false;
-      }
-    }
-
-  }
-
-  return true;
 }
 
 process.on('SIGINT', shutdown);

@@ -17,7 +17,8 @@ module.exports = function(grunt) {
             'jankbot.js',
             'config.js',
             'core/*.js',
-            'test/*.js'
+            'test/*.js',
+            'lib/*.js'
           ]
         }]
       }
