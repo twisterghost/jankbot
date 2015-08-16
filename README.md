@@ -60,11 +60,14 @@ Simply add him as you would another user and he will add you back, ready to help
 
 ## Adding Modules
 
-Jankbot is designed to use custom modules to extend his abilities. To add a
-module, place the module source folder in the `bot_modules/`
+Jankbot is designed to use custom modules to extend his abilities. Jankbot modules can be installed via `npm`, the node package manager. Published Jankbot modules should use the naming scheme `jankbot-MODULENAME`, so you can search [npm's registry](https://www.npmjs.com/) for Jankbot modules to install.
+
+### Legacy Modules
+
+To add a legacy module (a module not found on npm, designed before Jankbot 2.1.0), place the module source folder in the `bot_modules/`
 directory. Jankbot will load the module next time you run the program.
 
-### Getting Jankbot Modules
+### JankDota Jankbot Modules
 
 We have a collection of modules you can add immediately at the
 [Jankbot Modules Repository](https://github.com/JankGaming/jankbot-modules) on
