@@ -38,7 +38,8 @@ module.exports = function(grunt) {
           {src: ['install']},
           {src: ['jankbot']},
           {src: ['config']},
-          {src: ['scripts/*']}
+          {src: ['scripts/*']},
+          {src: ['lib/*']}
         ]
       }
     },
