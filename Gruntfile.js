@@ -32,6 +32,7 @@ module.exports = function(grunt) {
         files: [
           {src: ['config.js']},
           {src: ['jankbot.js']},
+          {src: ['README.md']},
           {src: ['package.json']},
           {src: ['dict/*']},
           {src: ['core/*']},
