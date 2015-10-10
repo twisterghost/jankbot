@@ -1,7 +1,7 @@
 # Jankbot
 A Steam chat bot, built for Dota 2, made for everyone!
 
-Current version: 2.1.0
+Current version: 2.1.1
 
 Maintained by [@twisterghost](http://twitter.com/twisterghost)
 
