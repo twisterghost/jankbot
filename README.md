@@ -45,15 +45,15 @@ Windows does not ship with the resources to connect securely to Steam.
 3. Download Jankbot's [latest release](https://github.com/twisterghost/jankbot/releases)
 4. Unzip it to a folder
 5. Open that folder in a terminal
-6. Run `./install`
-7. Run `./config` and follow the prompt
+6. Run `npm install`
+7. Run `npm run config` and follow the prompt
 
 ## Running Jankbot
 
 Once you have installed and configured Jankbot and you have a Steam account
 ready to go with at least one purchase, you are READY TO RUN JANKBOT, WOOHOO!
 
-**To run Jankbot:** `./jankbot`
+**To run Jankbot:** `npm start`
 
 And that's it! Jankbot should now log in to steam and accept friend requests.
 Simply add him as you would another user and he will add you back, ready to help improve your community!
@@ -94,17 +94,15 @@ must make at least 1 transaction on the account to make use of friends lists.
 
 **How do I add Jankbot modules?**
 
-Starting with Jankbot v2, to add a module, simply download the module and place
-the folder inside of Jankbot's `bot_modules/` directory. Jankbot will
-auto-discover modules on startup.
+Starting with Jankbot v2.1.0, you can add modules to Jankbot using `npm`. NPM
+is a database of Node.js packages.  Included among them are Jankbot modules.
+Jankbot modules are prefixed with `jankbot-`, so you can [search npm for
+Jankbot modules](https://www.npmjs.com/search?q=jankbot) and run `npm install
+jankbot-some-module` to install the module.
 
-**Where can I find Jankbot modules?**
-
-We are currently working on a solution for finding Jankbot modules more easily,
-but for now, you can find a decent selection
-[here](https://github.com/JankGaming/jankbot-modules). If you are a developer
-and have made your own module, you can submit a pull request to that repository
-to have your module added to the list.
+For older versions of Jankbot, simply download the module and place the folder
+inside of Jankbot's `bot_modules/` directory. Jankbot will auto-discover
+modules on startup.
 
 **How do I keep Jankbot running after I close the terminal?**
 
@@ -125,16 +123,17 @@ instead of 'it' or 'Jankbot' all the time.
 
 **I'm still having trouble. How can I get help?**
 
-Tons of ways! You can email the head developer at michael@jankdota.com,
-tweet [@JankDota](http://twitter.com/jankdota), send a reddit message to
+Tons of ways! You can email the head developer at michael@jankdota.com, tweet
+[@JankDota](http://twitter.com/jankdota), send a reddit message to
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
 
 ## Trello
 
-Jankbot has a [public Trello page](https://trello.com/b/4zEJvVmk/jankbot) where you can see what is
-being worked on and what is being released next. If you have a Trello account, you can even vote on
-cards to weigh in on what should be done next.
+Jankbot has a [public Trello page](https://trello.com/b/4zEJvVmk/jankbot) where
+you can see what is being worked on and what is being released next. If you
+have a Trello account, you can even vote on cards to weigh in on what should be
+done next.
 
 ## For Developers
 
@@ -145,12 +144,13 @@ strong!
 
 ## Module API
 
-See [The Module API](https://github.com/twisterghost/jankbot/wiki/The-Module-API)
-on the Jankbot Wiki for documentation on creating your own custom modules.
+See [The Module
+API](https://github.com/twisterghost/jankbot/wiki/The-Module-API) on the
+Jankbot Wiki for documentation on creating your own custom modules.
 
-### Contributing
-If you would like to contribute to the Jankbot project on GitHub, fork this repo
-and send pull requests. We are more than happy to review and add changes.
+### Contributing If you would like to contribute to the Jankbot project on
+GitHub, fork this repo and send pull requests. We are more than happy to review
+and add changes.
 
 You may also feel free to add yourself to the `contributors` file.
 
@@ -160,8 +160,20 @@ Jankbot is under the MIT Open Source License:
 
 Copyright (c) 2013 Michael Barrett, JankDota.com
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

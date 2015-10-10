@@ -43,6 +43,7 @@ var modules = moduleLoader.loadModules();
 var bot = new Steam.SteamClient();
 
 // Attempt to log on to Steam.
+logger.log('Attempting Steam login...');
 bot.logOn({
   accountName: CONFIG.username,
   password: CONFIG.password

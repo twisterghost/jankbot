@@ -9,7 +9,8 @@
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
     "jshint": "grunt jshint",
     "release": "grunt release",
-    "start": "node jankbot.js"
+    "start": "node jankbot.js",
+    "config": "node ./scripts/config.js"
   },
   "license": "MIT",
   "dependencies": {

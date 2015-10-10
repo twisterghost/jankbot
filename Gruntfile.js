@@ -30,15 +30,11 @@ module.exports = function(grunt) {
           archive: 'jankbot.zip'
         },
         files: [
-          {src: ['config.js']},
           {src: ['jankbot.js']},
           {src: ['README.md']},
           {src: ['package.json']},
           {src: ['dict/*']},
           {src: ['core/*']},
-          {src: ['install']},
-          {src: ['jankbot']},
-          {src: ['config']},
           {src: ['scripts/*']},
           {src: ['lib/*']}
         ]
