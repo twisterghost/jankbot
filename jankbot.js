@@ -41,26 +41,32 @@ var modules = moduleLoader.loadModules();
 
 // Create the bot instance.
 var bot = new Steam.SteamClient();
+var botUser = new Steam.SteamUser(bot);
+var botFriends = new Steam.SteamFriends(bot);
 
 // Attempt to log on to Steam.
 logger.log('Attempting Steam login...');
-bot.logOn({
-  accountName: CONFIG.username,
-  password: CONFIG.password
+bot.connect();
+bot.on('connected', function() {
+	botUser.logOn({
+	  account_name: CONFIG.username,
+	  password: CONFIG.password
+	});
 });
 
 // Once logged on, configure self and initialize core modules.
-bot.on('loggedOn', function() {
+//bot.on('loggedOn', function() {
+bot.on('logOnResponse', function(logonResp) {
   logger.log(DICT.SYSTEM.system_loggedin);
-
+  logger.log(logonResp);
   // Tell Steam our screen name and status.
-  bot.setPersonaState(Steam.EPersonaState.Online);
-  bot.setPersonaName(CONFIG.displayName);
+  botFriends.setPersonaState(Steam.EPersonaState.Online);
+  botFriends.setPersonaName(CONFIG.displayName);
 
   // Initialize core modules.
   dota2.init(bot);
-  friends.init(bot, CONFIG, DICT);
-  admin.init(bot, DICT, shutdown);
+  friends.init(botFriends, CONFIG, DICT);
+  admin.init(botFriends, DICT, shutdown);
   basic.init(DICT, help);
 
   // Add administrators.
@@ -68,7 +74,7 @@ bot.on('loggedOn', function() {
     logger.log('Friending admins...');
     for (var i = 0; i < CONFIG.admins.length; i++) {
       var other = CONFIG.admins[i];
-      bot.addFriend(other);
+      botFriends.addFriend(other);
       logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
       friends.addFriend(other);
       friends.updateFriendsNames();
@@ -112,8 +118,7 @@ bot.on('error', function(e) {
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
-bot.on('message', function(source, message) {
-
+botFriends.on('message', function(source, message) {
   // Be sure this person is remembered and run friends list name update.
   // friends.addFriend() can be run however many times on the same friend ID without duplicating.
   friends.addFriend(source);
@@ -173,22 +178,39 @@ bot.on('message', function(source, message) {
 
 
 // Add friends back automatically if they are not blacklisted.
-bot.on('relationship', function(other, type){
-  if(type === Steam.EFriendRelationship.PendingInvitee) {
-    if (friends.checkIsBlacklisted(other)) {
-      logger.log(minimap.map({userid: other}, DICT.SYSTEM.system_blacklist_attempt));
-      bot.removeFriend(other);
+botFriends.on('relationships', function(other, type){
+  logger.log('[RELATIONSHIP]' + other + ' ' + type);
+});
+
+botFriends.on('friend', function(steamId, type) {
+  /* type 0 = unfriend, 2 = bot added them, 3 = they added bot */
+  logger.log('Received a friend request from: ' + steamId + ' of type ' + type);
+    if(type === Steam.EFriendRelationship.RequestRecipient) {
+    if (friends.checkIsBlacklisted(steamId)) {
+      logger.log(minimap.map({userid: steamId}, DICT.SYSTEM.system_blacklist_attempt));
+      botFriends.removeFriend(steamId);
       return;
     } else if (friends.count() >= 250) {
-      bot.removeFriend(other);
+      botFriends.removeFriend(steamId);
       logger.log('Rejected friend request: friend limit reached');
       return;
     }
-    bot.addFriend(other);
-    logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
-    friends.addFriend(other);
+    botFriends.addFriend(steamId);
+    logger.log(minimap.map({'userid' : steamId}, DICT.SYSTEM.system_added_friend));
+    friends.addFriend(steamId);
     friends.updateFriendsNames();
   }
+  else if (type === Steam.EFriendRelationship.None) {
+    logger.log('Removed by: ' + steamId); // who?
+  }
+});
+
+/* friendid = steamid
+I think this only grabs info for currently online people, too
+*/
+botFriends.on('personaState', function(resp) {
+  console.log(resp.friendid + ', ' + resp.player_name);
+  friends.updateFriendsNames(resp.friendid, resp.player_name);
 });
 
 // Responses for unknown commands.
