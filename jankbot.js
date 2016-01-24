@@ -82,37 +82,7 @@ bot.on('logOnResponse', function() {
 });
 
 bot.on('error', function(e) {
-
-  if (e.cause === 'logonFail') {
-
-    console.error('Could not log on to Steam for the following reason:');
-
-    switch (e.eresult) {
-      case Steam.EResult.InvalidPassword:
-        console.error('Invalid password - check the password provided in data/config.json');
-        break;
-      case Steam.EResult.AlreadyLoggedInElsewhere:
-        console.error('This account is already logged in on another computer');
-        break;
-      case Steam.EResult.AccountLogonDenied:
-        console.error('Account logon was denied, be sure to turn off Steam Guard on this account.');
-        break;
-      default:
-        console.error('Unspecified logon error. Here is the error dump:');
-        console.error(e);
-    }
-
-  } else if (e.cause === 'logonFail') {
-    if (e.eresult === Steam.EResult.LoggedInElsewhere) {
-      console.error('Jankbot was logged off of Steam because the account is now ' +
-        'in use on another computer.');
-    } else {
-      console.error('Jankbot was logged off of the Steam network for unknown reasons. ' +
-        'Here is the error dump:');
-      console.error(e);
-    }
-  }
-
+  logger.error('Jankbot has been logged off of the Steam network.');
   shutdown();
 });
 
