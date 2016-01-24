@@ -4,7 +4,7 @@
   "description": "A Dota-centric steambot by JankDota",
   "main": "jankbot.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --recursive test",
+    "test": "./node_modules/.bin/mocha --recursive test",
     "ci": "npm run jshint && npm run test",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
     "jshint": "grunt jshint",
