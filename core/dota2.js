@@ -18,15 +18,14 @@ exports.launch = function() {
     });
 
     dota2.on('partyInviteUpdate', function(party) {
-	    console.log(party);
       var partyId = party.group_id;
       dota2.respondPartyInvite(partyId, true);
       dota2.joinChat(partyId);
     });
 
-    dota2.on('chatMessage', function(channel, senderName, message, chatObject) {
+    dota2.on('chatMessage', function(channel, senderName, message) {
+      // TODO: Allow jankbot functionality in chat messages
       logger.log('[messaged receieved] ' + senderName +  ': ' + message + '. On ' + channel);
-	  logger.log(chatObject);
     });
   }
 };

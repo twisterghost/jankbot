@@ -48,17 +48,16 @@ var botFriends = new Steam.SteamFriends(bot);
 logger.log('Attempting Steam login...');
 bot.connect();
 bot.on('connected', function() {
-	botUser.logOn({
-	  account_name: CONFIG.username,
-	  password: CONFIG.password
-	});
+  botUser.logOn({
+    account_name: CONFIG.username,
+    password: CONFIG.password
+  });
 });
 
 // Once logged on, configure self and initialize core modules.
-//bot.on('loggedOn', function() {
-bot.on('logOnResponse', function(logonResp) {
+bot.on('logOnResponse', function() {
   logger.log(DICT.SYSTEM.system_loggedin);
-  logger.log(logonResp);
+
   // Tell Steam our screen name and status.
   botFriends.setPersonaState(Steam.EPersonaState.Online);
   botFriends.setPersonaName(CONFIG.displayName);
@@ -122,7 +121,6 @@ botFriends.on('message', function(source, message) {
   // Be sure this person is remembered and run friends list name update.
   // friends.addFriend() can be run however many times on the same friend ID without duplicating.
   friends.addFriend(source);
-  friends.updateFriendsNames();
   friends.updateTimestamp(source);
 
   // If the message is blank, do nothing (blank messages are received from 'is typing').
@@ -176,41 +174,39 @@ botFriends.on('message', function(source, message) {
 
 });
 
-
-// Add friends back automatically if they are not blacklisted.
-botFriends.on('relationships', function(other, type){
-  logger.log('[RELATIONSHIP]' + other + ' ' + type);
-});
-
 botFriends.on('friend', function(steamId, type) {
-  /* type 0 = unfriend, 2 = bot added them, 3 = they added bot */
+
+  // type 0 = unfriend, 2 = bot added them, 3 = they added bot
   logger.log('Received a friend request from: ' + steamId + ' of type ' + type);
-    if(type === Steam.EFriendRelationship.RequestRecipient) {
+  if(type === Steam.EFriendRelationship.RequestRecipient) {
+
+    // Refuse if they are blacklisted
     if (friends.checkIsBlacklisted(steamId)) {
       logger.log(minimap.map({userid: steamId}, DICT.SYSTEM.system_blacklist_attempt));
       botFriends.removeFriend(steamId);
       return;
+
+    // Refuse if too many friends
     } else if (friends.count() >= 250) {
       botFriends.removeFriend(steamId);
       logger.log('Rejected friend request: friend limit reached');
       return;
     }
+
+    // Add friend
     botFriends.addFriend(steamId);
     logger.log(minimap.map({'userid' : steamId}, DICT.SYSTEM.system_added_friend));
     friends.addFriend(steamId);
-    friends.updateFriendsNames();
-  }
-  else if (type === Steam.EFriendRelationship.None) {
-    logger.log('Removed by: ' + steamId); // who?
+
+  // If removed
+  } else if (type === Steam.EFriendRelationship.None) {
+    logger.log('Removed by: ' + steamId);
   }
 });
 
-/* friendid = steamid
-I think this only grabs info for currently online people, too
-*/
 botFriends.on('personaState', function(resp) {
-  console.log(resp.friendid + ', ' + resp.player_name);
-  friends.updateFriendsNames(resp.friendid, resp.player_name);
+  logger.log(resp.friendid + ' is now known as ' + resp.player_name);
+  friends.updateFriendName(resp.friendid, resp.player_name);
 });
 
 // Responses for unknown commands.
