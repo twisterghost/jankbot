@@ -42,7 +42,7 @@ As of version 3.0.0, Jankbot is natively able to run on Window, Linux and OSX.
 3. Download Jankbot's [latest release](https://github.com/twisterghost/jankbot/releases)
 4. Unzip it to a folder
 5. Open that folder in a terminal
-6. Run `npm install`
+6. Run `npm install --production`
 7. Run `npm run config` and follow the prompt
 
 ## Running Jankbot

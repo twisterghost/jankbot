@@ -15,10 +15,9 @@
   "license": "MIT",
   "dependencies": {
     "dota2": "1.0.1",
-    "lodash": "2.4.1",
+    "lodash": "4.0.0",
     "minimap": "0.1.1",
-    "request": "2.16.6",
-    "semver": "^5.0.1",
+    "semver": "5.0.1",
     "steam": "1.4.0"
   },
   "devDependencies": {
