@@ -81,7 +81,7 @@ bot.on('logOnResponse', function() {
   }
 });
 
-bot.on('error', function(e) {
+bot.on('error', function() {
   logger.error('Jankbot has been logged off of the Steam network.');
   shutdown();
 });
