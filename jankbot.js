@@ -76,7 +76,6 @@ bot.on('logOnResponse', function() {
       botFriends.addFriend(other);
       logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
       friends.addFriend(other);
-      friends.updateFriendsNames();
     }
   }
 });
