@@ -153,14 +153,12 @@ exports.removeFriend = function(id, cb) {
   }
 };
 
-// Grabs what names it can from bot.users and applies them to the friends list.
-exports.updateFriendsNames = function() {
-  for (var friend in friends) {
-    if (bot.users.hasOwnProperty(friend) && friends.hasOwnProperty(friend)) {
-      friends[friend].name = bot.users[friend].playerName;
-    }
+// Update a friend's name
+exports.updateFriendName = function(steamId, username) {
+  if (steamId !== null) {
+    exports.set(steamId,'name', username);
+    exports.save();
   }
-  exports.save();
 };
 
 // Return all friends.

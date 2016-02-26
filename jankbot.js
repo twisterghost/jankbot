@@ -41,26 +41,31 @@ var modules = moduleLoader.loadModules();
 
 // Create the bot instance.
 var bot = new Steam.SteamClient();
+var botUser = new Steam.SteamUser(bot);
+var botFriends = new Steam.SteamFriends(bot);
 
 // Attempt to log on to Steam.
 logger.log('Attempting Steam login...');
-bot.logOn({
-  accountName: CONFIG.username,
-  password: CONFIG.password
+bot.connect();
+bot.on('connected', function() {
+  botUser.logOn({
+    account_name: CONFIG.username,
+    password: CONFIG.password
+  });
 });
 
 // Once logged on, configure self and initialize core modules.
-bot.on('loggedOn', function() {
+bot.on('logOnResponse', function() {
   logger.log(DICT.SYSTEM.system_loggedin);
 
   // Tell Steam our screen name and status.
-  bot.setPersonaState(Steam.EPersonaState.Online);
-  bot.setPersonaName(CONFIG.displayName);
+  botFriends.setPersonaState(Steam.EPersonaState.Online);
+  botFriends.setPersonaName(CONFIG.displayName);
 
   // Initialize core modules.
   dota2.init(bot);
-  friends.init(bot, CONFIG, DICT);
-  admin.init(bot, DICT, shutdown);
+  friends.init(botFriends, CONFIG, DICT);
+  admin.init(botFriends, DICT, shutdown);
   basic.init(DICT, help);
 
   // Add administrators.
@@ -68,56 +73,23 @@ bot.on('loggedOn', function() {
     logger.log('Friending admins...');
     for (var i = 0; i < CONFIG.admins.length; i++) {
       var other = CONFIG.admins[i];
-      bot.addFriend(other);
+      botFriends.addFriend(other);
       logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
       friends.addFriend(other);
-      friends.updateFriendsNames();
     }
   }
 });
 
-bot.on('error', function(e) {
-
-  if (e.cause === 'logonFail') {
-
-    console.error('Could not log on to Steam for the following reason:');
-
-    switch (e.eresult) {
-      case Steam.EResult.InvalidPassword:
-        console.error('Invalid password - check the password provided in data/config.json');
-        break;
-      case Steam.EResult.AlreadyLoggedInElsewhere:
-        console.error('This account is already logged in on another computer');
-        break;
-      case Steam.EResult.AccountLogonDenied:
-        console.error('Account logon was denied, be sure to turn off Steam Guard on this account.');
-        break;
-      default:
-        console.error('Unspecified logon error. Here is the error dump:');
-        console.error(e);
-    }
-
-  } else if (e.cause === 'logonFail') {
-    if (e.eresult === Steam.EResult.LoggedInElsewhere) {
-      console.error('Jankbot was logged off of Steam because the account is now ' +
-        'in use on another computer.');
-    } else {
-      console.error('Jankbot was logged off of the Steam network for unknown reasons. ' +
-        'Here is the error dump:');
-      console.error(e);
-    }
-  }
-
+bot.on('error', function() {
+  logger.error('Jankbot has been logged off of the Steam network.');
   shutdown();
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
-bot.on('message', function(source, message) {
-
+botFriends.on('message', function(source, message) {
   // Be sure this person is remembered and run friends list name update.
   // friends.addFriend() can be run however many times on the same friend ID without duplicating.
   friends.addFriend(source);
-  friends.updateFriendsNames();
   friends.updateTimestamp(source);
 
   // If the message is blank, do nothing (blank messages are received from 'is typing').
@@ -171,24 +143,39 @@ bot.on('message', function(source, message) {
 
 });
 
+botFriends.on('friend', function(steamId, type) {
 
-// Add friends back automatically if they are not blacklisted.
-bot.on('relationship', function(other, type){
-  if(type === Steam.EFriendRelationship.PendingInvitee) {
-    if (friends.checkIsBlacklisted(other)) {
-      logger.log(minimap.map({userid: other}, DICT.SYSTEM.system_blacklist_attempt));
-      bot.removeFriend(other);
+  // type 0 = unfriend, 2 = bot added them, 3 = they added bot
+  logger.log('Received a friend request from: ' + steamId + ' of type ' + type);
+  if(type === Steam.EFriendRelationship.RequestRecipient) {
+
+    // Refuse if they are blacklisted
+    if (friends.checkIsBlacklisted(steamId)) {
+      logger.log(minimap.map({userid: steamId}, DICT.SYSTEM.system_blacklist_attempt));
+      botFriends.removeFriend(steamId);
       return;
+
+    // Refuse if too many friends
     } else if (friends.count() >= 250) {
-      bot.removeFriend(other);
+      botFriends.removeFriend(steamId);
       logger.log('Rejected friend request: friend limit reached');
       return;
     }
-    bot.addFriend(other);
-    logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
-    friends.addFriend(other);
-    friends.updateFriendsNames();
+
+    // Add friend
+    botFriends.addFriend(steamId);
+    logger.log(minimap.map({'userid' : steamId}, DICT.SYSTEM.system_added_friend));
+    friends.addFriend(steamId);
+
+  // If removed
+  } else if (type === Steam.EFriendRelationship.None) {
+    logger.log('Removed by: ' + steamId);
   }
+});
+
+botFriends.on('personaState', function(resp) {
+  logger.log(resp.friendid + ' is now known as ' + resp.player_name);
+  friends.updateFriendName(resp.friendid, resp.player_name);
 });
 
 // Responses for unknown commands.

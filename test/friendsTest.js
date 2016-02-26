@@ -258,10 +258,10 @@ describe('friends.js', function() {
     });
   });
 
-  describe('#updateFriendsNames()', function() {
-    it('updates the internal friend list with names from the bot data', function() {
-      friends.updateFriendsNames();
-      expect(friends.getAllFriends()['1'].name).to.equal(botMock.users['1'].playerName);
+  describe('#updateFriendName()', function() {
+    it('updates the name of a friend', function() {
+      friends.updateFriendName(1, 'testName!');
+      expect(friends.getAllFriends()['1'].name).to.equal('testName!');
     });
   });
 

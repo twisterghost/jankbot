@@ -1,7 +1,7 @@
 # Jankbot
 A Steam chat bot, built for Dota 2, made for everyone!
 
-Current version: 2.1.1
+Current version: 3.0.0
 
 Maintained by [@twisterghost](http://twitter.com/twisterghost)
 
@@ -28,11 +28,8 @@ group.
 The Jankbot project is rapidly developing and is very welcome to pull requests.
 
 ## Installation
-Jankbot was designed and developed on Linux machines. There shouldn't be any
-trouble installing on a Linux distro, or OSX. **Installing and running on Windows
-is possible, but unsupported** and
-[requires prerequisites to be installed](https://github.com/twisterghost/jankbot/wiki/Windows-Prerequisites).
-Windows does not ship with the resources to connect securely to Steam.
+
+As of version 3.0.0, Jankbot is natively able to run on Window, Linux and OSX.
 
 **[In-depth installation instructions](https://github.com/twisterghost/jankbot/wiki/Installation-&-Setup)**
 
@@ -40,12 +37,12 @@ Windows does not ship with the resources to connect securely to Steam.
 
 *Please be sure you understand what you're doing if you use this summary!*
 
-1. Install [NodeJS 0.10.0 or higher](http://nodejs.org/)
+1. Install [NodeJS 4.2.* LTS](https://nodejs.org/en/download/)
 2. Make a steam account with at least one purchase on it
 3. Download Jankbot's [latest release](https://github.com/twisterghost/jankbot/releases)
 4. Unzip it to a folder
 5. Open that folder in a terminal
-6. Run `npm install`
+6. Run `npm install --production`
 7. Run `npm run config` and follow the prompt
 
 ## Running Jankbot
