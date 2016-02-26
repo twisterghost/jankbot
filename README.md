@@ -145,7 +145,9 @@ See [The Module
 API](https://github.com/twisterghost/jankbot/wiki/The-Module-API) on the
 Jankbot Wiki for documentation on creating your own custom modules.
 
-### Contributing If you would like to contribute to the Jankbot project on
+### Contributing
+
+If you would like to contribute to the Jankbot project on
 GitHub, fork this repo and send pull requests. We are more than happy to review
 and add changes.
 
