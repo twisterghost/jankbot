@@ -17,7 +17,7 @@ var moduleLoader = require('./lib/moduleLoader.js');
 
 // Ensure data/ exists
 if (!fs.existsSync('data')) {
-  logger.error('The data directory is missing. Please run ./config to set up Jankbot.');
+  logger.error('The data directory is missing. Type "npm run config" to set up Jankbot.');
   process.exit(1);
 }
 
