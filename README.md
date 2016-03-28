@@ -6,6 +6,7 @@ Current version: 3.0.0
 Maintained by [@twisterghost](http://twitter.com/twisterghost)
 
 [![Build Status](https://travis-ci.org/twisterghost/jankbot.svg?branch=master)](https://travis-ci.org/twisterghost/jankbot)
+[![bitHound Overall Score](https://www.bithound.io/github/twisterghost/jankbot/badges/score.svg)](https://www.bithound.io/github/twisterghost/jankbot)
 
 ## Table of Contents
 1. [Introduction](#introduction)
