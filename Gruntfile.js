@@ -4,26 +4,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc'
-      },
-
-      all: {
-        files: [{
-          expand: true,
-          cwd: '.',
-          src: [
-            'jankbot.js',
-            'config.js',
-            'core/*.js',
-            'test/*.js',
-            'lib/*.js'
-          ]
-        }]
-      }
-    },
-
     compress: {
       main: {
         options: {
