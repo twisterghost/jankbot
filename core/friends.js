@@ -276,6 +276,6 @@ exports.initTest = function(friendData) {
 // http://codereview.stackexchange.com/users/19757/dokkat
 /* istanbul ignore next */
 function fuzzyMatch(str,pattern){
-    pattern = pattern.split('').reduce(function(a,b){ return a+'.*'+b; });
-    return (new RegExp(pattern)).test(str);
+  pattern = pattern.split('').reduce(function(a,b){ return a+'.*'+b; });
+  return (new RegExp(pattern)).test(str);
 }

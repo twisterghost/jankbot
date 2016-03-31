@@ -28,8 +28,8 @@ exports.command = function(source, input, original) {
       actions.lfg(source, fromUser);
       return true;
     case DICT.CMDS.inhouse:
-     actions.inhouse(source, fromUser, input);
-     return true;
+      actions.inhouse(source, fromUser, input);
+      return true;
     case DICT.CMDS.ping:
       actions.ping(source);
       return true;
@@ -117,10 +117,9 @@ let actions = {
       friends.messageUser(source, friendInfo);
     } else {
 
-    // No friend found :(
-    friends.messageUser(source, 'I couldn\'t find any user I know with a name similar to ' +
-      input + '. Sorry :(');
-
+      // No friend found :(
+      friends.messageUser(source, 'I couldn\'t find any user I know with a name similar to ' +
+        input + '. Sorry :(');
     }
   }
 
