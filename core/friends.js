@@ -1,17 +1,19 @@
+'use strict';
+
 /**
  * friends - Friend list manager and message interaction module for Jankbot.
  */
 
-var fs = require('fs');
-var Steam = require('steam');
-var logger = require('./logger.js');
+let fs = require('fs');
+let Steam = require('steam');
+let logger = require('./logger.js');
 
-var friends = {};
-var blacklist = [];
-var testMode = false;
-var bot;
-var config;
-var dict;
+let friends = {};
+let blacklist = [];
+let testMode = false;
+let bot;
+let config;
+let dict;
 
 // Load saved friends lists.
 /* istanbul ignore next */
@@ -47,9 +49,9 @@ exports.idOf = function(name, fuzzy) {
 
   // Fuzzy search.
   if (fuzzy) {
-    for (var fuzzyFriend in friends) {
+    for (let fuzzyFriend in friends) {
       if (friends[fuzzyFriend].name) {
-        var thisFriend = friends[fuzzyFriend].name;
+        let thisFriend = friends[fuzzyFriend].name;
 
         // If this fuzzily matched, get info.
         if (fuzzyMatch(thisFriend.toLowerCase(), name.toLowerCase())) {
@@ -63,7 +65,7 @@ exports.idOf = function(name, fuzzy) {
   } else {
 
     // Exact search.
-    for (var exactFriend in friends) {
+    for (let exactFriend in friends) {
       if (friends[exactFriend].name === name) {
         return exactFriend;
       }
@@ -101,7 +103,7 @@ exports.get = function(id, property) {
 
 // Run callback for each friend, passing in the friend ID.
 exports.forEach = function(callback) {
-  for (var friend in friends) {
+  for (let friend in friends) {
     if (friends.hasOwnProperty(friend)) {
       callback(friend);
     }
@@ -118,7 +120,7 @@ exports.blacklist = function(id) {
 
 // Removes the given ID from the blacklist.
 exports.unBlacklist = function(id) {
-  var index = blacklist.indexOf(id);
+  let index = blacklist.indexOf(id);
   if (index !== -1) {
     blacklist.splice(index, 1);
   }
@@ -230,9 +232,9 @@ exports.messageUser = function(user, message, broadcast) {
 exports.broadcast = function(source, message) {
   logger.log('Broadcasting: ' + message);
 
-  var lastBroadcastTime = parseInt(exports.get(source, 'lastBroadcastTime'));
-  var TEN_MINUTES = 10 * 60 * 1000;
-  var now = new Date().getTime();
+  let lastBroadcastTime = parseInt(exports.get(source, 'lastBroadcastTime'));
+  let TEN_MINUTES = 10 * 60 * 1000;
+  let now = new Date().getTime();
 
   // If they have broadcasted before and it is too soon, stop it.
   // Ignore for admins.
@@ -246,7 +248,7 @@ exports.broadcast = function(source, message) {
   // Save this last broadcast time.
   exports.set(source, 'lastBroadcastTime', now);
 
-  for (var friend in friends) {
+  for (let friend in friends) {
     if (friends.hasOwnProperty(friend) && friend !== source) {
       exports.messageUser(friend, message, true);
     }
@@ -256,7 +258,7 @@ exports.broadcast = function(source, message) {
 };
 
 exports.count = function() {
-  var count = 0;
+  let count = 0;
   exports.forEach(function() {
     count++;
   });

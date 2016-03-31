@@ -1,10 +1,12 @@
+'use strict';
+
 // Handler for admin functionality.
-var minimap = require('minimap');
-var friends = require('./friends.js');
-var logger = require('./logger.js');
-var DICT;
-var bot;
-var shutdown;
+let minimap = require('minimap');
+let friends = require('./friends.js');
+let logger = require('./logger.js');
+let DICT;
+let bot;
+let shutdown;
 
 exports.init = function(initBot, dictionary, killCommand) {
   bot = initBot;
@@ -14,7 +16,7 @@ exports.init = function(initBot, dictionary, killCommand) {
 
 exports.command = function(source, input, original) {
 
-  var command = input[1];
+  let command = input[1];
   if (actions.hasOwnProperty(command)) {
     actions[command](source, input, original);
     return;
@@ -24,7 +26,7 @@ exports.command = function(source, input, original) {
 
 };
 
-var actions = {
+let actions = {
   quit: function() {
     shutdown();
   },
@@ -40,9 +42,9 @@ var actions = {
   },
 
   lookup: function(source, input) {
-    var lookupList = friends.getAllFriends();
+    let lookupList = friends.getAllFriends();
     if (lookupList.hasOwnProperty(input[2])) {
-      var friend = lookupList[input[2]];
+      let friend = lookupList[input[2]];
       friends.messageUser(source, JSON.stringify(friend, null, '  '));
     } else {
       friends.messageUser(source, DICT.ADMIN.lookup_error);
@@ -50,10 +52,10 @@ var actions = {
   },
 
   inactive: function(source) {
-    var ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
-    var inactiveList = friends.getAllFriends();
-    var inactiveUsers = [];
-    for (var inactiveFriend in inactiveList) {
+    let ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
+    let inactiveList = friends.getAllFriends();
+    let inactiveUsers = [];
+    for (let inactiveFriend in inactiveList) {
 
       // If this user hasn't used this bot in a week, log it.
       if (new Date(inactiveList[inactiveFriend].lastMessageTime).getTime() <
@@ -70,7 +72,7 @@ var actions = {
   },
 
   kick: function(source, input) {
-    var friendId = input[2];
+    let friendId = input[2];
     bot.removeFriend(input[2]);
     friends.removeFriend(friendId, function(success) {
       if (success) {
@@ -97,7 +99,7 @@ var actions = {
   },
 
   broadcast: function(source, input, original) {
-    var adminMessage = original.replace('admin broadcast', '');
+    let adminMessage = original.replace('admin broadcast', '');
     logger.log(minimap.map({message: adminMessage}, DICT.ADMIN.broadcast_log));
     friends.broadcast(source, adminMessage);
     friends.messageUser(source, DICT.ADMIN.broadcast_sent);

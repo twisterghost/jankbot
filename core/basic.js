@@ -1,8 +1,10 @@
+'use strict';
+
 // Handler for basic functionality.
-var minimap = require('minimap');
-var friends = require('./friends.js');
-var DICT;
-var helpFunction;
+let minimap = require('minimap');
+let friends = require('./friends.js');
+let DICT;
+let helpFunction;
 
 exports.init = function(dictionary, help) {
   DICT = dictionary;
@@ -11,12 +13,12 @@ exports.init = function(dictionary, help) {
 
 exports.command = function(source, input, original) {
 
-  var command = input[0];
-  var fromUser = friends.nameOf(source);
+  let command = input[0];
+  let fromUser = friends.nameOf(source);
 
   // Respond to greetings.
   if (isGreeting(original)) {
-    var responseStr = minimap.map({'user' : fromUser}, DICT.greeting_response);
+    let responseStr = minimap.map({'user' : fromUser}, DICT.greeting_response);
     friends.messageUser(source, responseStr);
     return true;
   }
@@ -49,22 +51,22 @@ exports.command = function(source, input, original) {
 
 };
 
-var actions = {
+let actions = {
 
   lfg: function(source, fromUser) {
-    var lfgMessage = minimap.map({'user' : fromUser, url: getProfileUrl(source)},
+    let lfgMessage = minimap.map({'user' : fromUser, url: getProfileUrl(source)},
         DICT.LFG_RESPONSES.lfg_broadcast);
-    var res = friends.broadcast(source, lfgMessage);
+    let res = friends.broadcast(source, lfgMessage);
     if (res) {
       friends.messageUser(source, DICT.LFG_RESPONSES.lfg_response_sender);
     }
   },
 
   inhouse: function(source, fromUser, input) {
-    var inhouseMessage;
+    let inhouseMessage;
     if (input.length > 1) {
       input.splice(0, 1);
-      var password = input.join(' ');
+      let password = input.join(' ');
       inhouseMessage = minimap.map({
         'host' : fromUser,
         'pass': password,
@@ -74,19 +76,19 @@ var actions = {
       inhouseMessage = minimap.map({'host' : fromUser, url: getProfileUrl(source)},
           DICT.INHOUSE_RESPONSES.inhouse_broadcast);
     }
-    var res = friends.broadcast(source, inhouseMessage);
+    let res = friends.broadcast(source, inhouseMessage);
     if (res) {
       friends.messageUser(source, DICT.INHOUSE_RESPONSES.inhouse_response_sender);
     }
   },
 
   ping: function(source) {
-    var responseStr = minimap.map({'userid' : source}, DICT.ping_response);
+    let responseStr = minimap.map({'userid' : source}, DICT.ping_response);
     friends.messageUser(source, responseStr);
   },
 
   help: function(source) {
-    var isAdmin = friends.isAdmin(source);
+    let isAdmin = friends.isAdmin(source);
     friends.messageUser(source, helpFunction(isAdmin));
   },
 
@@ -104,13 +106,13 @@ var actions = {
     input.splice(0, 1);
     input = input.join(' ');
 
-    var lookupID = friends.idOf(input, true);
+    let lookupID = friends.idOf(input, true);
 
     if (lookupID) {
-      var friendsList = friends.getAllFriends();
-      var foundFriend = friendsList[lookupID];
-      var profileURL = getProfileUrl(lookupID);
-      var friendInfo = foundFriend.name + ': \n' +
+      let friendsList = friends.getAllFriends();
+      let foundFriend = friendsList[lookupID];
+      let profileURL = getProfileUrl(lookupID);
+      let friendInfo = foundFriend.name + ': \n' +
         'Steam profile: ' + profileURL + '\n';
       friends.messageUser(source, friendInfo);
     } else {

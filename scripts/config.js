@@ -1,14 +1,16 @@
+'use strict';
+
 /**
  * config.js
  * Utility file to help configure Jankbot.
  */
 
 // Imports.
-var fs = require('fs');
-var path = require('path');
-var readline = require('readline');
+let fs = require('fs');
+let path = require('path');
+let readline = require('readline');
 
-var rl = readline.createInterface({
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
@@ -19,11 +21,10 @@ if (!fs.existsSync('data')) {
 }
 
 // Open config.json or create it.
-var configPath = path.join('data', 'config.json');
+let configPath = path.join('data', 'config.json');
+let config = {};
 if (fs.existsSync(configPath)) {
-  var config = JSON.parse(fs.readFileSync(configPath));
-} else {
-  config = {};
+  config = JSON.parse(fs.readFileSync(configPath));
 }
 
 // Default config execution.
