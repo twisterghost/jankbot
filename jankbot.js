@@ -15,7 +15,7 @@ let logger = require('./core/logger.js');
 let dota2 = require('./core/dota2.js');
 let admin = require('./core/admin.js');
 let basic = require('./core/basic.js');
-let moduleLoader = require('./lib/moduleLoader.js');
+let ModuleLoader = require('./lib/moduleLoader.js');
 
 // Ensure data/ exists
 if (!fs.existsSync('data')) {
@@ -36,9 +36,17 @@ if (fs.existsSync('helpfile')) {
 }
 
 // Load modules.
+let moduleLoader = new ModuleLoader();
 moduleLoader.addModulePath('node_modules');
 moduleLoader.addModulePath('bot_modules');
-let modules = moduleLoader.loadModules();
+let modules = [];
+try {
+  modules = moduleLoader.getModules();
+} catch (error) {
+  logger.error(error.message);
+}
+
+logger.log(`Loaded ${modules.length} modules.`);
 
 
 // Create the bot instance.
@@ -188,7 +196,7 @@ function randomResponse() {
 
 // Saves data and exits gracefully.
 function shutdown() {
-  console.info('Shutting down Jankbot...');
+  logger.log('Shutting down Jankbot...');
   friends.save();
   for (let i = 0; i < modules.length; i++) {
     if (typeof modules[i].onExit === 'function') {
