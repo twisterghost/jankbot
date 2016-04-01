@@ -1,14 +1,16 @@
+'use strict';
+
 /**
  * config.js
  * Utility file to help configure Jankbot.
  */
 
 // Imports.
-var fs = require('fs');
-var path = require('path');
-var readline = require('readline');
+let fs = require('fs');
+let path = require('path');
+let readline = require('readline');
 
-var rl = readline.createInterface({
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
@@ -19,11 +21,10 @@ if (!fs.existsSync('data')) {
 }
 
 // Open config.json or create it.
-var configPath = path.join('data', 'config.json');
+let configPath = path.join('data', 'config.json');
+let config = {};
 if (fs.existsSync(configPath)) {
-  var config = JSON.parse(fs.readFileSync(configPath));
-} else {
-  config = {};
+  config = JSON.parse(fs.readFileSync(configPath));
 }
 
 // Default config execution.
@@ -54,40 +55,40 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
       console.log('You can also skip this part and use the "ping" command on jankbot to get your ID');
       console.log('Then, run this script again to add yourself as an admin later.');
       rl.question('Enter the 17 digit IDs of all admin accounts, seperated by spaces.\n(admins) ',
-          function(answer) {
-        if (answer) {
-          config.admins = answer.split(' ');
-        } else if (!config.admins) {
-          config.admins = [];
-        }
-
-        // Get display name.
-        rl.question('\nWhat should Jankbot show up as on your friends list?\n(displayName) ',
-          function(answer) {
+        function(answer) {
           if (answer) {
-            config.displayName = answer;
+            config.admins = answer.split(' ');
+          } else if (!config.admins) {
+            config.admins = [];
           }
 
-          // Get dictionary.
-          rl.question('\nWhat dictionary file should Jankbot use? [Leave blank for english]\n' +
-            '(dictionary) ',
+          // Get display name.
+          rl.question('\nWhat should Jankbot show up as on your friends list?\n(displayName) ',
             function(answer) {
-            if (answer === '') {
-              config.dictionary = 'english.json';
-            } else {
-              if (answer.indexOf('.json') === -1) {
-                answer += '.json';
+              if (answer) {
+                config.displayName = answer;
               }
-              config.dictionary = answer;
-            }
 
-            fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-            console.log('Your config.json file will look like:');
-            console.log(JSON.stringify(config, null, 2));
-            console.log('\nYou\'re all set!');
-            process.exit();
-          });
+              // Get dictionary.
+              rl.question('\nWhat dictionary file should Jankbot use? [Leave blank for english]\n' +
+                '(dictionary) ',
+                function(answer) {
+                  if (answer === '') {
+                    config.dictionary = 'english.json';
+                  } else {
+                    if (answer.indexOf('.json') === -1) {
+                      answer += '.json';
+                    }
+                    config.dictionary = answer;
+                  }
+
+                  fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+                  console.log('Your config.json file will look like:');
+                  console.log(JSON.stringify(config, null, 2));
+                  console.log('\nYou\'re all set!');
+                  process.exit();
+                });
+            });
         });
-      });
-  });
+    });
 });

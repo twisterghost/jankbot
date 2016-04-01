@@ -22,7 +22,6 @@ var fakeConfig = {
   ]
 };
 var helpFunction = sinon.spy();
-var dictionary = require('../dict/english.json');
 
 logger.noiseFree();
 friends.initTest({

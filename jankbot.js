@@ -1,19 +1,21 @@
+'use strict';
+
 /**
  * Jankbot - A Dota-centric steambot by JankDota
  * Authored by Michael Barrett (@twisterghost)
  * https://github.com/twisterghost/jankbot
  */
 
-var fs = require('fs');
-var path = require('path');
-var minimap = require('minimap');
-var Steam = require('steam');
-var friends = require('./core/friends.js');
-var logger = require('./core/logger.js');
-var dota2 = require('./core/dota2.js');
-var admin = require('./core/admin.js');
-var basic = require('./core/basic.js');
-var moduleLoader = require('./lib/moduleLoader.js');
+let fs = require('fs');
+let path = require('path');
+let minimap = require('minimap');
+let Steam = require('steam');
+let friends = require('./core/friends.js');
+let logger = require('./core/logger.js');
+let dota2 = require('./core/dota2.js');
+let admin = require('./core/admin.js');
+let basic = require('./core/basic.js');
+let ModuleLoader = require('./lib/moduleLoader.js');
 
 // Ensure data/ exists
 if (!fs.existsSync('data')) {
@@ -22,27 +24,35 @@ if (!fs.existsSync('data')) {
 }
 
 // Load config file.
-var CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
+let CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
 
 // Load dictionary.
-var DICT = JSON.parse(fs.readFileSync(path.join('dict', CONFIG.dictionary)));
+let DICT = JSON.parse(fs.readFileSync(path.join('dict', CONFIG.dictionary)));
 
 // Load in optional helpfile.
-var helpInfo = '';
+let helpInfo = '';
 if (fs.existsSync('helpfile')) {
   helpInfo = fs.readFileSync('helpfile');
 }
 
 // Load modules.
+let moduleLoader = new ModuleLoader();
 moduleLoader.addModulePath('node_modules');
 moduleLoader.addModulePath('bot_modules');
-var modules = moduleLoader.loadModules();
+let modules = [];
+try {
+  modules = moduleLoader.getModules();
+} catch (error) {
+  logger.error(error.message);
+}
+
+logger.log(`Loaded ${modules.length} modules.`);
 
 
 // Create the bot instance.
-var bot = new Steam.SteamClient();
-var botUser = new Steam.SteamUser(bot);
-var botFriends = new Steam.SteamFriends(bot);
+let bot = new Steam.SteamClient();
+let botUser = new Steam.SteamUser(bot);
+let botFriends = new Steam.SteamFriends(bot);
 
 // Attempt to log on to Steam.
 logger.log('Attempting Steam login...');
@@ -71,8 +81,8 @@ bot.on('logOnResponse', function() {
   // Add administrators.
   if (CONFIG.admins) {
     logger.log('Friending admins...');
-    for (var i = 0; i < CONFIG.admins.length; i++) {
-      var other = CONFIG.admins[i];
+    for (let i = 0; i < CONFIG.admins.length; i++) {
+      let other = CONFIG.admins[i];
       botFriends.addFriend(other);
       logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
       friends.addFriend(other);
@@ -98,16 +108,16 @@ botFriends.on('message', function(source, message) {
   }
 
   // Save the original full message for later use.
-  var original = message;
+  let original = message;
   message = message.toLowerCase();
-  var fromUser = friends.nameOf(source);
+  let fromUser = friends.nameOf(source);
 
   // Log the received message.
   logger.log(minimap.map({'user' : fromUser, 'message' : original},
       DICT.SYSTEM.system_msg_received));
 
-  // Create the input variable which we give to modules for parsing.
-  var input = message.split(' ');
+  // Create the input letiable which we give to modules for parsing.
+  let input = message.split(' ');
 
   // First, check if this is an admin function request.
   if (input[0] === 'admin') {
@@ -128,7 +138,7 @@ botFriends.on('message', function(source, message) {
   }
 
   // Finally, loop through other modules.
-  for (var i = 0; i < modules.length; i++) {
+  for (let i = 0; i < modules.length; i++) {
     if (typeof modules[i].handle === 'function') {
 
       // If this module returns true after execution, stop parsing.
@@ -180,15 +190,15 @@ botFriends.on('personaState', function(resp) {
 
 // Responses for unknown commands.
 function randomResponse() {
-  var responses = DICT.random_responses;
+  let responses = DICT.random_responses;
   return responses[Math.floor(Math.random() * responses.length)];
 }
 
 // Saves data and exits gracefully.
 function shutdown() {
-  console.info('Shutting down Jankbot...');
+  logger.log('Shutting down Jankbot...');
   friends.save();
-  for (var i = 0; i < modules.length; i++) {
+  for (let i = 0; i < modules.length; i++) {
     if (typeof modules[i].onExit === 'function') {
       modules[i].onExit();
     }
@@ -198,7 +208,7 @@ function shutdown() {
 
 // Help text.
 function help(isAdmin) {
-  var resp = '\n';
+  let resp = '\n';
   if (helpInfo === '') {
     resp += DICT.help_message + '\n\n';
   } else {
@@ -206,14 +216,14 @@ function help(isAdmin) {
   }
 
   // Core commands.
-  for (var cmd in DICT.CMDS) {
+  for (let cmd in DICT.CMDS) {
     if (typeof cmd === 'string') {
       resp += cmd + ' - ' + DICT.CMD_HELP[cmd] + '\n';
     }
   }
 
   // Module help texts.
-  for (var i = 0; i < modules.length; i++) {
+  for (let i = 0; i < modules.length; i++) {
     if (typeof modules[i].getHelp === 'function') {
       resp += '\n' + modules[i].getHelp(isAdmin);
     }

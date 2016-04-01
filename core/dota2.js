@@ -1,7 +1,9 @@
-var logger = require('./logger.js');
-var Dota2 = require('dota2');
-var dota2;
-var inGame = false;
+'use strict';
+
+let logger = require('./logger.js');
+let Dota2 = require('dota2');
+let dota2;
+let inGame = false;
 
 
 exports.init = function(bot) {
