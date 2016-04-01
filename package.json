@@ -13,6 +13,9 @@
     "config": "node ./scripts/config.js"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=4.2.0"
+  },
   "dependencies": {
     "dota2": "3.0.0",
     "lodash": "4.6.1",
