@@ -17,7 +17,6 @@ Maintained by [@twisterghost](http://twitter.com/twisterghost)
 6. [FAQ](#faq)
 7. [For Developers](#for-developers)
 8. [Module API](#module-api)
-9. [License](#license)
 
 ## Introduction
 Jankbot is an open source module-oriented Steam bot designed to help organize
