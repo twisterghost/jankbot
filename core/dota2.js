@@ -33,4 +33,4 @@ exports.client = dota2;
 
 exports.getClient = function() {
   return dota2;
-}
+};
