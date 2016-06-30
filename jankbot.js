@@ -78,6 +78,13 @@ bot.on('logOnResponse', function() {
   admin.init(botFriends, DICT, shutdown);
   basic.init(DICT, help);
 
+  // Loop through modules can call their onBotLogin handler if provided
+  for (let i = 0; i < modules.length; i++) {
+    if (typeof modules[i].onBotLogin === 'function') {
+      modules[i].onBotLogin(bot);
+    }
+  }
+
   // Add administrators.
   if (CONFIG.admins) {
     logger.log('Friending admins...');
