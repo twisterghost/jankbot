@@ -37,7 +37,7 @@ As of version 3.0.0, Jankbot is natively able to run on Window, Linux and OSX.
 
 *Please be sure you understand what you're doing if you use this summary!*
 
-1. Install [NodeJS 4.2.* LTS](https://nodejs.org/en/download/)
+1. Install [NodeJS 6.10.* LTS](https://nodejs.org/en/download/)
 2. Make a steam account with at least one purchase on it
 3. Download Jankbot's [latest release](https://github.com/twisterghost/jankbot/releases)
 4. Unzip it to a folder
