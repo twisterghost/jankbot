@@ -5,7 +5,6 @@ let Dota2 = require('dota2');
 let dota2;
 let inGame = false;
 
-
 exports.init = function(bot) {
   dota2 = new Dota2.Dota2Client(bot, true);
 };
