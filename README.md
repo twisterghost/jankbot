@@ -115,8 +115,8 @@ Remember that you will need to restart Jankbot after updating.
 
 **I'm still having trouble. How can I get help?**
 
-Tons of ways! You can tweet
-[@JankDota](http://twitter.com/jankdota), send a reddit message to
+Tons of ways! You can tweet/DM
+[@twisterghost](http://twitter.com/twisterghost), send a reddit message to
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
 
