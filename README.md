@@ -19,19 +19,18 @@ Maintained by [@twisterghost](http://twitter.com/twisterghost)
 8. [Module API](#module-api)
 
 ## Introduction
-Jankbot is an open source module-oriented Steam bot designed to help organize
-player communities. The system is open for use and devleoped with scale in mind
-so that any size group can make use of it. Jankbot is designed with Dota 2 in
-mind, but any gaming community should find him to be a major asset to their
-group.
+Jankbot is an open source Steam bot designed to help organize player communities.
 
-The Jankbot project is rapidly developing and is very welcome to pull requests.
+The system was devleoped with scale in mind so that any size group 
+can make use of it. Jankbot was originally designed to support Dota 2 communities,
+but build so that anyone can make use of it.
 
 ## Installation
 
-As of version 3.0.0, Jankbot is natively able to run on Window, Linux and OSX.
+Jankbot is natively able to run on Windows, Linux and OSX.
 
-**[In-depth installation instructions](https://github.com/twisterghost/jankbot/wiki/Installation-&-Setup)**
+For a point by point walkthrough of the installation process, see the 
+**[in-depth installation instructions](https://github.com/twisterghost/jankbot/wiki/Installation-&-Setup)**
 
 ### Installation TL;DR
 
@@ -47,22 +46,23 @@ As of version 3.0.0, Jankbot is natively able to run on Window, Linux and OSX.
 
 ## Running Jankbot
 
-Once you have installed and configured Jankbot and you have a Steam account
-ready to go with at least one purchase, you are READY TO RUN JANKBOT, WOOHOO!
+Once you have installed and configured Jankbot with a valid Steam account,
+you can run Jankbot with the command:
 
-**To run Jankbot:** `npm start`
+`npm start`
 
-And that's it! Jankbot should now log in to steam and accept friend requests.
-Simply add him as you would another user and he will add you back, ready to help improve your community!
+Jankbot should attempt to log in, and once connected, will begin accepting friend requests.
+Add him as you would another user and he will add you back.
 
 ## Adding Modules
 
-Jankbot is designed to use custom modules to extend his abilities. Jankbot modules can be installed via `npm`, the node package manager. Published Jankbot modules should use the naming scheme `jankbot-MODULENAME`, so you can search [npm's registry](https://www.npmjs.com/) for Jankbot modules to install.
+Jankbot is designed to use custom modules to extend his abilities.
 
-### Legacy Modules
+Jankbot modules can be installed via `npm`, the node package manager. 
+`npm` is installed along with `node`.
 
-To add a legacy module (a module not found on npm, designed before Jankbot 2.1.0), place the module source folder in the `bot_modules/`
-directory. Jankbot will load the module next time you run the program.
+Published Jankbot modules should use the naming scheme `jankbot-MODULENAME`, so you can
+search [npm's registry](https://www.npmjs.com/) for Jankbot modules to install.
 
 ### JankDota Jankbot Modules
 
@@ -113,11 +113,6 @@ delete or overwrite any module data files like `friendslist`. Soon enough a
 patch system will be put in place and Jankbot will be able to update himself.
 Remember that you will need to restart Jankbot after updating.
 
-**Why is Jankbot a 'he'?**
-
-By all means, refer to Jankbot as Jankettebot. Just feels easier saying 'he'
-instead of 'it' or 'Jankbot' all the time.
-
 **I'm still having trouble. How can I get help?**
 
 Tons of ways! You can email the head developer at michael@jankdota.com, tweet
@@ -125,30 +120,26 @@ Tons of ways! You can email the head developer at michael@jankdota.com, tweet
 [/u/twisterghost](http://reddit.com/u/twisterghost), or if you think it is a
 problem with the code, open an issue right here on GitHub.
 
-## Trello
+**I think I found a bug, or, I have a feature request!**
 
-Jankbot has a [public Trello page](https://trello.com/b/4zEJvVmk/jankbot) where
-you can see what is being worked on and what is being released next. If you
-have a Trello account, you can even vote on cards to weigh in on what should be
-done next.
+You can [open an issue](https://github.com/twisterghost/jankbot/issues) in this
+repository. Please note that not every feature request can be acted upon, but
+requests are welcome.
 
 ## For Developers
 
-Jankbot is an open source project far more than open to pull requests. If you
+Jankbot is an open source project and is open to pull requests. If you
 are a developer and wish to contribute, code review, fix a bug or whatever,
-please join in! We can only do so much alone, but together Jankbot can be
-strong!
+please join in!
 
 ## Module API
 
-See [The Module
-API](https://github.com/twisterghost/jankbot/wiki/The-Module-API) on the
-Jankbot Wiki for documentation on creating your own custom modules.
+See [The Module API](https://github.com/twisterghost/jankbot/wiki/The-Module-API)
+on the Jankbot Wiki for documentation on creating your own custom modules.
 
 ### Contributing
 
 If you would like to contribute to the Jankbot project on
-GitHub, fork this repo and send pull requests. We are more than happy to review
-and add changes.
+GitHub, fork this repo and send pull requests to the `master` branch.
 
 You may also feel free to add yourself to the `contributors` file.
