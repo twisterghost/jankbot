@@ -10,6 +10,7 @@ let fs = require('fs');
 let path = require('path');
 let minimap = require('minimap');
 let Steam = require('steam');
+let _ = require('lodash');
 let friends = require('./core/friends.js');
 let logger = require('./core/logger.js');
 let dota2 = require('./core/dota2.js');
@@ -110,7 +111,7 @@ botFriends.on('message', function(source, message) {
   friends.updateTimestamp(source);
 
   // If the message is blank, do nothing (blank messages are received from 'is typing').
-  if (message === '') {
+  if (!message || _.trim(message).length === 0) {
     return;
   }
 
