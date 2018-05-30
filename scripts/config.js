@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * config.js
@@ -6,13 +6,13 @@
  */
 
 // Imports.
-let fs = require('fs');
-let path = require('path');
-let readline = require('readline');
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
 
-let rl = readline.createInterface({
+const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 // Ensure the data directory exists.
@@ -21,7 +21,7 @@ if (!fs.existsSync('data')) {
 }
 
 // Open config.json or create it.
-let configPath = path.join('data', 'config.json');
+const configPath = path.join('data', 'config.json');
 let config = {};
 if (fs.existsSync(configPath)) {
   config = JSON.parse(fs.readFileSync(configPath));
@@ -32,15 +32,16 @@ console.log('This will set up your config.json file for Jankbot.\n');
 console.log('Leaving an answer blank will use the current config option.\n');
 
 // Get username.
-rl.question('What Steam account should Jankbot log in with?\n(username) ', function(answer) {
+rl.question('What Steam account should Jankbot log in with?\n(username) ', (answer) => {
   if (answer) {
     config.username = answer;
   }
 
   // Get password.
-  rl.question('\nWhat is the password for this account? (The password will be visible, verify it ' +
+  rl.question(
+    '\nWhat is the password for this account? (The password will be visible, verify it ' +
       'is correct.)\n(password) ',
-    function(answer) {
+    (answer) => {
       if (answer) {
         config.password = answer;
       }
@@ -54,8 +55,9 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
       console.log('USE THAT 17 DIGIT NUMBER HERE');
       console.log('You can also skip this part and use the "ping" command on jankbot to get your ID');
       console.log('Then, run this script again to add yourself as an admin later.');
-      rl.question('Enter the 17 digit IDs of all admin accounts, seperated by spaces.\n(admins) ',
-        function(answer) {
+      rl.question(
+        'Enter the 17 digit IDs of all admin accounts, seperated by spaces.\n(admins) ',
+        (answer) => {
           if (answer) {
             config.admins = answer.split(' ');
           } else if (!config.admins) {
@@ -63,16 +65,18 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
           }
 
           // Get display name.
-          rl.question('\nWhat should Jankbot show up as on your friends list?\n(displayName) ',
-            function(answer) {
+          rl.question(
+            '\nWhat should Jankbot show up as on your friends list?\n(displayName) ',
+            (answer) => {
               if (answer) {
                 config.displayName = answer;
               }
 
               // Get dictionary.
-              rl.question('\nWhat dictionary file should Jankbot use? [Leave blank for english]\n' +
+              rl.question(
+                '\nWhat dictionary file should Jankbot use? [Leave blank for english]\n' +
                 '(dictionary) ',
-                function(answer) {
+                (answer) => {
                   if (answer === '') {
                     config.dictionary = 'english.json';
                   } else {
@@ -87,8 +91,12 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', funct
                   console.log(JSON.stringify(config, null, 2));
                   console.log('\nYou\'re all set!');
                   process.exit();
-                });
-            });
-        });
-    });
+                },
+              );
+            },
+          );
+        },
+      );
+    },
+  );
 });

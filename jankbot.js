@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * Jankbot - A Dota-centric steambot by JankDota
@@ -6,17 +6,17 @@
  * https://github.com/twisterghost/jankbot
  */
 
-let fs = require('fs');
-let path = require('path');
-let minimap = require('minimap');
-let Steam = require('steam');
-let _ = require('lodash');
-let friends = require('./core/friends.js');
-let logger = require('./core/logger.js');
-let dota2 = require('./core/dota2.js');
-let admin = require('./core/admin.js');
-let basic = require('./core/basic.js');
-let ModuleLoader = require('./lib/moduleLoader.js');
+const fs = require('fs');
+const path = require('path');
+const minimap = require('minimap');
+const Steam = require('steam');
+const _ = require('lodash');
+const friends = require('./core/friends.js');
+const logger = require('./core/logger.js');
+const dota2 = require('./core/dota2.js');
+const admin = require('./core/admin.js');
+const basic = require('./core/basic.js');
+const ModuleLoader = require('./lib/moduleLoader.js');
 
 // Ensure data/ exists
 if (!fs.existsSync('data')) {
@@ -25,10 +25,10 @@ if (!fs.existsSync('data')) {
 }
 
 // Load config file.
-let CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
+const CONFIG = JSON.parse(fs.readFileSync(path.join('data', 'config.json')));
 
 // Load dictionary.
-let DICT = JSON.parse(fs.readFileSync(path.join('dict', CONFIG.dictionary)));
+const DICT = JSON.parse(fs.readFileSync(path.join('dict', CONFIG.dictionary)));
 
 // Load in optional helpfile.
 let helpInfo = '';
@@ -37,7 +37,7 @@ if (fs.existsSync('helpfile')) {
 }
 
 // Load modules.
-let moduleLoader = new ModuleLoader();
+const moduleLoader = new ModuleLoader();
 moduleLoader.addModulePath('node_modules');
 moduleLoader.addModulePath('bot_modules');
 let modules = [];
@@ -51,22 +51,22 @@ logger.log(`Loaded ${modules.length} modules.`);
 
 
 // Create the bot instance.
-let bot = new Steam.SteamClient();
-let botUser = new Steam.SteamUser(bot);
-let botFriends = new Steam.SteamFriends(bot);
+const bot = new Steam.SteamClient();
+const botUser = new Steam.SteamUser(bot);
+const botFriends = new Steam.SteamFriends(bot);
 
 // Attempt to log on to Steam.
 logger.log('Attempting Steam login...');
 bot.connect();
-bot.on('connected', function() {
+bot.on('connected', () => {
   botUser.logOn({
     account_name: CONFIG.username,
-    password: CONFIG.password
+    password: CONFIG.password,
   });
 });
 
 // Once logged on, configure self and initialize core modules.
-bot.on('logOnResponse', function() {
+bot.on('logOnResponse', () => {
   logger.log(DICT.SYSTEM.system_loggedin);
 
   // Tell Steam our screen name and status.
@@ -90,21 +90,21 @@ bot.on('logOnResponse', function() {
   if (CONFIG.admins) {
     logger.log('Friending admins...');
     for (let i = 0; i < CONFIG.admins.length; i++) {
-      let other = CONFIG.admins[i];
+      const other = CONFIG.admins[i];
       botFriends.addFriend(other);
-      logger.log(minimap.map({'userid' : other}, DICT.SYSTEM.system_added_friend));
+      logger.log(minimap.map({ userid: other }, DICT.SYSTEM.system_added_friend));
       friends.addFriend(other);
     }
   }
 });
 
-bot.on('error', function() {
+bot.on('error', () => {
   logger.error('Jankbot has been logged off of the Steam network.');
   shutdown();
 });
 
 // Respond to messages. All core Jankbot functionality starts from this function.
-botFriends.on('message', function(source, message) {
+botFriends.on('message', (source, message) => {
   // Be sure this person is remembered and run friends list name update.
   // friends.addFriend() can be run however many times on the same friend ID without duplicating.
   friends.addFriend(source);
@@ -116,28 +116,28 @@ botFriends.on('message', function(source, message) {
   }
 
   // Save the original full message for later use.
-  let original = message;
+  const original = message;
   message = message.toLowerCase();
-  let fromUser = friends.nameOf(source);
+  const fromUser = friends.nameOf(source);
 
   // Log the received message.
-  logger.log(minimap.map({'user' : fromUser, 'message' : original},
-      DICT.SYSTEM.system_msg_received));
+  logger.log(minimap.map(
+    { user: fromUser, message: original },
+    DICT.SYSTEM.system_msg_received,
+  ));
 
   // Create the input letiable which we give to modules for parsing.
-  let input = message.split(' ');
+  const input = message.split(' ');
 
   // First, check if this is an admin function request.
   if (input[0] === 'admin') {
-
     // Authenticate as admin.
     if (friends.isAdmin(source)) {
       admin.command(source, input, original);
       return;
-    } else {
-      friends.messageUser(source, DICT.ERRORS.err_not_admin);
-      return;
     }
+    friends.messageUser(source, DICT.ERRORS.err_not_admin);
+    return;
   }
 
   // Next, check if it is a default action. Basic will return true if it handles the input.
@@ -148,7 +148,6 @@ botFriends.on('message', function(source, message) {
   // Finally, loop through other modules.
   for (let i = 0; i < modules.length; i++) {
     if (typeof modules[i].handle === 'function') {
-
       // If this module returns true after execution, stop parsing.
       if (modules[i].handle(original, source)) {
         return;
@@ -158,18 +157,15 @@ botFriends.on('message', function(source, message) {
 
   // If nothing was matched, send a random response back.
   friends.messageUser(source, randomResponse());
-
 });
 
-botFriends.on('friend', function(steamId, type) {
-
+botFriends.on('friend', (steamId, type) => {
   // type 0 = unfriend, 2 = bot added them, 3 = they added bot
-  logger.log('Received a friend request from: ' + steamId + ' of type ' + type);
-  if(type === Steam.EFriendRelationship.RequestRecipient) {
-
+  logger.log(`Received a friend request from: ${steamId} of type ${type}`);
+  if (type === Steam.EFriendRelationship.RequestRecipient) {
     // Refuse if they are blacklisted
     if (friends.checkIsBlacklisted(steamId)) {
-      logger.log(minimap.map({userid: steamId}, DICT.SYSTEM.system_blacklist_attempt));
+      logger.log(minimap.map({ userid: steamId }, DICT.SYSTEM.system_blacklist_attempt));
       botFriends.removeFriend(steamId);
       return;
 
@@ -182,23 +178,23 @@ botFriends.on('friend', function(steamId, type) {
 
     // Add friend
     botFriends.addFriend(steamId);
-    logger.log(minimap.map({'userid' : steamId}, DICT.SYSTEM.system_added_friend));
+    logger.log(minimap.map({ userid: steamId }, DICT.SYSTEM.system_added_friend));
     friends.addFriend(steamId);
 
   // If removed
   } else if (type === Steam.EFriendRelationship.None) {
-    logger.log('Removed by: ' + steamId);
+    logger.log(`Removed by: ${steamId}`);
   }
 });
 
-botFriends.on('personaState', function(resp) {
-  logger.log(resp.friendid + ' is now known as ' + resp.player_name);
+botFriends.on('personaState', (resp) => {
+  logger.log(`${resp.friendid} is now known as ${resp.player_name}`);
   friends.updateFriendName(resp.friendid, resp.player_name);
 });
 
 // Responses for unknown commands.
 function randomResponse() {
-  let responses = DICT.random_responses;
+  const responses = DICT.random_responses;
   return responses[Math.floor(Math.random() * responses.length)];
 }
 
@@ -218,22 +214,22 @@ function shutdown() {
 function help(isAdmin) {
   let resp = '\n';
   if (helpInfo === '') {
-    resp += DICT.help_message + '\n\n';
+    resp += `${DICT.help_message}\n\n`;
   } else {
-    resp += helpInfo + '\n\n';
+    resp += `${helpInfo}\n\n`;
   }
 
   // Core commands.
-  for (let cmd in DICT.CMDS) {
+  for (const cmd in DICT.CMDS) {
     if (typeof cmd === 'string') {
-      resp += cmd + ' - ' + DICT.CMD_HELP[cmd] + '\n';
+      resp += `${cmd} - ${DICT.CMD_HELP[cmd]}\n`;
     }
   }
 
   // Module help texts.
   for (let i = 0; i < modules.length; i++) {
     if (typeof modules[i].getHelp === 'function') {
-      resp += '\n' + modules[i].getHelp(isAdmin);
+      resp += `\n${modules[i].getHelp(isAdmin)}`;
     }
   }
   return resp;

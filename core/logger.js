@@ -1,14 +1,15 @@
-'use strict';
+
 
 /**
  * logger - A simple logger middleman for Jankbot. Logs to the console and to a file.
  */
 
-let fs = require('fs');
+const fs = require('fs');
+
 let noiseFree = false;
 
-exports.log = function(message) {
-  fs.appendFile('output.log', 'LOG: ' + message + '\n');
+exports.log = function (message) {
+  fs.appendFile('output.log', `LOG: ${message}\n`);
 
   /* istanbul ignore next */
   if (!noiseFree) {
@@ -16,8 +17,8 @@ exports.log = function(message) {
   }
 };
 
-exports.error = function(message) {
-  fs.appendFile('output.log', 'ERR: ' + message + '\n');
+exports.error = function (message) {
+  fs.appendFile('output.log', `ERR: ${message}\n`);
 
   /* istanbul ignore next */
   if (!noiseFree) {
@@ -25,6 +26,6 @@ exports.error = function(message) {
   }
 };
 
-exports.noiseFree = function() {
+exports.noiseFree = function () {
   noiseFree = true;
 };
