@@ -1,5 +1,5 @@
 module.exports = {
   EChatEntryType: {
-    ChatMsg: 'hello'
-  }
+    ChatMsg: 'hello',
+  },
 };

@@ -1,35 +1,34 @@
-/*jshint expr: true*/
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
+/* eslint no-unused-expressions: 0 */
+const { expect } = require('chai');
+const mockery = require('mockery');
+const sinon = require('sinon');
 
-var mockFs = {
-  appendFile: sinon.spy()
+const mockFs = {
+  appendFileSync: sinon.spy(),
 };
 
 mockery.registerMock('fs', mockFs);
 mockery.enable({
   useCleanCache: true,
-  warnOnUnregistered: false
+  warnOnUnregistered: false,
 });
 
-var logger = require('../core/logger.js');
+const logger = require('../core/logger.js');
+
 logger.noiseFree();
 
-describe('Logger', function() {
-
-  describe('log', function() {
-    it('Writes to a file', function() {
+describe('Logger', () => {
+  describe('log', () => {
+    it('Writes to a file', () => {
       logger.log('test');
-      expect(mockFs.appendFile.calledWith('output.log', 'LOG: test\n')).to.be.true;
+      expect(mockFs.appendFileSync.calledWith('output.log', 'LOG: test\n')).to.be.true;
     });
   });
 
-  describe('error', function() {
-    it('Writes to a file', function() {
+  describe('error', () => {
+    it('Writes to a file', () => {
       logger.error('test');
-      expect(mockFs.appendFile.calledWith('output.log', 'ERR: test\n')).to.be.true;
+      expect(mockFs.appendFileSync.calledWith('output.log', 'ERR: test\n')).to.be.true;
     });
   });
-
 });
