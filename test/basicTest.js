@@ -1,5 +1,5 @@
-/* jshint expr: true */
-const expect = require('chai').expect;
+/* eslint no-unused-expressions: 0 */
+const { expect } = require('chai');
 const friends = require('../core/friends.js');
 const basic = require('../core/basic.js');
 const logger = require('../core/logger.js');

@@ -1,16 +1,14 @@
-
-
 const logger = require('./logger.js');
 const Dota2 = require('dota2');
 
 let dota2;
 let inGame = false;
 
-exports.init = function (bot) {
+exports.init = function init(bot) {
   dota2 = new Dota2.Dota2Client(bot, true);
 };
 
-exports.launch = function () {
+exports.launch = function launch() {
   if (!inGame) {
     dota2.launch();
     inGame = true;
@@ -21,7 +19,7 @@ exports.launch = function () {
   }
 };
 
-exports.gg = function () {
+exports.gg = function gg() {
   if (inGame) {
     dota2.exit();
     inGame = false;
@@ -31,6 +29,6 @@ exports.gg = function () {
 // DEPRECATED - This was broken, but kept for 3.*.* to keep from breaking further
 exports.client = dota2;
 
-exports.getClient = function () {
+exports.getClient = function getClient() {
   return dota2;
 };

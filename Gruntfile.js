@@ -1,5 +1,7 @@
-module.exports = function (grunt) {
-  require('load-grunt-tasks')(grunt);
+const loadGruntTasks = require('load-grunt-tasks');
+
+module.exports = function gruntConfig(grunt) {
+  loadGruntTasks(grunt);
 
   grunt.initConfig({
 

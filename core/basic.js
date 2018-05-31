@@ -1,56 +1,20 @@
-
-
 // Handler for basic functionality.
 const minimap = require('minimap');
+const _ = require('lodash');
 const friends = require('./friends.js');
 
 let DICT;
 let helpFunction;
 
-exports.init = function (dictionary, help) {
-  DICT = dictionary;
-  helpFunction = help;
-};
+function isGreeting(message) {
+  return DICT.greetings.indexOf(message) !== -1;
+}
 
-exports.command = function (source, input, original) {
-  const command = input[0];
-  const fromUser = friends.nameOf(source);
+function getProfileUrl(source) {
+  return `http://steamcommunity.com/profiles/${source}`;
+}
 
-  // Respond to greetings.
-  if (isGreeting(original)) {
-    const responseStr = minimap.map({ user: fromUser }, DICT.greeting_response);
-    friends.messageUser(source, responseStr);
-    return true;
-  }
-
-  switch (command) {
-    case DICT.CMDS.lfg:
-      actions.lfg(source, fromUser);
-      return true;
-    case DICT.CMDS.inhouse:
-      actions.inhouse(source, fromUser, input);
-      return true;
-    case DICT.CMDS.ping:
-      actions.ping(source);
-      return true;
-    case DICT.CMDS.help:
-      actions.help(source);
-      return true;
-    case DICT.CMDS.mute:
-      actions.mute(source);
-      return true;
-    case DICT.CMDS.unmute:
-      actions.unmute(source);
-      return true;
-    case DICT.CMDS.whois:
-      actions.whois(source, input);
-      return true;
-    default:
-      return false;
-  }
-};
-
-let actions = {
+const actions = {
 
   lfg(source, fromUser) {
     const lfgMessage = minimap.map(
@@ -105,8 +69,9 @@ let actions = {
     friends.messageUser(source, DICT.unmute_response);
   },
 
-  whois(source, input) {
-    input.splice(0, 1);
+  whois(source, rawInput) {
+    let input = _.cloneDeep(rawInput);
+    input.shift();
     input = input.join(' ');
 
     const lookupID = friends.idOf(input, true);
@@ -127,10 +92,46 @@ let actions = {
 
 };
 
-function isGreeting(message) {
-  return DICT.greetings.indexOf(message) !== -1;
-}
+exports.init = function init(dictionary, help) {
+  DICT = dictionary;
+  helpFunction = help;
+};
 
-function getProfileUrl(source) {
-  return `http://steamcommunity.com/profiles/${source}`;
-}
+exports.command = function handleCommand(source, input, original) {
+  const command = input[0];
+  const fromUser = friends.nameOf(source);
+
+  // Respond to greetings.
+  if (isGreeting(original)) {
+    const responseStr = minimap.map({ user: fromUser }, DICT.greeting_response);
+    friends.messageUser(source, responseStr);
+    return true;
+  }
+
+  switch (command) {
+    case DICT.CMDS.lfg:
+      actions.lfg(source, fromUser);
+      return true;
+    case DICT.CMDS.inhouse:
+      actions.inhouse(source, fromUser, input);
+      return true;
+    case DICT.CMDS.ping:
+      actions.ping(source);
+      return true;
+    case DICT.CMDS.help:
+      actions.help(source);
+      return true;
+    case DICT.CMDS.mute:
+      actions.mute(source);
+      return true;
+    case DICT.CMDS.unmute:
+      actions.unmute(source);
+      return true;
+    case DICT.CMDS.whois:
+      actions.whois(source, input);
+      return true;
+    default:
+      return false;
+  }
+};
+

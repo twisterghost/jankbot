@@ -1,5 +1,5 @@
-
-
+/* eslint no-console: 0 */
+// TODO: Rework this file using async/await
 /**
  * config.js
  * Utility file to help configure Jankbot.
@@ -32,18 +32,18 @@ console.log('This will set up your config.json file for Jankbot.\n');
 console.log('Leaving an answer blank will use the current config option.\n');
 
 // Get username.
-rl.question('What Steam account should Jankbot log in with?\n(username) ', (answer) => {
-  if (answer) {
-    config.username = answer;
+rl.question('What Steam account should Jankbot log in with?\n(username) ', (username) => {
+  if (username) {
+    config.username = username;
   }
 
   // Get password.
   rl.question(
     '\nWhat is the password for this account? (The password will be visible, verify it ' +
       'is correct.)\n(password) ',
-    (answer) => {
-      if (answer) {
-        config.password = answer;
+    (password) => {
+      if (password) {
+        config.password = password;
       }
 
       // Get admins.
@@ -57,9 +57,9 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', (answ
       console.log('Then, run this script again to add yourself as an admin later.');
       rl.question(
         'Enter the 17 digit IDs of all admin accounts, seperated by spaces.\n(admins) ',
-        (answer) => {
-          if (answer) {
-            config.admins = answer.split(' ');
+        (admins) => {
+          if (admins) {
+            config.admins = admins.split(' ');
           } else if (!config.admins) {
             config.admins = [];
           }
@@ -67,23 +67,22 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', (answ
           // Get display name.
           rl.question(
             '\nWhat should Jankbot show up as on your friends list?\n(displayName) ',
-            (answer) => {
-              if (answer) {
-                config.displayName = answer;
+            (displayName) => {
+              if (displayName) {
+                config.displayName = displayName;
               }
 
               // Get dictionary.
               rl.question(
                 '\nWhat dictionary file should Jankbot use? [Leave blank for english]\n' +
                 '(dictionary) ',
-                (answer) => {
-                  if (answer === '') {
+                (dictionary) => {
+                  if (dictionary === '') {
                     config.dictionary = 'english.json';
                   } else {
-                    if (answer.indexOf('.json') === -1) {
-                      answer += '.json';
-                    }
-                    config.dictionary = answer;
+                    const formattedDictionary = dictionary.indexOf('.json') === -1 ?
+                      `${dictionary}.json` : dictionary;
+                    config.dictionary = formattedDictionary;
                   }
 
                   fs.writeFileSync(configPath, JSON.stringify(config, null, 2));

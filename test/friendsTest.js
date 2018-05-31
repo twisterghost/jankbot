@@ -1,6 +1,6 @@
-/* jshint expr: true */
+/* eslint no-unused-expressions: 0 */
 const mockery = require('mockery');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const sinon = require('sinon');
 const _ = require('lodash');
 const mockSteam = require('./mocks/mockSteam');

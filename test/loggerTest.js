@@ -1,5 +1,5 @@
-/* jshint expr: true */
-const expect = require('chai').expect;
+/* eslint no-unused-expressions: 0 */
+const { expect } = require('chai');
 const mockery = require('mockery');
 const sinon = require('sinon');
 

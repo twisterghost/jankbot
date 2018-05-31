@@ -1,7 +1,6 @@
-
-
 // Handler for admin functionality.
 const minimap = require('minimap');
+const _ = require('lodash');
 const friends = require('./friends.js');
 const logger = require('./logger.js');
 
@@ -9,20 +8,7 @@ let DICT;
 let bot;
 let shutdown;
 
-exports.init = function (initBot, dictionary, killCommand) {
-  bot = initBot;
-  DICT = dictionary;
-  shutdown = killCommand;
-};
-
-exports.command = function (source, input, original) {
-  const command = input[1];
-  if (actions.hasOwnProperty(command)) {
-    actions[command](source, input, original);
-  }
-};
-
-let actions = {
+const actions = {
   quit() {
     shutdown();
   },
@@ -39,7 +25,7 @@ let actions = {
 
   lookup(source, input) {
     const lookupList = friends.getAllFriends();
-    if (lookupList.hasOwnProperty(input[2])) {
+    if (lookupList[input[2]]) {
       const friend = lookupList[input[2]];
       friends.messageUser(source, JSON.stringify(friend, null, '  '));
     } else {
@@ -50,14 +36,14 @@ let actions = {
   inactive(source) {
     const ONE_WEEK = 60 * 60 * 24 * 7 * 1000;
     const inactiveList = friends.getAllFriends();
-    const inactiveUsers = [];
-    for (const inactiveFriend in inactiveList) {
-      // If this user hasn't used this bot in a week, log it.
-      if (new Date(inactiveList[inactiveFriend].lastMessageTime).getTime() <
+    const inactiveUsers = _.compact(_.map(inactiveList, (inactiveFriend, id) => {
+      if (new Date(inactiveFriend.lastMessageTime).getTime() <
           (new Date().getTime() - ONE_WEEK)) {
-        inactiveUsers.push(inactiveList[inactiveFriend]);
+        return id;
       }
-    }
+
+      return undefined;
+    }));
 
     if (inactiveUsers.length === 0) {
       friends.messageUser(source, DICT.ADMIN.no_inactive_users);
@@ -71,7 +57,13 @@ let actions = {
     bot.removeFriend(input[2]);
     friends.removeFriend(friendId, (success) => {
       if (success) {
-        friends.messageUser(source, minimap.map({ id: friendId }, DICT.ADMIN.remove_friend_success));
+        friends.messageUser(
+          source,
+          minimap.map(
+            { id: friendId },
+            DICT.ADMIN.remove_friend_success,
+          ),
+        );
       } else {
         friends.messageUser(source, minimap.map({ id: friendId }, DICT.ADMIN.remove_friend_error));
       }
@@ -101,3 +93,17 @@ let actions = {
   },
 
 };
+
+exports.init = function init(initBot, dictionary, killCommand) {
+  bot = initBot;
+  DICT = dictionary;
+  shutdown = killCommand;
+};
+
+exports.command = function handleCommand(source, input, original) {
+  const command = input[1];
+  if (actions[command]) {
+    actions[command](source, input, original);
+  }
+};
+
