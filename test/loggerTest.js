@@ -4,7 +4,7 @@ const mockery = require('mockery');
 const sinon = require('sinon');
 
 const mockFs = {
-  appendFile: sinon.spy(),
+  appendFileSync: sinon.spy(),
 };
 
 mockery.registerMock('fs', mockFs);
@@ -21,14 +21,14 @@ describe('Logger', () => {
   describe('log', () => {
     it('Writes to a file', () => {
       logger.log('test');
-      expect(mockFs.appendFile.calledWith('output.log', 'LOG: test\n')).to.be.true;
+      expect(mockFs.appendFileSync.calledWith('output.log', 'LOG: test\n')).to.be.true;
     });
   });
 
   describe('error', () => {
     it('Writes to a file', () => {
       logger.error('test');
-      expect(mockFs.appendFile.calledWith('output.log', 'ERR: test\n')).to.be.true;
+      expect(mockFs.appendFileSync.calledWith('output.log', 'ERR: test\n')).to.be.true;
     });
   });
 });

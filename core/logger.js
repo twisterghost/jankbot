@@ -10,7 +10,7 @@ const fs = require('fs');
 let noiseFree = false;
 
 exports.log = function log(message) {
-  fs.appendFile('output.log', `LOG: ${message}\n`);
+  fs.appendFileSync('output.log', `LOG: ${message}\n`);
 
   /* istanbul ignore next */
   if (!noiseFree) {
@@ -19,7 +19,7 @@ exports.log = function log(message) {
 };
 
 exports.error = function error(message) {
-  fs.appendFile('output.log', `ERR: ${message}\n`);
+  fs.appendFileSync('output.log', `ERR: ${message}\n`);
 
   /* istanbul ignore next */
   if (!noiseFree) {
