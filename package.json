@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha --recursive test",
     "ci": "npm run lint && npm run test",
-    "coverage": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
+    "test:cov": "nyc --all mocha",
     "lint": "eslint .",
     "release": "grunt release",
     "start": "node jankbot.js",
@@ -33,11 +33,18 @@
     "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-compress": "1.4.1",
-    "istanbul": "0.4.5",
     "load-grunt-tasks": "3.5.2",
     "mocha": "3.2.0",
     "mockery": "2.0.0",
+    "nyc": "^12.0.1",
     "sinon": "2.1.0"
+  },
+  "nyc": {
+    "include": [
+      "core/*.js",
+      "lib/*.js",
+      "jankbot.js"
+    ]
   },
   "repository": "https://github.com/twisterghost/jankbot"
 }
