@@ -1,5 +1,5 @@
 /* eslint no-unused-expressions: 0 */
-const { expect } = require('chai');
+const test = require('ava');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,16 +9,12 @@ const parseJson = function parseJson(source) {
   };
 };
 
-describe('dictionaries', () => {
-  describe('#parseJSON', () => {
-    it('should not throw an exception for any dictionary', () => {
-      const dictFiles = fs.readdirSync('dict/');
-      Object.keys(dictFiles).forEach((f) => {
-        const file = path.join('dict/', dictFiles[f]);
-        const source = fs.readFileSync(file);
-        const parse = parseJson(source);
-        expect(parse).to.not.throw(Error);
-      });
-    });
+test('dictionaries should pass json parsing', (t) => {
+  const dictFiles = fs.readdirSync('dict/');
+  Object.keys(dictFiles).forEach((f) => {
+    const file = path.join('dict/', dictFiles[f]);
+    const source = fs.readFileSync(file);
+    const parse = parseJson(source);
+    t.notThrows(parse);
   });
 });

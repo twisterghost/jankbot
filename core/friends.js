@@ -9,7 +9,6 @@ const _ = require('lodash');
 
 let friends = {};
 let blacklist = [];
-let testMode = false;
 let bot;
 let config;
 let dict;
@@ -44,6 +43,10 @@ exports.init = function init(botInstance, jankbotConfig, dictionary) {
   bot = botInstance;
   config = jankbotConfig;
   dict = dictionary;
+};
+
+exports.setFriendsData = function setFriendsData(friendsData) {
+  friends = friendsData;
 };
 
 // Returns the name of the given ID based on friends list.
@@ -131,6 +134,11 @@ exports.unBlacklist = function unBlacklistUser(id) {
   exports.save();
 };
 
+exports.clearBlacklist = function clearBlacklist() {
+  blacklist = [];
+  exports.save();
+};
+
 // Returns true if the given id is blacklisted.
 exports.checkIsBlacklisted = function checkIsBlacklisted(id) {
   return blacklist.indexOf(id) !== -1;
@@ -204,10 +212,8 @@ exports.isAdmin = function isAdmin(friend) {
 // Saves the friends list.
 /* istanbul ignore next */
 exports.save = function save() {
-  if (!testMode) {
-    fs.writeFileSync('data/friendslist', JSON.stringify(friends));
-    fs.writeFileSync('data/blacklist', JSON.stringify(blacklist));
-  }
+  fs.writeFileSync('data/friendslist', JSON.stringify(friends));
+  fs.writeFileSync('data/blacklist', JSON.stringify(blacklist));
 };
 
 // Sends a message to a user.
@@ -256,13 +262,5 @@ exports.broadcast = function broadcast(source, message) {
 
 exports.count = function countFriends() {
   return Object.keys(friends).length;
-};
-
-// TODO: Replace this with something better to make tests more blackboxy
-// Load mock data for testing and block saving.
-exports.initTest = function initTest(friendData) {
-  testMode = true;
-  blacklist = [];
-  friends = friendData;
 };
 

@@ -1,5 +1,5 @@
 /* eslint no-unused-expressions: 0 */
-const { expect } = require('chai');
+const test = require('ava');
 const mockery = require('mockery');
 const sinon = require('sinon');
 
@@ -15,18 +15,12 @@ mockery.enable({
 
 const logger = require('../core/logger.js');
 
-describe('Logger', () => {
-  describe('log', () => {
-    it('Writes to a file', () => {
-      logger.log('test');
-      expect(mockFs.appendFileSync.calledWith('output.log', 'LOG: test\n')).to.be.true;
-    });
-  });
+test('log writes to file', (t) => {
+  logger.log('test');
+  t.true(mockFs.appendFileSync.calledWith('output.log', 'LOG: test\n'));
+});
 
-  describe('error', () => {
-    it('Writes to a file', () => {
-      logger.error('test');
-      expect(mockFs.appendFileSync.calledWith('error.log', 'ERR: test\n')).to.be.true;
-    });
-  });
+test('error writes to file', (t) => {
+  logger.error('test');
+  t.true(mockFs.appendFileSync.calledWith('error.log', 'ERR: test\n'));
 });
