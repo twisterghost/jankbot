@@ -1,24 +1,25 @@
-module.exports = function(grunt) {
+const loadGruntTasks = require('load-grunt-tasks');
 
-  require('load-grunt-tasks')(grunt);
+module.exports = function gruntConfig(grunt) {
+  loadGruntTasks(grunt);
 
   grunt.initConfig({
 
     compress: {
       main: {
         options: {
-          archive: 'jankbot.zip'
+          archive: 'jankbot.zip',
         },
         files: [
-          {src: ['jankbot.js']},
-          {src: ['README.md']},
-          {src: ['package.json']},
-          {src: ['dict/*']},
-          {src: ['core/*']},
-          {src: ['scripts/*']},
-          {src: ['lib/*']}
-        ]
-      }
+          { src: ['jankbot.js'] },
+          { src: ['README.md'] },
+          { src: ['package.json'] },
+          { src: ['dict/*'] },
+          { src: ['core/*'] },
+          { src: ['scripts/*'] },
+          { src: ['lib/*'] },
+        ],
+      },
     },
 
     clean: {
@@ -26,18 +27,17 @@ module.exports = function(grunt) {
         'coverage',
         'output.log',
         'npm-debug.log',
-        'jankbot.zip'
-      ]
-    }
+        'jankbot.zip',
+      ],
+    },
   });
 
   grunt.registerTask('build', [
-    'jshint'
+    'jshint',
   ]);
 
   grunt.registerTask('release', [
-    'compress'
+    'compress',
   ]);
-
 };
 

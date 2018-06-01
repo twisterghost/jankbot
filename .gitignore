@@ -11,3 +11,4 @@ quoteslist
 *.zip
 coverage
 helpfile
+.nyc_output

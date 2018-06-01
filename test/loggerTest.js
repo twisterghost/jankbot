@@ -1,35 +1,26 @@
-/*jshint expr: true*/
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
+/* eslint no-unused-expressions: 0 */
+const test = require('ava');
+const mockery = require('mockery');
+const sinon = require('sinon');
 
-var mockFs = {
-  appendFile: sinon.spy()
+const mockFs = {
+  appendFileSync: sinon.spy(),
 };
 
 mockery.registerMock('fs', mockFs);
 mockery.enable({
   useCleanCache: true,
-  warnOnUnregistered: false
+  warnOnUnregistered: false,
 });
 
-var logger = require('../core/logger.js');
-logger.noiseFree();
+const logger = require('../core/logger.js');
 
-describe('Logger', function() {
+test('log writes to file', (t) => {
+  logger.log('test');
+  t.true(mockFs.appendFileSync.calledWith('output.log', 'LOG: test\n'));
+});
 
-  describe('log', function() {
-    it('Writes to a file', function() {
-      logger.log('test');
-      expect(mockFs.appendFile.calledWith('output.log', 'LOG: test\n')).to.be.true;
-    });
-  });
-
-  describe('error', function() {
-    it('Writes to a file', function() {
-      logger.error('test');
-      expect(mockFs.appendFile.calledWith('output.log', 'ERR: test\n')).to.be.true;
-    });
-  });
-
+test('error writes to file', (t) => {
+  logger.error('test');
+  t.true(mockFs.appendFileSync.calledWith('error.log', 'ERR: test\n'));
 });

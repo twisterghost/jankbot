@@ -1,30 +1,18 @@
-'use strict';
+/* eslint no-console: 0 */
 
 /**
- * logger - A simple logger middleman for Jankbot. Logs to the console and to a file.
+ * logger - A lightweight logger that allows logging to stdout and a file simultaneously.
  */
 
-let fs = require('fs');
-let noiseFree = false;
+const fs = require('fs');
 
-exports.log = function(message) {
-  fs.appendFile('output.log', 'LOG: ' + message + '\n');
-
-  /* istanbul ignore next */
-  if (!noiseFree) {
-    console.log(message);
-  }
+exports.log = function log(message) {
+  fs.appendFileSync('output.log', `LOG: ${message}\n`);
+  console.log(message);
 };
 
-exports.error = function(message) {
-  fs.appendFile('output.log', 'ERR: ' + message + '\n');
-
-  /* istanbul ignore next */
-  if (!noiseFree) {
-    console.log(message);
-  }
+exports.error = function error(message) {
+  fs.appendFileSync('error.log', `ERR: ${message}\n`);
+  console.error(message);
 };
 
-exports.noiseFree = function() {
-  noiseFree = true;
-};

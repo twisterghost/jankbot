@@ -1,106 +1,116 @@
-/*jshint expr: true*/
-var expect = require('chai').expect;
-var friends = require('../core/friends.js');
-var basic = require('../core/basic.js');
-var logger = require('../core/logger.js');
-var sinon = require('sinon');
-var mockery = require('mockery');
-var mockSteam = require('./mocks/mockSteam');
-var dictionary = require('../dict/english.json');
+/* eslint no-unused-expressions: 0 */
+const test = require('ava');
+const basic = require('../core/basic.js');
+const friends = require('../core/friends.js');
+const logger = require('../core/logger.js');
+const sinon = require('sinon');
+const dictionary = require('../dict/english.json');
 
-mockery.registerMock('steam', mockSteam);
-mockery.enable({
-  useCleanCache: true,
-  warnOnUnregistered: false
-});
-
-var spiedBot;
-
-var fakeConfig = {
-  admins: [
-    '1'
-  ]
-};
-var helpFunction = sinon.spy();
-
-logger.noiseFree();
-friends.initTest({
-  '1': {
-    'messages':[],
-    'mute':false,
-    'name':'Test Friend 1',
-    'lastMessageTime': new Date()
-  },
-  '2': {
-    'messages':[],
-    'mute':false,
-    'name':'Test Friend 2',
-    'lastMessageTime': new Date() - 1000
-  },
-  '3': {
-    'messages':[],
-    'mute':false,
-    'name':'Final Test Friend',
-    'lastMessageTime': new Date()
-  }
-});
-friends.init(spiedBot, fakeConfig, dictionary);
+const helpFunction = sinon.spy();
 
 basic.init(dictionary, helpFunction);
 
-describe('Basic Functionality', function() {
+test.before('stub logging', () => {
+  sinon.stub(logger, 'log');
+  sinon.stub(logger, 'error');
+});
 
-  beforeEach(function() {
-    spiedBot = {
-      sendMessage: sinon.spy()
-    };
-    friends.init(spiedBot, fakeConfig);
-  });
+test.after('restore logging', () => {
+  logger.log.restore();
+  logger.error.restore();
+});
 
-  it('broadcasts a message when it hears "lfg"', function() {
-    basic.command('1', ['lfg'], 'lfg');
-    expect(spiedBot.sendMessage.callCount).to.equal(3);
-  });
+test('broadcasts a message when it hears "lfg"', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+  sandbox.stub(friends, 'broadcast').returns(true);
 
-  it('broadcasts a message when it hears "inhouse"', function() {
-    basic.command('1', ['inhouse'], 'inhouse');
-    expect(spiedBot.sendMessage.callCount).to.equal(3);
-  });
+  basic.command('1', ['lfg'], 'lfg');
 
-  it('includes a password when it hears "inhouse" with a password', function() {
-    basic.command('1', ['inhouse', 'hello'], 'inhouse hello');
-    expect(spiedBot.sendMessage.args[0][1].indexOf('hello')).to.be.above(-1);
-  });
+  t.true(friends.broadcast.calledOnce);
+  t.true(friends.messageUser.calledOnce);
+  sandbox.restore();
+});
 
-  it('responds with a steam ID when it hears "ping"', function() {
-    basic.command('1', ['ping'], 'ping');
-    expect(spiedBot.sendMessage.args[0][1].indexOf('1')).to.be.above(-1);
-  });
+test('broadcasts a message when it hears "inhouse"', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+  sandbox.stub(friends, 'broadcast').returns(true);
 
-  it('calls the help function and responds when it hears "help"', function() {
-    basic.command('1', ['help'], 'help');
-    expect(helpFunction.called).to.be.true;
-    expect(spiedBot.sendMessage.called).to.be.true;
-  });
+  basic.command('1', ['inhouse'], 'inhouse');
 
-  it('sets the mute status to true when it hears "mute"', function() {
-    basic.command('1', ['mute'], 'mute');
-    expect(friends.getMute('1')).to.be.true;
-  });
+  t.true(friends.broadcast.calledOnce);
+  t.true(friends.messageUser.calledOnce);
+  sandbox.restore();
+});
 
-  it('sets the mute status to false when it hears "unmute"', function() {
-    friends.setMute('1', true);
-    basic.command('1', ['unmute'], 'unmute');
-    expect(friends.getMute('1')).to.be.false;
-  });
+test('includes a password when it hears "inhouse" with a password', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+  sandbox.stub(friends, 'broadcast').returns(true);
 
-  it('responds to greetings', function() {
-    basic.command('1', [dictionary.greetings[0]], dictionary.greetings[0]);
-    expect(spiedBot.sendMessage.called).to.be.true;
-  });
+  basic.command('1', ['inhouse', 'hello'], 'inhouse hello');
 
-  it('returns false if it has no idea what to do', function() {
-    expect(basic.command('1', ['ddd'], 'ddd')).to.be.false;
-  });
+  t.true(friends.broadcast.args[0][1].indexOf('hello') > -1);
+  sandbox.restore();
+});
 
+test('responds with a steam ID when it hears "ping"', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+
+  basic.command('1', ['ping'], 'ping');
+
+  t.true(friends.messageUser.args[0][1].indexOf('1') > -1);
+  sandbox.restore();
+});
+
+test('calls the help function and responds when it hears "help"', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+  sandbox.stub(friends, 'isAdmin').returns(false);
+
+  basic.command('1', ['help'], 'help');
+
+  t.true(helpFunction.called);
+  t.true(friends.messageUser.called);
+
+  sandbox.restore();
+});
+
+test('sets the mute status to true when it hears "mute"', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+  sandbox.stub(friends, 'setMute');
+
+  basic.command('1', ['mute'], 'mute');
+
+  t.true(friends.messageUser.called);
+  t.true(friends.setMute.args[0][1]);
+  sandbox.restore();
+});
+
+test('sets the mute status to false when it hears "unmute"', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+  sandbox.stub(friends, 'setMute');
+
+  basic.command('1', ['unmute'], 'unmute');
+
+  t.true(friends.messageUser.called);
+  t.false(friends.setMute.args[0][1]);
+  sandbox.restore();
+});
+
+test('responds to greetings', (t) => {
+  const sandbox = sinon.createSandbox();
+  sandbox.stub(friends, 'messageUser');
+
+  basic.command('1', [dictionary.greetings[0]], dictionary.greetings[0]);
+  t.true(friends.messageUser.called);
+  sandbox.restore();
+});
+
+test('returns false if it has no idea what to do', (t) => {
+  t.false(basic.command('1', ['ddd'], 'ddd'));
 });
