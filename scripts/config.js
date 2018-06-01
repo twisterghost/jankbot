@@ -88,7 +88,7 @@ rl.question('What Steam account should Jankbot log in with?\n(username) ', (user
                   fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
                   console.log('Your config.json file will look like:');
                   console.log(JSON.stringify(config, null, 2));
-                  console.log('\nYou\'re all set!');
+                  console.log('\nYou\'re all set! Run `npm start` to launch Jankbot.');
                   process.exit();
                 },
               );
