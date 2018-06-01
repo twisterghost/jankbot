@@ -15,8 +15,6 @@ mockery.enable({
 
 const logger = require('../core/logger.js');
 
-logger.noiseFree();
-
 describe('Logger', () => {
   describe('log', () => {
     it('Writes to a file', () => {
@@ -28,7 +26,7 @@ describe('Logger', () => {
   describe('error', () => {
     it('Writes to a file', () => {
       logger.error('test');
-      expect(mockFs.appendFileSync.calledWith('output.log', 'ERR: test\n')).to.be.true;
+      expect(mockFs.appendFileSync.calledWith('error.log', 'ERR: test\n')).to.be.true;
     });
   });
 });

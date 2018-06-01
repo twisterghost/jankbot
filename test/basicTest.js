@@ -1,18 +1,25 @@
 /* eslint no-unused-expressions: 0 */
-const { expect } = require('chai');
-const friends = require('../core/friends.js');
-const basic = require('../core/basic.js');
-const logger = require('../core/logger.js');
-const sinon = require('sinon');
 const mockery = require('mockery');
 const mockSteam = require('./mocks/mockSteam');
-const dictionary = require('../dict/english.json');
+
+// Set up mocks for testing.
+const loggerMock = {
+  log() {},
+  error() {},
+};
 
 mockery.registerMock('steam', mockSteam);
+mockery.registerMock('./logger.js', loggerMock);
 mockery.enable({
   useCleanCache: true,
   warnOnUnregistered: false,
 });
+
+const { expect } = require('chai');
+const basic = require('../core/basic.js');
+const friends = require('../core/friends.js');
+const sinon = require('sinon');
+const dictionary = require('../dict/english.json');
 
 let spiedBot;
 
@@ -23,7 +30,6 @@ const fakeConfig = {
 };
 const helpFunction = sinon.spy();
 
-logger.noiseFree();
 friends.initTest({
   1: {
     messages: [],
