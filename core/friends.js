@@ -206,6 +206,7 @@ exports.isAdmin = function isAdmin(friend) {
   if (!config.admins) {
     return false;
   }
+  console.log(friend, config.admins.indexOf(friend));
   return config.admins.indexOf(friend) !== -1;
 };
 

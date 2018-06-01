@@ -75,15 +75,15 @@ function help(isAdmin) {
   }
 
   // Core commands.
-  resp += Object.keys(DICT).map(command => `${command} = ${DICT.CMD_HELP[command]}`).join('\n');
-
-  resp += _.compress(modules.map((module) => {
+  resp += Object.keys(DICT.CMDS).map(command => `${command} - ${DICT.CMD_HELP[command]}`).join('\n');
+  resp += '\n\n';
+  resp += _.compact(modules.map((module) => {
     if (typeof module.getHelp === 'function') {
       return module.getHelp(isAdmin);
     }
 
     return undefined;
-  })).join('\n');
+  })).join('\n\n');
 
   return resp;
 }

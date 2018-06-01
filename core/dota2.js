@@ -26,9 +26,6 @@ exports.gg = function gg() {
   }
 };
 
-// DEPRECATED - This was broken, but kept for 3.*.* to keep from breaking further
-exports.client = dota2;
-
 exports.getClient = function getClient() {
   return dota2;
 };
