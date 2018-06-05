@@ -35,7 +35,7 @@ For a point by point walkthrough of the installation process, see the
 
 *Please be sure you understand what you're doing if you use this summary!*
 
-1. Install [NodeJS 8.9.1 LTS](https://nodejs.org/en/download/)
+1. Install [NodeJS 8 LTS](https://nodejs.org/en/download/)
 2. Make a steam account with at least one purchase on it
 3. Download Jankbot's [latest release](https://github.com/twisterghost/jankbot/releases)
 4. Unzip it to a folder
